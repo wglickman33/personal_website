@@ -1,0 +1,43 @@
+// Color variables
+$primary-color: #3d7aed;
+$secondary-color: #344563;
+$light-color: #ffffff;
+$dark-color: #121821;
+$gray-color: #f7f8f9;
+$dark-gray-color: #1a202c;
+
+// Accent colors
+$accent-color-1: #f54d7e;
+$accent-color-2: #00c896;
+$accent-color-3: #ffb342;
+
+// Typography
+$font-family-primary: 'Poppins', sans-serif;
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Animation and transition
+$transition-speed: 0.3s;
+$transition-speed-slow: 0.5s;
+$transition-speed-fast: 0.2s;
+
+// Layout
+$container-max-width: 1200px;
+$header-height: 70px;
+$header-height-scrolled: 60px;
+$content-padding: 20px;
+
+// Effects
+$border-radius: 6px;
+$border-radius-lg: 12px;
+$box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+$box-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+$dark-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+
+// Z-index levels
+$z-index-header: 1000;
+$z-index-dropdown: 10;
+$z-index-modal: 2000;

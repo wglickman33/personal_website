@@ -1,0 +1,53 @@
+@use "../../assets/styles/partials/variables" as *;
+@use "../../assets/styles/partials/mixins" as *;
+@use "../../assets/styles/partials/breakpoints" as *;
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+  position: relative;
+  
+  &__line {
+    width: 100%;
+    height: 2px;
+    background-color: $light-color;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+  
+  &--active {
+    .hamburger__line {
+      &:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+      }
+      
+      &:nth-child(2) {
+        opacity: 0;
+        transform: translateX(10px);
+      }
+      
+      &:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+      }
+    }
+  }
+  
+  @include md {
+    display: flex;
+  }
+  
+  &:hover {
+    .hamburger__line {
+      background-color: $primary-color;
+    }
+  }
+}

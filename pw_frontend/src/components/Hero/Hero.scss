@@ -1,0 +1,529 @@
+@use "../../assets/styles/partials/variables" as *;
+@use "../../assets/styles/partials/fonts" as *;
+@use "../../assets/styles/partials/mixins" as *;
+@use "../../assets/styles/partials/breakpoints" as *;
+@use "../../assets/styles/partials/animations" as *;
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  padding: $header-height 0 100px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba($dark-color, 0.9);
+  z-index: 1;
+  
+  &.dark {
+    background-color: rgba($dark-gray-color, 0.9);
+  }
+  
+  .container {
+    @include container;
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+  }
+  
+  .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+    
+    .gradient-sphere {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.4;
+      transition: all 7s ease-in-out;
+      
+      &.sphere-1 {
+        width: 400px;
+        height: 400px;
+        background: linear-gradient(135deg, #3c8ce7, #00eaff);
+        top: -100px;
+        right: -100px;
+        animation: float 15s ease-in-out infinite alternate;
+      }
+      
+      &.sphere-2 {
+        width: 350px;
+        height: 350px;
+        background: linear-gradient(135deg, #ff6b6b, #ffa3fd);
+        bottom: -50px;
+        left: -100px;
+        animation: float 20s ease-in-out infinite alternate-reverse;
+      }
+      
+      &.sphere-3 {
+        width: 300px;
+        height: 300px;
+        background: linear-gradient(135deg, #14f7ff, #4370ff);
+        bottom: 20%;
+        right: 20%;
+        animation: float 18s ease-in-out infinite alternate;
+      }
+    }
+  }
+  
+  .wave-divider {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    z-index: 1;
+    
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      
+      path {
+        fill: $light-color;
+        transition: fill 0.3s ease;
+      }
+    }
+  }
+  
+  &.dark .wave-divider svg path {
+    fill: $dark-color;
+  }
+  
+  .hero-content {
+    padding: 40px 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    max-width: 900px;
+    
+    &.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .hero-title {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    
+    .greeting {
+      font-size: $font-size-xl;
+      font-weight: $font-weight-regular;
+      color: $light-color;
+      opacity: 0.9;
+      margin-bottom: 10px;
+    }
+    
+    .name {
+      font-size: $font-size-5xl;
+      font-weight: $font-weight-bold;
+      color: $light-color;
+      background: linear-gradient(to right, #fff, #a3bffa);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: textGradient 5s infinite alternate;
+    }
+  }
+  
+  .skill-transition {
+    position: relative;
+    height: 120px;
+    margin: 30px 0;
+    perspective: 1000px;
+  }
+  
+  .skill-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    transform-origin: center top;
+    transition: 
+      opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+      transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+      visibility 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    visibility: hidden;
+    pointer-events: none;
+    
+    &.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      visibility: visible;
+      pointer-events: auto;
+      z-index: 2;
+      
+      .skill-icon, .skill-title, .skill-description {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .skill-icon {
+      font-size: 36px;
+      margin-right: 10px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: 
+        opacity 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s,
+        transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s;
+    }
+    
+    .skill-title {
+      font-size: $font-size-3xl;
+      font-weight: $font-weight-bold;
+      color: $primary-color;
+      margin: 10px 0;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: 
+        opacity 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s,
+        transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s;
+    }
+    
+    .skill-description {
+      font-size: $font-size-md;
+      color: $light-color;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: 
+        opacity 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s,
+        transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s;
+    }
+  }
+  
+  .hero-tagline {
+    font-size: $font-size-md;
+    line-height: 1.7;
+    color: $light-color;
+    opacity: 0.9;
+    margin-bottom: 30px;
+    
+    .philosophy {
+      font-style: italic;
+      opacity: 0.8;
+    }
+  }
+  
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 40px;
+    min-height: 40px;
+    transition: all 0.5s ease;
+    
+    &.transitioning .tech-bubble {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .tech-bubble {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 30px;
+      background-color: rgba($light-color, 0.1);
+      backdrop-filter: blur(10px);
+      font-size: $font-size-sm;
+      color: $light-color;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: techBubbleIn 0.5s forwards;
+      
+      @for $i from 1 through 10 {
+        &:nth-child(#{$i}) {
+          animation-delay: #{0.05 * $i}s;
+        }
+      }
+      
+      &:hover {
+        background-color: rgba($primary-color, 0.2);
+        transform: translateY(-5px);
+      }
+    }
+  }
+  
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border-radius: $border-radius;
+      font-size: $font-size-base;
+      font-weight: $font-weight-medium;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      
+      &.primary {
+        background-color: $primary-color;
+        color: $light-color;
+        
+        &:hover {
+          background-color: lighten($primary-color, 5%);
+          transform: translateY(-3px);
+          box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+        }
+      }
+      
+      &.secondary {
+        background-color: rgba($light-color, 0.1);
+        color: $light-color;
+        backdrop-filter: blur(10px);
+        
+        &:hover {
+          background-color: rgba($light-color, 0.15);
+          transform: translateY(-3px);
+          box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+        }
+      }
+      
+      &.outline {
+        background-color: transparent;
+        color: $light-color;
+        border: 1px solid rgba($light-color, 0.3);
+        
+        &:hover {
+          border-color: $primary-color;
+          color: $primary-color;
+          transform: translateY(-3px);
+        }
+      }
+    }
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-30px) translateX(15px);
+  }
+  100% {
+    transform: translateY(20px) translateX(-15px);
+  }
+}
+
+@keyframes textGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes techBubbleIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@include md {
+  .hero {
+    padding-top: calc(#{$header-height} + 20px);
+    
+    .hero-title {
+      .name {
+        font-size: $font-size-4xl;
+      }
+      
+      .greeting {
+        font-size: $font-size-lg;
+      }
+    }
+    
+    .skill-transition {
+      height: 150px;
+    }
+    
+    .skill-item {
+      .skill-title {
+        font-size: $font-size-2xl;
+      }
+      
+      .skill-description {
+        font-size: $font-size-base;
+      }
+    }
+    
+    .hero-tagline {
+      font-size: $font-size-base;
+    }
+    
+    .hero-cta {
+      gap: 10px;
+      
+      .cta-button {
+        padding: 10px 20px;
+      }
+    }
+  }
+}
+
+@include sm {
+  .hero {
+    padding-top: calc(#{$header-height} + 10px);
+    padding-bottom: 80px;
+    
+    .container {
+      padding: 0 15px;
+    }
+    
+    .hero-content {
+      padding: 20px 0;
+    }
+    
+    .hero-title {
+      .name {
+        font-size: $font-size-3xl;
+      }
+      
+      .greeting {
+        font-size: $font-size-base;
+        margin-bottom: 5px;
+      }
+    }
+    
+    .skill-transition {
+      height: 130px;
+      margin: 20px 0;
+    }
+    
+    .skill-item {
+      .skill-icon {
+        font-size: 28px;
+      }
+      
+      .skill-title {
+        font-size: $font-size-xl;
+        margin: 5px 0;
+      }
+      
+      .skill-description {
+        font-size: $font-size-sm;
+      }
+    }
+    
+    .hero-tagline {
+      font-size: $font-size-sm;
+      margin-bottom: 20px;
+    }
+    
+    .tech-stack {
+      gap: 8px;
+      margin-bottom: 25px;
+      
+      .tech-bubble {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+    }
+    
+    .hero-cta {
+      flex-direction: column;
+      gap: 10px;
+      
+      .cta-button {
+        width: 100%;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+      }
+    }
+    
+    .wave-divider {
+      height: 80px;
+    }
+  }
+}
+
+@include xs {
+  .hero {
+    padding-top: calc(#{$header-height} + 5px);
+    padding-bottom: 60px;
+    
+    .container {
+      padding: 0 12px;
+    }
+    
+    .hero-background {
+      .gradient-sphere {
+        filter: blur(40px);
+        
+        &.sphere-1 {
+          width: 250px;
+          height: 250px;
+          top: -50px;
+          right: -50px;
+        }
+        
+        &.sphere-2 {
+          width: 200px;
+          height: 200px;
+          bottom: -30px;
+          left: -50px;
+        }
+        
+        &.sphere-3 {
+          width: 180px;
+          height: 180px;
+          bottom: 30%;
+          right: -30px;
+        }
+      }
+    }
+    
+    .hero-title {
+      .name {
+        font-size: $font-size-2xl;
+      }
+      
+      .greeting {
+        font-size: 0.9rem;
+      }
+    }
+    
+    .skill-transition {
+      height: 140px;
+    }
+    
+    .skill-item {
+      .skill-title {
+        font-size: $font-size-lg;
+      }
+    }
+    
+    .hero-tagline {
+      br {
+        display: none;
+      }
+    }
+    
+    .wave-divider {
+      height: 60px;
+    }
+  }
+}

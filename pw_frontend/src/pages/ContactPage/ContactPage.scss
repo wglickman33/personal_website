@@ -1,0 +1,51 @@
+@use "../../assets/styles/partials/variables" as *;
+@use "../../assets/styles/partials/fonts" as *;
+@use "../../assets/styles/partials/mixins" as *;
+@use "../../assets/styles/partials/breakpoints" as *;
+@use "../../assets/styles/partials/animations" as *;
+
+.page-name-page {
+  min-height: 100vh;
+  padding: $header-height 0 50px;
+  
+  .container {
+    @include container;
+    padding-top: 50px;
+  }
+  
+  h1 {
+    font-size: $font-size-4xl;
+    margin-bottom: 30px;
+    color: $dark-color;
+    
+    .dark & {
+      color: $light-color;
+    }
+  }
+  
+  @include md {
+    padding-top: calc(#{$header-height} + 20px);
+    
+    .container {
+      padding-top: 30px;
+    }
+    
+    h1 {
+      font-size: $font-size-3xl;
+      margin-bottom: 20px;
+    }
+  }
+  
+  @include sm {
+    padding-bottom: 30px;
+    
+    .container {
+      padding-top: 20px;
+    }
+    
+    h1 {
+      font-size: $font-size-2xl;
+      margin-bottom: 15px;
+    }
+  }
+}

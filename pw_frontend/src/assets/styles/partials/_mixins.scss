@@ -1,0 +1,124 @@
+@use "variables" as *;
+
+// Flexbox mixins
+@mixin flex($justify: center, $align: center, $direction: row, $wrap: nowrap) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+  flex-wrap: $wrap;
+}
+
+// Transition mixin
+@mixin transition($property: all, $duration: $transition-speed, $timing: ease) {
+  transition: $property $duration $timing;
+}
+
+// Position mixins
+@mixin absolute($top: auto, $right: auto, $bottom: auto, $left: auto) {
+  position: absolute;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+@mixin fixed($top: auto, $right: auto, $bottom: auto, $left: auto) {
+  position: fixed;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+// Container mixin
+@mixin container {
+  width: 100%;
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 $content-padding;
+}
+
+// Typography mixins
+@mixin heading($size: lg, $weight: $font-weight-semibold, $color: $dark-color) {
+  font-family: $font-family-primary;
+  font-weight: $weight;
+  color: $color;
+  
+  @if $size == xs {
+    font-size: $font-size-sm;
+  } @else if $size == sm {
+    font-size: $font-size-base;
+  } @else if $size == md {
+    font-size: $font-size-lg;
+  } @else if $size == lg {
+    font-size: $font-size-xl;
+  } @else if $size == xl {
+    font-size: $font-size-2xl;
+  } @else if $size == 2xl {
+    font-size: $font-size-3xl;
+  } @else if $size == 3xl {
+    font-size: $font-size-4xl;
+  } @else if $size == 4xl {
+    font-size: $font-size-5xl;
+  }
+}
+
+// Responsive mixins
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == xs {
+    @media (max-width: 576px) { @content; }
+  } @else if $breakpoint == sm {
+    @media (max-width: 768px) { @content; }
+  } @else if $breakpoint == md {
+    @media (max-width: 992px) { @content; }
+  } @else if $breakpoint == lg {
+    @media (max-width: 1200px) { @content; }
+  } @else if $breakpoint == xl {
+    @media (min-width: 1201px) { @content; }
+  }
+}
+
+// Button mixin
+@mixin button($bg-color: $primary-color, $text-color: $light-color, $hover-bg: darken($primary-color, 10%)) {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  background-color: $bg-color;
+  color: $text-color;
+  border: none;
+  border-radius: $border-radius;
+  font-family: $font-family-primary;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  @include transition;
+  
+  &:hover {
+    background-color: $hover-bg;
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($primary-color, 0.3);
+  }
+}
+
+// Link hover animation mixin
+@mixin link-hover-animation {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: $primary-color;
+    @include transition(all, 0.4s, ease);
+    transform: translateX(-50%);
+  }
+  
+  &:hover::after {
+    width: 70%;
+  }
+}

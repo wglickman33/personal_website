@@ -1,0 +1,66 @@
+@use "variables" as *;
+@use "fonts" as *;
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: $font-family-primary;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $dark-color;
+  background-color: $light-color;
+  overflow-x: hidden;
+  transition: background-color $transition-speed ease, color $transition-speed ease;
+  
+  &.dark {
+    color: $light-color;
+    background-color: $dark-color;
+  }
+}
+
+a {
+  text-decoration: none;
+  color: $primary-color;
+  transition: color $transition-speed ease;
+  
+  &:hover {
+    color: darken($primary-color, 10%);
+  }
+}
+
+button {
+  cursor: pointer;
+  font-family: $font-family-primary;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  white-space: nowrap;
+}
+
+.container {
+  width: 100%;
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 $content-padding;
+}

@@ -1,0 +1,18 @@
+@use "./assets/styles/partials/variables" as *;
+@use "./assets/styles/partials/fonts" as *;
+@use "./assets/styles/partials/mixins" as *;
+@use "./assets/styles/partials/breakpoints" as *;
+@use "./assets/styles/partials/global" as *;
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}

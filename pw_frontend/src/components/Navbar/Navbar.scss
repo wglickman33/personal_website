@@ -1,0 +1,123 @@
+@use "../../assets/styles/partials/variables" as *;
+@use "../../assets/styles/partials/fonts" as *;
+@use "../../assets/styles/partials/mixins" as *;
+@use "../../assets/styles/partials/breakpoints" as *;
+
+.navbar {
+  display: flex;
+  align-items: center;
+  
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 30px;
+  }
+  
+  &__item {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInNavLink 0.5s ease forwards;
+    
+    @for $i from 1 through 6 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{0.1 * $i}s;
+      }
+    }
+  }
+  
+  &__link {
+    display: inline-block;
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
+    color: rgba($light-color, 0.85);
+    text-decoration: none;
+    padding: 5px 0;
+    transition: all $transition-speed ease;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: $primary-color;
+      transition: width $transition-speed ease;
+    }
+    
+    &:hover {
+      color: rgba($light-color, 1);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      
+      &::after {
+        width: 100%;
+      }
+    }
+    
+    &--active {
+      color: $primary-color;
+      
+      &::after {
+        width: 100%;
+        background-color: $primary-color;
+      }
+    }
+  }
+}
+
+@keyframes fadeInNavLink {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@include md {
+  .navbar {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 900;
+    background-color: rgba($dark-color, 0.95);
+    backdrop-filter: blur(10px);
+    padding-top: 80px;
+    
+    &.navbar--open {
+      display: flex !important;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    
+    &__list {
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+      padding-top: 50px;
+    }
+    
+    &__item {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+    
+    &__link {
+      font-size: $font-size-xl;
+      padding: 10px;
+      
+      &::after {
+        height: 3px;
+      }
+    }
+  }
+}
