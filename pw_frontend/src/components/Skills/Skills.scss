@@ -1,0 +1,202 @@
+@use "../../assets/styles/partials/variables" as *;
+@use "../../assets/styles/partials/fonts" as *;
+@use "../../assets/styles/partials/mixins" as *;
+@use "../../assets/styles/partials/breakpoints" as *;
+
+.skills {
+  padding: 100px 40px;
+  background: linear-gradient(135deg, #e2e8f0 0%, #f8fafc 100%);
+  position: relative;
+
+  &.skills--dark {
+    background: $dark-gray-color;
+  }
+
+  @include md {
+    padding: 80px 32px;
+  }
+
+  @include sm {
+    padding: 60px 20px;
+  }
+}
+
+.skills__container {
+  max-width: $container-max-width;
+  margin: 0 auto;
+}
+
+.skills__title {
+  font-family: $font-family-display;
+  font-size: clamp($font-size-3xl, 5vw, $font-size-5xl);
+  font-weight: $font-weight-black;
+  color: $primary-color;
+  text-align: center;
+  margin-bottom: 16px;
+  letter-spacing: $letter-spacing-tighter;
+
+  .skills--dark & {
+    color: $light-color;
+  }
+}
+
+.skills__subtitle {
+  font-size: $font-size-lg;
+  color: $secondary-color;
+  text-align: center;
+  margin-bottom: 80px;
+
+  .skills--dark & {
+    color: rgba($light-color, 0.7);
+  }
+
+  @include sm {
+    margin-bottom: 60px;
+    font-size: $font-size-base;
+  }
+}
+
+.skills__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+
+  @include sm {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.skills__category {
+  background-color: rgba($light-color, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba($primary-color, 0.08);
+  border-radius: $border-radius-lg;
+  padding: 28px;
+  transition: all $transition-speed ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, $accent-color-3, $accent-color-1, $accent-color-2);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: $box-shadow-xl;
+    border-color: rgba($accent-color-1, 0.3);
+
+    &::before {
+      transform: scaleX(1);
+    }
+
+    .skills__category-title {
+      background: linear-gradient(135deg, $accent-color-3, $accent-color-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+
+  .skills--dark & {
+    background-color: rgba($dark-color, 0.8);
+    border-color: rgba($light-color, 0.1);
+
+    &:hover {
+      border-color: rgba($accent-color-1, 0.3);
+    }
+  }
+
+  @include md {
+    padding: 24px;
+    border-radius: $border-radius;
+  }
+
+  @include sm {
+    padding: 20px;
+  }
+}
+
+.skills__category-title {
+  font-family: $font-family-display;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $primary-color;
+  margin-bottom: 24px;
+  letter-spacing: $letter-spacing-tight;
+  transition: all $transition-speed ease;
+
+  .skills--dark & {
+    color: $light-color;
+  }
+}
+
+.skills__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skills__item {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.skills__item--visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  @for $i from 1 through 10 {
+    &:nth-child(#{$i}) {
+      transition-delay: #{$i * 0.05}s;
+    }
+  }
+}
+
+.skills__item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background-color: rgba($gray-color-light, 0.6);
+  border-radius: $border-radius;
+  border: 1px solid rgba($primary-color, 0.08);
+  transition: all $transition-speed ease;
+
+  &:hover {
+    background-color: rgba($accent-color-1, 0.05);
+    border-color: rgba($accent-color-1, 0.3);
+    box-shadow: $box-shadow;
+  }
+
+  .skills--dark & {
+    background-color: rgba($primary-color, 0.2);
+    border-color: rgba($light-color, 0.1);
+
+    &:hover {
+      background-color: rgba($accent-color-1, 0.1);
+      border-color: rgba($accent-color-1, 0.3);
+    }
+  }
+}
+
+.skills__name {
+  font-family: $font-family-display;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $primary-color;
+
+  .skills--dark & {
+    color: $light-color;
+  }
+}

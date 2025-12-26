@@ -1,0 +1,413 @@
+// Button.scss - Fix for hero section text colors
+@use "../../assets/styles/partials/variables" as *;
+@use "../../assets/styles/partials/fonts" as *;
+@use "../../assets/styles/partials/mixins" as *;
+@use "../../assets/styles/partials/breakpoints" as *;
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 0 1.5rem;
+  border-radius: $border-radius;
+  font-family: $font-family-primary;
+  font-weight: $font-weight-medium;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transform: translateZ(0); // Force hardware acceleration
+  will-change: transform; // Optimize for animations
+  transition: all 0.2s ease-out; // Faster, smoother transition
+  overflow: hidden;
+  
+  // Make sure content is above effects
+  &__label, &__icon {
+    position: relative;
+    z-index: 2;
+  }
+  
+  // Button sizes
+  &--sm {
+    height: 36px;
+    font-size: $font-size-sm;
+  }
+  
+  &--md {
+    height: 44px;
+    font-size: $font-size-base;
+  }
+  
+  &--lg {
+    height: 54px;
+    font-size: $font-size-md;
+  }
+  
+  // Icon styles
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease-out; // Match button transition
+    
+    &--left {
+      margin-right: 0.75rem;
+    }
+    
+    &--right {
+      margin-left: 0.75rem;
+    }
+  }
+  
+  // Loading spinner
+  &__loader {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  &--loading {
+    pointer-events: none;
+    
+    .button__label {
+      opacity: 0.7;
+    }
+  }
+  
+  &--full-width {
+    width: 100%;
+  }
+  
+  // PRIMARY BUTTON - Solid, modern design
+  &--primary {
+    background-color: $primary-color;
+    color: $light-color;
+    border: 1px solid $primary-color;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    &:hover, &:focus {
+      background-color: color-mix(in srgb, $primary-color 92%, white 8%);
+      border-color: color-mix(in srgb, $primary-color 92%, white 8%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      
+      .button__icon--right {
+        transform: translateX(3px);
+      }
+      
+      .button__icon--left {
+        transform: translateX(-3px);
+      }
+    }
+    
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    // Hero-specific styles to maintain white text
+    .hero & {
+      color: $light-color;
+      
+      &:hover, &:focus {
+        color: $light-color;
+      }
+    }
+  }
+  
+  // SECONDARY BUTTON - Tailored for both dark and light backgrounds
+  &--secondary {
+    background-color: rgba($dark-color, 0.08);
+    color: $dark-color;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    
+    &:hover, &:focus {
+      background-color: rgba($dark-color, 0.12);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+      
+      .button__icon--right {
+        transform: translateX(3px);
+      }
+      
+      .button__icon--left {
+        transform: translateX(-3px);
+      }
+    }
+    
+    &:active {
+      transform: translateY(0);
+      background-color: rgba($dark-color, 0.15);
+    }
+    
+    // Hero-specific styles to ensure white text
+    .hero & {
+      background-color: rgba($light-color, 0.2);
+      color: $light-color;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(4px);
+      
+      &:hover, &:focus {
+        background-color: rgba($light-color, 0.3);
+        color: $light-color; // Force white text on hover
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      }
+      
+      &:active {
+        background-color: rgba($light-color, 0.25);
+        color: $light-color;
+      }
+    }
+    
+    // Dark mode styles
+    .dark & {
+      background-color: rgba($light-color, 0.15);
+      color: $light-color;
+      
+      &:hover, &:focus {
+        background-color: rgba($light-color, 0.25);
+        color: $light-color;
+      }
+      
+      &:active {
+        background-color: rgba($light-color, 0.2);
+      }
+    }
+  }
+  
+  // OUTLINE BUTTON - High contrast for visibility
+  &--outline {
+    background-color: transparent;
+    box-shadow: inset 0 0 0 2px $primary-color;
+    color: $primary-color;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: $primary-color;
+      opacity: 0;
+      z-index: 1;
+      transition: opacity 0.2s ease-out;
+    }
+    
+    &:hover, &:focus {
+      transform: translateY(-2px);
+      box-shadow: inset 0 0 0 2px $primary-color, 0 4px 8px rgba($primary-color, 0.3);
+      
+      &::before {
+        opacity: 0.12;
+      }
+      
+      .button__icon--right {
+        transform: translateX(3px);
+      }
+      
+      .button__icon--left {
+        transform: translateX(-3px);
+      }
+    }
+    
+    &:active {
+      transform: translateY(0);
+      
+      &::before {
+        opacity: 0.2;
+      }
+    }
+    
+    // Hero-specific styles with white border and text
+    .hero & {
+      box-shadow: inset 0 0 0 2px $light-color;
+      color: $light-color;
+      
+      &::before {
+        background-color: $light-color;
+      }
+      
+      &:hover, &:focus {
+        color: $light-color; // Keep text white on hover
+        box-shadow: inset 0 0 0 2px $light-color, 0 4px 12px rgba($light-color, 0.3);
+        
+        &::before {
+          opacity: 0.15;
+        }
+      }
+    }
+    
+    // Dark mode styles
+    .dark & {
+      box-shadow: inset 0 0 0 2px color-mix(in srgb, $primary-color 90%, white 10%);
+      color: color-mix(in srgb, $primary-color 90%, white 10%);
+      
+      &:hover, &:focus {
+        box-shadow: inset 0 0 0 2px color-mix(in srgb, $primary-color 85%, white 15%), 0 4px 8px rgba($primary-color, 0.3);
+        
+        &::before {
+          background-color: color-mix(in srgb, $primary-color 90%, white 10%);
+        }
+      }
+    }
+  }
+  
+  // GRADIENT BUTTON - Subtle gradient
+  &--gradient {
+    background: linear-gradient(135deg, $primary-color, $accent-color-1);
+    color: $light-color;
+    border: 1px solid $primary-color;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    &:hover, &:focus {
+      background: linear-gradient(135deg, color-mix(in srgb, $primary-color 92%, white 8%), color-mix(in srgb, $accent-color-1 92%, white 8%));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      
+      .button__icon--right {
+        transform: translateX(3px);
+      }
+      
+      .button__icon--left {
+        transform: translateX(-3px);
+      }
+    }
+    
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    // Hero-specific styles to maintain white text
+    .hero & {
+      color: $light-color;
+      
+      &:hover, &:focus {
+        color: $light-color;
+      }
+    }
+  }
+  
+  // TEXT BUTTON - Minimal style
+  &--text {
+    background-color: transparent;
+    color: $primary-color;
+    padding: 0;
+    height: auto;
+    
+    &:hover, &:focus {
+      color: color-mix(in srgb, $primary-color 85%, black 15%);
+      
+      .button__icon--right {
+        transform: translateX(3px);
+      }
+      
+      .button__icon--left {
+        transform: translateX(-3px);
+      }
+    }
+    
+    &:active {
+      color: color-mix(in srgb, $primary-color 80%, black 20%);
+    }
+    
+    // Hero-specific styles with white text
+    .hero & {
+      color: $light-color;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      
+      &:hover, &:focus {
+        color: rgba($light-color, 0.8); // Slightly dimmed white on hover
+      }
+      
+      &:active {
+        color: rgba($light-color, 0.7);
+      }
+    }
+    
+    // Dark mode styles
+    .dark & {
+      color: color-mix(in srgb, $primary-color 90%, white 10%);
+      
+      &:hover, &:focus {
+        color: color-mix(in srgb, $primary-color 80%, white 20%);
+      }
+      
+      &:active {
+        color: color-mix(in srgb, $primary-color 85%, white 15%);
+      }
+    }
+  }
+  
+  // Disabled state
+  &:disabled, &[aria-disabled="true"] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+    pointer-events: none;
+  }
+  
+  // Accessibility focus
+  &:focus-visible {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+    
+    .hero & {
+      outline-color: $light-color;
+    }
+  }
+}
+
+// Fix the ProjectCard view-project button
+.project-card {
+  .view-project {
+    // Override any conflicting styles
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem 1.5rem;
+    border: 2px solid white;
+    border-radius: $border-radius;
+    color: white;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    z-index: 5; // Ensure it's above other elements
+    transition: all 0.2s ease-out;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: -1;
+    }
+    
+    &:hover, &:focus {
+      color: $primary-color;
+      
+      &::before {
+        transform: translateX(0);
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

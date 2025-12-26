@@ -1,0 +1,81 @@
+@use "../../assets/styles/partials/variables" as *;
+@use "../../assets/styles/partials/fonts" as *;
+
+.star-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.star-rating__star {
+  display: inline-flex;
+  align-items: center;
+  color: $timeline-color-grey;
+  transition: all $transition-speed ease;
+
+  .material-symbols-outlined {
+    font-size: 20px;
+    font-variation-settings: 'FILL' 1, 'wght' 400;
+  }
+
+  &.star-rating__star--full {
+    color: $accent-color-1;
+    animation: starPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &.star-rating__star--half {
+    color: $accent-color-1;
+    animation: starPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &.star-rating__star--empty {
+    color: $timeline-color-grey;
+    opacity: 0.4;
+  }
+}
+
+@keyframes starPop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.star-rating--sm {
+  .star-rating__star .material-symbols-outlined {
+    font-size: 16px;
+  }
+
+  .star-rating__value {
+    font-size: $font-size-xs;
+  }
+}
+
+.star-rating--lg {
+  .star-rating__star .material-symbols-outlined {
+    font-size: 24px;
+  }
+
+  .star-rating__value {
+    font-size: $font-size-base;
+  }
+}
+
+.star-rating__value {
+  margin-left: 8px;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $primary-color;
+  font-family: $font-family-display;
+  background: linear-gradient(135deg, $accent-color-3, $accent-color-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

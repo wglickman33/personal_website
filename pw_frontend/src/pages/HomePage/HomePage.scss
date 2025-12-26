@@ -1,11 +1,3 @@
-@use "../../assets/styles/partials/variables" as *;
-@use "../../assets/styles/partials/fonts" as *;
-@use "../../assets/styles/partials/mixins" as *;
-@use "../../assets/styles/partials/breakpoints" as *;
-@use "../../assets/styles/partials/animations" as *;
-
 .home-page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+  width: 100%;
+    }

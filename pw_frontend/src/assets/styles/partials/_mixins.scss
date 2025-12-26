@@ -1,4 +1,5 @@
 @use "variables" as *;
+@use "fonts" as *;
 
 // Flexbox mixins
 @mixin flex($justify: center, $align: center, $direction: row, $wrap: nowrap) {
@@ -80,7 +81,7 @@
 }
 
 // Button mixin
-@mixin button($bg-color: $primary-color, $text-color: $light-color, $hover-bg: darken($primary-color, 10%)) {
+@mixin button($bg-color: $primary-color, $text-color: $light-color, $hover-bg: color-mix(in srgb, $primary-color 90%, black 10%)) {
   display: inline-block;
   padding: 0.5rem 1.25rem;
   background-color: $bg-color;
@@ -110,15 +111,14 @@
     content: '';
     position: absolute;
     bottom: 0;
-    left: 50%;
+    left: 0;
     width: 0;
     height: 2px;
     background-color: $primary-color;
-    @include transition(all, 0.4s, ease);
-    transform: translateX(-50%);
+    @include transition(all, 0.3s, ease);
   }
   
   &:hover::after {
-    width: 70%;
+    width: 100%;
   }
 }

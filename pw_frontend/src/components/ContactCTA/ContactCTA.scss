@@ -1,0 +1,86 @@
+// ContactCTA.scss - More edgy and techy
+@use "../../assets/styles/partials/variables" as *;
+@use "../../assets/styles/partials/fonts" as *;
+@use "../../assets/styles/partials/mixins" as *;
+@use "../../assets/styles/partials/breakpoints" as *;
+@use "../../assets/styles/partials/animations" as *;
+
+.contact-cta {
+  padding-top: 8rem;
+  padding-bottom: 6rem;
+  position: relative;
+  background: $dark-color;
+  overflow: hidden;
+  
+  .container {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .cta-content {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .cta-title {
+    font-size: $font-size-3xl;
+    color: $light-color;
+    margin-bottom: 1.5rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: -0.02em;
+    
+    @include sm {
+      font-size: $font-size-2xl;
+    }
+  }
+  
+  .cta-text {
+    font-size: $font-size-md;
+    color: rgba(white, 0.9);
+    margin-bottom: 3rem;
+    
+    @include sm {
+      font-size: $font-size-base;
+      margin-bottom: 2.5rem;
+    }
+  }
+  
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    
+    @include sm {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+  }
+  
+  .cta-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  
+  .gradient-circle {
+    display: none;
+  }
+  
+  .grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: 1;
+  }
+}

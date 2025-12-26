@@ -1,0 +1,46 @@
+// SectionDivider.scss
+.section-divider {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+    direction: ltr;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 2;
+    
+    &.top {
+      top: -1px;
+    }
+    
+    &.bottom {
+      bottom: -1px;
+    }
+    
+    // Flip the shape
+    &.flip {
+      transform: rotate(180deg);
+    }
+    
+    // Wave specific height
+    &.wave {
+      svg {
+        height: 120px;
+      }
+    }
+    
+    // Other variants height
+    &.curve, &.angle, &.triangle {
+      svg {
+        height: 100px;
+      }
+    }
+    
+    svg {
+      display: block;
+      width: calc(100% + 1.3px);
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }

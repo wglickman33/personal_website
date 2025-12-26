@@ -1,0 +1,205 @@
+// Experience.scss
+@use "../../assets/styles/partials/variables" as *;
+@use "../../assets/styles/partials/mixins" as *;
+@use "../../assets/styles/partials/breakpoints" as *;
+
+.experience {
+  position: relative;
+  
+  &.dark {
+    .timeline-content {
+      background-color: $dark-gray-color;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .timeline-title,
+    .timeline-company {
+      color: $light-color;
+    }
+    
+    .timeline-description {
+      color: rgba($light-color, 0.8);
+    }
+    
+    .timeline-period {
+      background-color: rgba($primary-color, 0.2);
+      color: $primary-color;
+    }
+    
+    .skill-tag {
+      background-color: rgba($light-color, 0.1);
+      color: $light-color;
+    }
+    
+    .timeline-line {
+      background-color: rgba($light-color, 0.1);
+    }
+    
+    .timeline-item::after {
+      background-color: $primary-color;
+      border: 2px solid rgba($light-color, 0.2);
+    }
+  }
+  
+  .timeline {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 0;
+  }
+  
+  .timeline-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background-color: rgba($dark-color, 0.1);
+    transform: translateX(-50%);
+    
+    @include md {
+      left: 20px;
+    }
+  }
+  
+  .timeline-item {
+    position: relative;
+    margin-bottom: 60px;
+    width: 50%;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.5s ease;
+    
+    &.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background-color: $primary-color;
+      border: 2px solid rgba($dark-color, 0.1);
+      border-radius: 50%;
+      top: 15px;
+      z-index: 1;
+    }
+    
+    &.left {
+      left: 0;
+      padding-right: 40px;
+      
+      &::after {
+        right: -8px;
+      }
+    }
+    
+    &.right {
+      left: 50%;
+      padding-left: 40px;
+      
+      &::after {
+        left: -8px;
+      }
+    }
+    
+    @include md {
+      width: 100%;
+      left: 0;
+      padding-left: 50px;
+      
+      &::after {
+        left: 12px;
+      }
+      
+      &.left {
+        padding-right: 0;
+        
+        &::after {
+          right: auto;
+          left: 12px;
+        }
+      }
+      
+      &.right {
+        left: 0;
+      }
+    }
+  }
+  
+  .timeline-content {
+    padding: 25px;
+    background-color: $light-color;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    position: relative;
+  }
+  
+  .company-logo {
+    position: absolute;
+    top: -25px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: white;
+    padding: 5px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+  
+  .timeline-period {
+    display: inline-block;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $primary-color;
+    background-color: rgba($primary-color, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .timeline-title {
+    font-size: $font-size-lg;
+    color: $dark-color;
+    margin-bottom: 5px;
+    font-weight: $font-weight-semibold;
+  }
+  
+  .timeline-company {
+    font-size: $font-size-sm;
+    color: $secondary-color;
+    margin-bottom: 15px;
+    font-weight: $font-weight-medium;
+  }
+  
+  .timeline-description {
+    font-size: $font-size-base;
+    color: $secondary-color;
+    line-height: 1.6;
+    margin-bottom: 15px;
+  }
+  
+  .timeline-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .skill-tag {
+    font-size: $font-size-xs;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background-color: $gray-color;
+    color: $secondary-color;
+  }
+}

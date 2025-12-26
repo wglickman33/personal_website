@@ -1,0 +1,96 @@
+// FeaturedProjects.scss - Refined styling
+@use "../../assets/styles/partials/variables" as *;
+@use "../../assets/styles/partials/fonts" as *;
+@use "../../assets/styles/partials/mixins" as *;
+@use "../../assets/styles/partials/breakpoints" as *;
+@use "../../assets/styles/partials/animations" as *;
+
+.featured-projects {
+  position: relative;
+  overflow: hidden;
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+  background-color: $light-color;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba($accent-color-2, 0.05), transparent 70%);
+    border-radius: 50%;
+    top: -100px;
+    right: -100px;
+    z-index: 0;
+  }
+  
+  &.dark {
+    background-color: $dark-color;
+    
+    .section-title, 
+    .section-subtitle {
+      color: $light-color;
+    }
+  }
+  
+  .container {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    
+    @include sm {
+      margin-bottom: 3rem;
+    }
+  }
+  
+  .section-title {
+    @include heading(2xl);
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: $primary-color;
+    }
+  }
+  
+  .section-subtitle {
+    font-size: $font-size-md;
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 1.5rem;
+    color: $secondary-color;
+  }
+  
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    margin-bottom: 3rem;
+    
+    @include md {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @include sm {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+  
+  .projects-cta {
+    margin-top: 3rem;
+    text-align: center;
+  }
+}

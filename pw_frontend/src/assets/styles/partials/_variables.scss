@@ -1,43 +1,46 @@
-// Color variables
-$primary-color: #3d7aed;
-$secondary-color: #344563;
+$primary-color: #0f172a;
+$secondary-color: #64748b;
 $light-color: #ffffff;
-$dark-color: #121821;
-$gray-color: #f7f8f9;
-$dark-gray-color: #1a202c;
+$dark-color: #0f172a;
+$gray-color: #f1f5f9;
+$gray-color-light: #f8fafc;
+$dark-gray-color: #1e293b;
 
-// Accent colors
-$accent-color-1: #f54d7e;
-$accent-color-2: #00c896;
-$accent-color-3: #ffb342;
+$accent-color-1: #3b82f6;
+$accent-color-2: #1e40af;
+$accent-color-3: #60a5fa;
+$accent-color-4: #2563eb;
 
-// Typography
-$font-family-primary: 'Poppins', sans-serif;
+$timeline-color-grey: #cbd5e1;
+$timeline-color-blue: #3b82f6;
+
 $font-weight-light: 300;
 $font-weight-regular: 400;
 $font-weight-medium: 500;
 $font-weight-semibold: 600;
 $font-weight-bold: 700;
+$font-weight-extrabold: 800;
+$font-weight-black: 900;
 
-// Animation and transition
-$transition-speed: 0.3s;
-$transition-speed-slow: 0.5s;
+$transition-speed: 0.4s;
+$transition-speed-slow: 0.6s;
 $transition-speed-fast: 0.2s;
 
-// Layout
-$container-max-width: 1200px;
+$container-max-width: 1280px;
 $header-height: 70px;
 $header-height-scrolled: 60px;
 $content-padding: 20px;
 
-// Effects
-$border-radius: 6px;
-$border-radius-lg: 12px;
-$box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-$box-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
-$dark-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+$border-radius: 8px;
+$border-radius-lg: 16px;
+$border-radius-xl: 24px;
+$box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+$box-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+$box-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+$box-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+$box-shadow-hover: 0 25px 50px rgba(0, 0, 0, 0.15);
+$dark-box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3), 0 4px 6px rgba(0, 0, 0, 0.2);
 
-// Z-index levels
 $z-index-header: 1000;
 $z-index-dropdown: 10;
 $z-index-modal: 2000;
