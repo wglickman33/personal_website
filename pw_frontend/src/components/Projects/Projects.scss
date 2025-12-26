@@ -59,37 +59,35 @@
 .projects__timeline {
   position: relative;
   padding: 40px 0;
+}
 
-  &::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: linear-gradient(180deg, 
-      transparent,
-      $timeline-color-grey 10%,
-      $timeline-color-grey 90%,
-      transparent
-    );
-    transform: translateX(-50%);
+.projects__timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: $timeline-color-grey;
+  transform: translateX(-50%);
+  overflow: hidden;
 
-    .projects--dark & {
-      background: linear-gradient(180deg, 
-        transparent,
-        rgba($light-color, 0.2) 10%,
-        rgba($light-color, 0.2) 90%,
-        transparent
-      );
-    }
+  .projects--dark & {
+    background-color: rgba($light-color, 0.2);
   }
 
   @include md {
-    &::before {
-      left: 20px;
-    }
+    left: 20px;
   }
+}
+
+.projects__timeline-line-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(180deg, $accent-color-3, $accent-color-1);
+  transition: height 0.1s ease-out;
+  will-change: height;
 }
 
 .projects__item {

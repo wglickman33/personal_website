@@ -7,6 +7,37 @@ const Projects = () => {
   const { theme } = useTheme();
   const timelineRef = useRef<HTMLDivElement>(null);
   const [visibleProjects, setVisibleProjects] = useState<Set<string>>(new Set());
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!timelineRef.current) return;
+
+      const timeline = timelineRef.current;
+      const rect = timeline.getBoundingClientRect();
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const timelineTop = scrollTop + rect.top;
+      const timelineHeight = rect.height;
+      const viewportHeight = window.innerHeight;
+      const viewportCenter = viewportHeight * 0.5;
+
+      // Calculate when timeline center aligns with viewport center
+      const scrollableStart = timelineTop - viewportCenter;
+      const scrollableEnd = timelineTop + timelineHeight - viewportCenter;
+      const scrollableDistance = scrollableEnd - scrollableStart;
+      
+      // Progress based on how far we've scrolled relative to the timeline center
+      const scrolled = scrollTop - scrollableStart;
+      const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
+
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -38,6 +69,13 @@ const Projects = () => {
         <p className="projects__subtitle">A timeline of my work</p>
 
         <div className="projects__timeline" ref={timelineRef}>
+          <div className="projects__timeline-line">
+            <div 
+              className="projects__timeline-line-progress"
+              style={{ height: `${scrollProgress * 100}%` }}
+            />
+          </div>
+
           {projects.map((project, index) => (
             <div
               key={project.id}
