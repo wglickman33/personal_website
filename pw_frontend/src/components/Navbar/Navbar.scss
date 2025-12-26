@@ -49,8 +49,8 @@
     }
     
     &:hover {
-      color: rgba($light-color, 1);
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      color: $primary-color;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
       
       &::after {
         width: 100%;

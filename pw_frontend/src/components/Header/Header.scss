@@ -95,13 +95,7 @@
     font-size: $font-size-xl;
     font-weight: $font-weight-bold;
     color: $light-color;
-    background: linear-gradient(to right, #fff, #a3bffa);
-    background-size: 200% auto;
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    animation: textGradient 5s infinite alternate;
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    letter-spacing: 0.05em;
   }
   
   &__actions {
@@ -117,16 +111,16 @@
     color: $light-color;
     text-decoration: none;
     background-color: rgba($light-color, 0.08);
-    backdrop-filter: blur(5px);
+    border: 1px solid rgba($light-color, 0.15);
     padding: 8px 16px;
     border-radius: $border-radius;
     transition: all $transition-speed ease;
     
     &:hover {
-      background-color: rgba($light-color, 0.15);
-      transform: translateY(-3px);
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-      color: white;
+      background-color: rgba($light-color, 0.12);
+      border-color: rgba($light-color, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
   }
   
@@ -141,15 +135,16 @@
     align-items: center;
     justify-content: center;
     background-color: rgba($light-color, 0.08);
-    backdrop-filter: blur(5px);
+    border: 1px solid rgba($light-color, 0.15);
     position: relative;
     overflow: hidden;
     transition: all $transition-speed ease;
     
     &:hover {
-      background-color: rgba($light-color, 0.15);
-      transform: translateY(-3px);
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      background-color: rgba($light-color, 0.12);
+      border-color: rgba($light-color, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
   }
   
@@ -184,14 +179,6 @@
   }
 }
 
-@keyframes textGradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
-}
 
 @include sm {
   .header {

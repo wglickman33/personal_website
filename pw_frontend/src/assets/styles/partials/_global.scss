@@ -15,10 +15,12 @@ body {
   font-family: $font-family-primary;
   font-size: $font-size-base;
   line-height: $line-height-base;
-  color: $dark-color;
-  background-color: $light-color;
+  color: $primary-color;
+  background-color: $gray-color-light;
   overflow-x: hidden;
   transition: background-color $transition-speed ease, color $transition-speed ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   
   &.dark {
     color: $light-color;
@@ -32,7 +34,7 @@ a {
   transition: color $transition-speed ease;
   
   &:hover {
-    color: darken($primary-color, 10%);
+    color: color-mix(in srgb, $primary-color 90%, white 10%);
   }
 }
 

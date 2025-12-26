@@ -1,0 +1,82 @@
+// Section.scss
+@use "../../assets/styles/partials/variables" as *;
+@use "../../assets/styles/partials/mixins" as *;
+@use "../../assets/styles/partials/breakpoints" as *;
+
+.section {
+  padding: 5rem 0;
+  position: relative;
+  transition: background-color 0.3s ease;
+  
+  &.dark {
+    .section-title {
+      color: $light-color;
+    }
+    
+    .section-subtitle {
+      color: rgba($light-color, 0.8);
+    }
+  }
+  
+  &.no-padding {
+    padding: 0;
+  }
+  
+  &.centered {
+    text-align: center;
+    
+    .section-title::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+  
+  &.full-height {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .section-header {
+    margin-bottom: 3rem;
+    
+    @include sm {
+      margin-bottom: 2rem;
+    }
+  }
+  
+  .section-title {
+    @include heading(2xl);
+    margin-bottom: 1rem;
+    color: $dark-color;
+    position: relative;
+    display: inline-block;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -10px;
+      width: 50px;
+      height: 3px;
+      background-color: $primary-color;
+    }
+    
+    @include sm {
+      font-size: $font-size-xl;
+    }
+  }
+  
+  .section-subtitle {
+    font-size: $font-size-md;
+    color: $secondary-color;
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 1.5rem;
+    
+    @include sm {
+      font-size: $font-size-base;
+    }
+  }
+}

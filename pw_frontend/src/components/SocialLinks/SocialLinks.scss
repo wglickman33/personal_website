@@ -1,0 +1,46 @@
+// SocialLinks.scss
+@use "../../assets/styles/partials/variables" as *;
+@use "../../assets/styles/partials/mixins" as *;
+
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  
+  &.vertical {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba($light-color, 0.1);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-3px);
+      background-color: $primary-color;
+      box-shadow: 0 5px 15px rgba($primary-color, 0.3);
+    }
+  }
+  
+  .social-icon {
+    font-size: 1.2rem;
+  }
+  
+  &.dark {
+    .social-link {
+      background-color: rgba($dark-color, 0.5);
+      
+      &:hover {
+        background-color: $primary-color;
+      }
+    }
+  }
+}
