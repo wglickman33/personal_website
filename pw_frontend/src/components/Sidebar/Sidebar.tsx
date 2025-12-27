@@ -51,6 +51,13 @@ const Sidebar = () => {
     return location.pathname.startsWith(path);
   };
 
+  const handleNavClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (isMobile) {
+      setIsOpen(false);
+    }
+  };
+
   return (
     <>
       {isMobile && !isOpen && (
@@ -78,7 +85,7 @@ const Sidebar = () => {
               <span className="material-symbols-outlined">close</span>
             </button>
           )}
-          <Link to="/" className="sidebar__logo">
+          <Link to="/" className="sidebar__logo" onClick={handleNavClick}>
             <span className="sidebar__logo-text">WG</span>
           </Link>
         </div>
@@ -90,7 +97,7 @@ const Sidebar = () => {
                 <Link
                   to={item.path}
                   className={`sidebar__link ${isActive(item.path) ? 'sidebar__link--active' : ''}`}
-                  onClick={() => isMobile && setIsOpen(false)}
+                  onClick={handleNavClick}
                 >
                   <span className="material-symbols-outlined sidebar__icon">{item.icon}</span>
                   <span className="sidebar__label">{item.label}</span>

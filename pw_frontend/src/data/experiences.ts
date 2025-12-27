@@ -1,22 +1,14 @@
 export interface Experience {
-  title: string;
-  company: string;
-  location: string;
-  period: string;
-  description: string;
-  skills: string[];
-  logo?: string;
-}
-
+    title: string;
+    company: string;
+    location: string;
+    period: string;
+    description: string;
+    skills: string[];
+    logo?: string;
+  }
+  
 export const experiences: Experience[] = [
-  {
-    title: 'Agentic AI Engineer',
-    company: 'Further (Talk Further)',
-    location: 'Remote',
-    period: 'June 2025 - Present',
-    description: 'Building and maintaining voice AI agents for behavioral health facilities including substance abuse, mental health, eating disorders, and outpatient programs. Working with customer success managers, directors, VPs of sales, and clients. Created chat agents for instant facility answers, voice agents for human admission agent training scenarios, and a two-way SMS alumni support coordinator AI agent. Maintain 5+ agents with capabilities including scheduling appointments, collecting survey data, extracting insurance information, sending SMS during calls, performing admissions intake, and arranging callbacks.',
-    skills: ['Python', 'OpenAI API', 'Anthropic API', 'Voice AI', 'Chat AI', 'SMS Integration', 'RetellAI', 'Langfuse', 'Twilio', 'CekuraAI', 'Product Management'],
-  },
   {
     title: 'Junior AI Engineer',
     company: 'Quant Inc.',
@@ -24,6 +16,14 @@ export const experiences: Experience[] = [
     period: 'November 2024 - June 2025',
     description: 'Built AI agents for various industries including utility companies, pizza shops, restaurants, retail, malls, banks, policy, and government sectors. Shipped working agents across 8+ different industries in under 6 months. Clients actually used them, which was the real win. Learned a ton about adapting AI to wildly different business contexts.',
     skills: ['Python', 'JavaScript', 'TypeScript', 'OpenAI API', 'AI Agents', 'Flask', 'ServiceNow', 'CrewAI', 'DifyAI', 'Voice AI', 'Chat AI', 'Ansible', 'Docker'],
+  },
+  {
+    title: 'Agentic AI Engineer',
+    company: 'Further (Talk Further)',
+    location: 'Remote',
+    period: 'June 2025 - Present',
+    description: 'Building and maintaining voice AI agents for behavioral health facilities including substance abuse, mental health, eating disorders, and outpatient programs. Working with customer success managers, directors, VPs of sales, and clients. Created chat agents for instant facility answers, voice agents for human admission agent training scenarios, and a two-way SMS alumni support coordinator AI agent. Maintain 5+ agents with capabilities including scheduling appointments, collecting survey data, extracting insurance information, sending SMS during calls, performing admissions intake, and arranging callbacks.',
+    skills: ['Python', 'OpenAI API', 'Anthropic API', 'Voice AI', 'Chat AI', 'SMS Integration', 'RetellAI', 'Langfuse', 'Twilio', 'CekuraAI', 'Product Management'],
   },
   {
     title: 'Chief of Staff, Flight Training, and Curriculum Management',
@@ -65,6 +65,14 @@ export const experiences: Experience[] = [
     description: 'Worked as a phlebotomy and EKG intern, drawing blood, taking EKGs, and packaging blood samples. Gained hands-on healthcare experience that helps me understand patients, callers, and families when building healthcare AI agents.',
     skills: ['Phlebotomy', 'EKG', 'Healthcare', 'Patient Care', 'NHA Certification', 'ICD-10 Codes'],
   },
-];
-
-export default experiences;
+  {
+    title: 'Personal Website - Work in Progress',
+    company: 'williamglickman.com',
+    location: 'Remote',
+    period: 'December 2025 - Present',
+    description: 'This site is continuously evolving. Started December 2025 and counting. More features, content, and improvements coming soon.',
+    skills: ['React', 'TypeScript', 'SCSS', 'Web Development', 'UI/UX Design'],
+  },
+  ];
+  
+  export default experiences;

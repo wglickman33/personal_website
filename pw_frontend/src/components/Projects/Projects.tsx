@@ -21,12 +21,10 @@ const Projects = () => {
       const viewportHeight = window.innerHeight;
       const viewportCenter = viewportHeight * 0.5;
 
-      // Calculate when timeline center aligns with viewport center
       const scrollableStart = timelineTop - viewportCenter;
       const scrollableEnd = timelineTop + timelineHeight - viewportCenter;
       const scrollableDistance = scrollableEnd - scrollableStart;
       
-      // Progress based on how far we've scrolled relative to the timeline center
       const scrolled = scrollTop - scrollableStart;
       const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
 

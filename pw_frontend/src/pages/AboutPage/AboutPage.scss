@@ -324,7 +324,7 @@
   letter-spacing: $letter-spacing-tighter;
 
   .about-page--dark & {
-    color: $light-color;
+      color: $light-color;
   }
 }
 
@@ -447,7 +447,7 @@
       margin-right: auto;
     }
   }
-
+  
   @include md {
     padding-left: 70px !important;
     padding-right: 0 !important;
@@ -672,7 +672,7 @@
 .about-values__icon {
   font-size: 48px;
   color: $accent-color-1;
-  margin-bottom: 20px;
+      margin-bottom: 20px;
   display: block;
 }
 
@@ -863,7 +863,7 @@
       border-color: rgba($accent-color-1, 0.3);
     }
   }
-
+  
   @include sm {
     padding: 24px;
   }

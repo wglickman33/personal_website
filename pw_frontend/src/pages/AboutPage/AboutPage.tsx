@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useTheme from '../../hooks/useTheme';
 import { timelineItems } from '../../data/timeline';
+import Footer from '../../components/Footer/Footer';
 import './AboutPage.scss';
 
 const AboutPage = () => {
@@ -23,12 +24,10 @@ const AboutPage = () => {
       const viewportHeight = window.innerHeight;
       const viewportCenter = viewportHeight * 0.5;
 
-      // Calculate when timeline center aligns with viewport center
       const scrollableStart = timelineTop - viewportCenter;
       const scrollableEnd = timelineTop + timelineHeight - viewportCenter;
       const scrollableDistance = scrollableEnd - scrollableStart;
       
-      // Progress based on how far we've scrolled relative to the timeline center
       const scrolled = scrollTop - scrollableStart;
       const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
 
@@ -324,10 +323,10 @@ const AboutPage = () => {
               Get in Touch
             </Link>
           </div>
-      </div>
-          </section>
+        </div>
+      </section>
 
-          {showGraduationStory && (
+      {showGraduationStory && (
             <div className="about-timeline__story-modal" onClick={() => setShowGraduationStory(false)}>
               <div className="about-timeline__story-content" onClick={(e) => e.stopPropagation()}>
                 <button
@@ -343,10 +342,12 @@ const AboutPage = () => {
                   I actually graduated 2 semesters early completely by accident! The story goes...
                 </p>
               </div>
-            </div>
+      </div>
           )}
-        </div>
-      );
-    };
 
-    export default AboutPage;
+      <Footer />
+    </div>
+  );
+};
+
+export default AboutPage;

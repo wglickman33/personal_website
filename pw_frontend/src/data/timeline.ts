@@ -149,23 +149,6 @@ export const timelineItems: TimelineItem[] = [
     linkText: 'View on GitHub',
   },
   {
-    id: 'my-kosher-delivery',
-    date: '2024-2025',
-    title: 'My Kosher Delivery',
-    description: 'Built a comprehensive kosher food delivery platform serving New York area (5 Boroughs and Long Island). Unlike traditional delivery services, customers can order from multiple restaurants in a single order, with delivery capabilities extending 2+ hours away. 850 hours of development, 74,000+ lines of code. Full-stack application with comprehensive admin dashboard, order tracking, multi-restaurant ordering, user authentication, promo codes, gift cards, ticket system, and integrations with ShipDay, MailChimp, EmailJS, and Stripe.',
-    category: 'work',
-    downloads: [
-      {
-        url: 'https://mykosherdelivery.netlify.app',
-        text: 'Visit Live Site',
-      },
-      {
-        url: 'https://github.com/wglickman33/mykosherdelivery',
-        text: 'View on GitHub',
-      },
-    ],
-  },
-  {
     id: 'aviato-end',
     date: 'November 2024',
     title: 'Finished at Aviato Drone & Code',
@@ -192,5 +175,29 @@ export const timelineItems: TimelineItem[] = [
     title: 'Agentic AI Engineer at Further',
     description: 'Started at Further (Talk Further), building and maintaining voice AI agents for behavioral health facilities. Working with customer success managers, directors, VPs of sales, and clients.',
     category: 'work',
+  },
+  {
+    id: 'my-kosher-delivery',
+    date: '2024-2025',
+    title: 'My Kosher Delivery',
+    description: 'Built a comprehensive kosher food delivery platform serving New York area (5 Boroughs and Long Island). Unlike traditional delivery services, customers can order from multiple restaurants in a single order, with delivery capabilities extending 2+ hours away. 850 hours of development, 74,000+ lines of code. Full-stack application with comprehensive admin dashboard, order tracking, multi-restaurant ordering, user authentication, promo codes, gift cards, ticket system, and integrations with ShipDay, MailChimp, EmailJS, and Stripe.',
+    category: 'work',
+    downloads: [
+      {
+        url: 'https://mykosherdelivery.netlify.app',
+        text: 'Visit Live Site',
+      },
+      {
+        url: 'https://github.com/wglickman33/mykosherdelivery',
+        text: 'View on GitHub',
+      },
+    ],
+  },
+  {
+    id: 'site-wip',
+    date: 'December 2025',
+    title: 'Personal Website - Work in Progress',
+    description: 'This site is continuously evolving. Started December 2025 and counting. More features, content, and improvements coming soon.',
+    category: 'milestone',
   },
 ];
