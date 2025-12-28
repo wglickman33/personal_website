@@ -1,4 +1,3 @@
-// FeaturedProjects.tsx
 import { useEffect, useRef } from 'react';
 import useTheme from '../../hooks/useTheme';
 import { staggeredAnimation } from '../../utils/animation';

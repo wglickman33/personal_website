@@ -91,7 +91,6 @@
   }
 }
 
-// Animation classes
 .animate-fade-in {
   animation: fadeIn $transition-speed ease forwards;
 }
@@ -133,14 +132,12 @@
   animation: borderGlow 2s infinite;
 }
 
-// Delay classes
 @for $i from 1 through 10 {
   .delay-#{$i} {
     animation-delay: #{$i * 0.1}s;
   }
 }
 
-// Modern hamburger animation
 .hamburger-animation {
   &.active {
     .hamburger-line {
@@ -160,7 +157,6 @@
   }
 }
 
-// Subtle border pulse animation
 @keyframes borderPulse {
     0% {
       box-shadow: 0 0 0 0 rgba($primary-color, 0.3);

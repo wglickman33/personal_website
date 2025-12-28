@@ -1,4 +1,3 @@
-// ProjectCard.tsx
 import useTheme from '../../hooks/useTheme';
 import { Project } from '../../data/projects';
 import './ProjectCard.scss';

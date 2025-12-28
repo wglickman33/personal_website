@@ -1,4 +1,3 @@
-// SocialLinks.tsx
 import useTheme from '../../hooks/useTheme';
 import './SocialLinks.scss';
 

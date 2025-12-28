@@ -1,0 +1,552 @@
+@use "../../assets/styles/partials/variables" as *;
+@use "../../assets/styles/partials/fonts" as *;
+@use "../../assets/styles/partials/mixins" as *;
+@use "../../assets/styles/partials/breakpoints" as *;
+
+.project-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+.project-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  border: none;
+  background: rgba($primary-color, 0.55);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+.project-modal--dark .project-modal__backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.project-modal__panel {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: $border-radius-lg;
+  background: rgba($light-color, 0.85);
+  border: 1px solid rgba($primary-color, 0.08);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(18px);
+  transition: opacity $transition-speed ease;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.project-modal--dark .project-modal__panel {
+  background: rgba($dark-gray-color, 0.82);
+  border-color: rgba($light-color, 0.12);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.5);
+}
+
+.project-modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 60px 16px 24px;
+  border-bottom: 1px solid rgba($primary-color, 0.08);
+}
+
+.project-modal--dark .project-modal__header {
+  border-bottom-color: rgba($light-color, 0.12);
+}
+
+.project-modal__date {
+  display: inline-block;
+  font-family: $font-family-display;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  letter-spacing: $letter-spacing-wide;
+  background: linear-gradient(135deg, $accent-color-3, $accent-color-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.project-modal__title {
+  font-family: $font-family-display;
+  font-size: clamp($font-size-2xl, 3vw, $font-size-4xl);
+  font-weight: $font-weight-black;
+  color: $primary-color;
+  line-height: $line-height-tight;
+  letter-spacing: $letter-spacing-tight;
+}
+
+.project-modal--dark .project-modal__title {
+  color: $light-color;
+}
+
+.project-modal__close {
+  position: sticky;
+  top: 16px;
+  align-self: flex-end;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba($primary-color, 0.15);
+  background: rgba($light-color, 0.98);
+  backdrop-filter: blur(10px);
+  color: $primary-color;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-speed ease;
+  z-index: 50;
+  margin: 16px 16px 0 0;
+  flex-shrink: 0;
+  outline: none;
+
+  .material-symbols-outlined {
+    font-size: 24px;
+  }
+
+  &:hover {
+    background: rgba($accent-color-1, 0.12);
+    border-color: $accent-color-1;
+    color: $accent-color-1;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($accent-color-1, 0.3);
+    border-color: $accent-color-1;
+    background: rgba($accent-color-1, 0.12);
+    color: $accent-color-1;
+  }
+}
+
+.project-modal--dark .project-modal__close {
+  background: rgba($dark-gray-color, 0.95);
+  border-color: rgba($light-color, 0.25);
+  color: $light-color;
+
+  &:hover {
+    background: rgba($accent-color-1, 0.2);
+    border-color: $accent-color-1;
+    color: $light-color;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba($accent-color-1, 0.4);
+    border-color: $accent-color-1;
+    background: rgba($accent-color-1, 0.2);
+    color: $light-color;
+  }
+}
+
+.project-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+}
+
+.project-modal__body--full-width {
+  padding: 0;
+}
+
+.project-modal__full-game {
+  width: 100%;
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@include md {
+  .project-modal__body {
+    padding: 16px;
+    gap: 20px;
+  }
+  
+  .project-modal__body--full-width {
+    padding: 0;
+  }
+}
+
+.project-modal__media {
+  width: 100%;
+}
+
+.project-modal__placeholder {
+  height: 360px;
+  border-radius: $border-radius;
+  border: 1px solid rgba($primary-color, 0.08);
+  background: linear-gradient(135deg, rgba($accent-color-3, 0.06), rgba($accent-color-1, 0.06));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: $secondary-color;
+}
+
+.project-modal__placeholder .material-symbols-outlined {
+  font-size: 40px;
+  color: rgba($accent-color-1, 0.55);
+}
+
+.project-modal--dark .project-modal__placeholder {
+  border-color: rgba($light-color, 0.12);
+  color: rgba($light-color, 0.75);
+  background: linear-gradient(135deg, rgba($accent-color-3, 0.1), rgba($accent-color-1, 0.1));
+}
+
+.project-modal__carousel-main {
+  position: relative;
+  border-radius: $border-radius;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: rgba($primary-color, 0.04);
+  border: 1px solid rgba($primary-color, 0.08);
+  max-height: 400px;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+
+  @include md {
+    max-height: 300px;
+  }
+
+  @include sm {
+    max-height: 250px;
+  }
+}
+
+.project-modal--dark .project-modal__carousel-main {
+  background: rgba($light-color, 0.04);
+  border-color: rgba($light-color, 0.12);
+}
+
+.project-modal__carousel-image-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-modal__carousel-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.project-modal__carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba($primary-color, 0.2);
+  background: rgba($light-color, 0.95);
+  backdrop-filter: blur(8px);
+  color: $primary-color;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-speed ease;
+  outline: none;
+  z-index: 50;
+
+  .material-symbols-outlined {
+    font-size: 24px;
+  }
+
+  &:hover {
+    background: rgba($accent-color-1, 0.15);
+    border-color: $accent-color-1;
+    color: $accent-color-1;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($accent-color-1, 0.3);
+    border-color: $accent-color-1;
+    background: rgba($accent-color-1, 0.15);
+    color: $accent-color-1;
+  }
+}
+
+.project-modal--dark .project-modal__carousel-arrow {
+  background: rgba($dark-gray-color, 0.95);
+  border-color: rgba($light-color, 0.3);
+  color: $light-color;
+
+  &:hover {
+    background: rgba($accent-color-1, 0.25);
+    border-color: $accent-color-1;
+    color: $light-color;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba($accent-color-1, 0.4);
+    border-color: $accent-color-1;
+    background: rgba($accent-color-1, 0.25);
+    color: $light-color;
+  }
+}
+
+.project-modal__carousel-arrow--prev {
+  left: 14px;
+}
+
+.project-modal__carousel-arrow--next {
+  right: 14px;
+}
+
+.project-modal__carousel-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+  padding-bottom: 4px;
+}
+
+.project-modal__thumb {
+  width: 84px;
+  height: 58px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  padding: 0;
+  overflow: hidden;
+  background: rgba($primary-color, 0.05);
+  cursor: pointer;
+  transition: all $transition-speed ease;
+  outline: none;
+  flex-shrink: 0;
+
+  @include md {
+    width: 70px;
+    height: 48px;
+  }
+
+  @include sm {
+    width: 60px;
+    height: 42px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &:hover {
+    border-color: rgba($accent-color-1, 0.5);
+    transform: scale(1.05);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: $accent-color-1;
+    box-shadow: 0 0 0 3px rgba($accent-color-1, 0.3);
+  }
+
+  &.project-modal__thumb--active {
+    border-color: $accent-color-1;
+    box-shadow: 0 0 0 2px rgba($accent-color-1, 0.25);
+  }
+}
+
+.project-modal--dark .project-modal__thumb {
+  background: rgba($light-color, 0.05);
+}
+
+.project-modal__description {
+  font-size: $font-size-base;
+  line-height: $line-height-relaxed;
+  color: $secondary-color;
+  margin-bottom: 16px;
+}
+
+.project-modal--dark .project-modal__description {
+  color: rgba($light-color, 0.82);
+}
+
+.project-modal__tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.project-modal__tech-tag {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: $border-radius;
+  border: 1px solid rgba($accent-color-1, 0.2);
+  background: rgba($accent-color-1, 0.1);
+  color: $accent-color-1;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  transition: all $transition-speed ease;
+}
+
+.project-modal__tech-tag:hover {
+  border-color: rgba($accent-color-1, 0.3);
+  background: rgba($accent-color-1, 0.14);
+}
+
+.project-modal__sections {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba($primary-color, 0.08);
+}
+
+.project-modal--dark .project-modal__sections {
+  border-top-color: rgba($light-color, 0.12);
+}
+
+.project-modal__section-title {
+  font-family: $font-family-display;
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+  color: $primary-color;
+  margin-bottom: 8px;
+}
+
+.project-modal--dark .project-modal__section-title {
+  color: $light-color;
+}
+
+.project-modal__section-text {
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
+  color: $secondary-color;
+}
+
+.project-modal--dark .project-modal__section-text {
+  color: rgba($light-color, 0.78);
+}
+
+.project-modal__links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 18px;
+  border-top: 1px solid rgba($primary-color, 0.08);
+}
+
+.project-modal--dark .project-modal__links {
+  border-top-color: rgba($light-color, 0.12);
+}
+
+.project-modal__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: $border-radius;
+  background: rgba($accent-color-1, 0.12);
+  border: 1px solid rgba($accent-color-1, 0.3);
+  color: $accent-color-1;
+  text-decoration: none;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  transition: all $transition-speed ease;
+  position: relative;
+  min-height: 44px;
+
+  .material-symbols-outlined {
+    font-size: 20px;
+  }
+
+  &:hover {
+    background: rgba($accent-color-1, 0.18);
+    border-color: $accent-color-1;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($accent-color-1, 0.3);
+    border-color: $accent-color-1;
+    background: rgba($accent-color-1, 0.18);
+  }
+}
+
+.project-modal--dark .project-modal__link {
+  background: rgba($accent-color-1, 0.18);
+  border-color: rgba($accent-color-1, 0.4);
+  color: $light-color;
+
+  &:hover {
+    background: rgba($accent-color-1, 0.25);
+    border-color: $accent-color-1;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba($accent-color-1, 0.4);
+    border-color: $accent-color-1;
+    background: rgba($accent-color-1, 0.25);
+  }
+}
+
+.project-modal__link::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%);
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  letter-spacing: $letter-spacing-wide;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: rgba($primary-color, 0.92);
+  color: $light-color;
+  border: 1px solid rgba($light-color, 0.12);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity $transition-speed ease;
+  z-index: 1000;
+}
+
+.project-modal--dark .project-modal__link::after {
+  background: rgba($dark-color, 0.92);
+  border-color: rgba($light-color, 0.14);
+}
+
+.project-modal__link:hover::after,
+.project-modal__link:focus-visible::after {
+  opacity: 1;
+}
+
+@include sm {
+  .project-modal {
+    padding: 16px;
+  }
+
+  .project-modal__panel {
+    max-height: calc(100vh - 32px);
+  }
+}
+
+

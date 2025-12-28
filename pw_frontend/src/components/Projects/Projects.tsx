@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import useTheme from '../../hooks/useTheme';
-import { projects } from '../../data/projects';
+import { homepageProjects } from '../../data/projects';
 import './Projects.scss';
 
 const Projects = () => {
@@ -74,7 +74,7 @@ const Projects = () => {
             />
           </div>
 
-          {projects.map((project, index) => (
+          {homepageProjects.map((project, index) => (
             <div
               key={project.id}
               data-project-id={project.id}

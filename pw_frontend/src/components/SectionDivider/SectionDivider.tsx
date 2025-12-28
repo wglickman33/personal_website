@@ -1,4 +1,3 @@
-// SectionDivider.tsx
 import './SectionDivider.scss';
 
 interface SectionDividerProps {
@@ -14,7 +13,6 @@ const SectionDivider = ({
   color = 'currentColor',
   flip = false
 }: SectionDividerProps) => {
-  // This will ensure consistent dimensions and viewBox for all variants
   const getViewBox = () => {
     switch(variant) {
       case 'wave': return "0 0 1440 120";
@@ -25,7 +23,6 @@ const SectionDivider = ({
     }
   };
   
-  // Define exact path for each variant
   const getPath = () => {
     switch(variant) {
       case 'wave': 

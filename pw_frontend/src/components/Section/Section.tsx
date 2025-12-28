@@ -1,4 +1,3 @@
-// Section.tsx
 import { ReactNode } from 'react';
 import useTheme from '../../hooks/useTheme';
 import './Section.scss';

@@ -1,4 +1,3 @@
-// Testimonials.tsx
 import { useEffect, useRef, useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import Section from '../Section/Section';

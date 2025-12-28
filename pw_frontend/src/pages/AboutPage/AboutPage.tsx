@@ -10,7 +10,7 @@ const AboutPage = () => {
   const timelineRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [visibleItems, setVisibleItems] = useState<Set<string>>(new Set());
-  const [showGraduationStory, setShowGraduationStory] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,7 +75,7 @@ const AboutPage = () => {
         <div className="about-hero__container">
           <div className="about-hero__content">
             <div className="about-hero__badge">
-              <span className="material-symbols-outlined">person</span>
+              <span className="about-hero__badge-dot"></span>
               The Story
             </div>
 
@@ -147,13 +147,26 @@ const AboutPage = () => {
                   <h3 className="about-timeline__item-title">
                     {item.title}
                     {item.id === 'college-graduation' && (
-                      <button
-                        className="about-timeline__story-trigger"
-                        onClick={() => setShowGraduationStory(true)}
-                        aria-label="Read the story"
+                      <div
+                        className="about-timeline__tooltip-wrapper"
+                        onMouseEnter={() => setShowTooltip(true)}
+                        onMouseLeave={() => setShowTooltip(false)}
                       >
-                        <span className="material-symbols-outlined">info</span>
-                      </button>
+                        <button
+                          className="about-timeline__story-trigger"
+                          aria-label="Read the story"
+                        >
+                          <span className="material-symbols-outlined">info</span>
+                        </button>
+                        {showTooltip && (
+                          <div className="about-timeline__tooltip">
+                            <h4 className="about-timeline__tooltip-title">The "Accidental" Early Graduation</h4>
+                            <p className="about-timeline__tooltip-text">
+                              In my first semester (August 2020), my advisor gave me the wrong classes to take. From that point on, I decided to stop going to advising and pick my own classes. So my junior year 2nd semester (semester 6), before starting, I had a question I couldn't find the answer to, so I decided to go to advising. They told me I could graduate and I had no idea. I graduated by accident because I took the right classes and had enough credits!
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     )}
                   </h3>
                   {item.image && (
@@ -323,27 +336,8 @@ const AboutPage = () => {
               Get in Touch
             </Link>
           </div>
-        </div>
-      </section>
-
-      {showGraduationStory && (
-            <div className="about-timeline__story-modal" onClick={() => setShowGraduationStory(false)}>
-              <div className="about-timeline__story-content" onClick={(e) => e.stopPropagation()}>
-                <button
-                  className="about-timeline__story-close"
-                  onClick={() => setShowGraduationStory(false)}
-                  aria-label="Close story"
-                >
-                  <span className="material-symbols-outlined">close</span>
-                </button>
-                <h3 className="about-timeline__story-title">The "Accidental" Early Graduation</h3>
-                <p className="about-timeline__story-text">
-                  {/* Add your funny story here */}
-                  I actually graduated 2 semesters early completely by accident! The story goes...
-                </p>
-              </div>
       </div>
-          )}
+      </section>
 
       <Footer />
     </div>

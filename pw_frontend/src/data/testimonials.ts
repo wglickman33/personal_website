@@ -1,4 +1,3 @@
-// testimonials.ts
 export interface Testimonial {
     name: string;
     title: string;

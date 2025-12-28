@@ -134,20 +134,16 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 20px;
+  padding: 8px 20px;
   background-color: rgba($light-color, 0.7);
   backdrop-filter: blur(10px);
   border: 1px solid rgba($primary-color, 0.08);
-  border-radius: 100px;
+  border-radius: 50px;
   font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
+  font-weight: $font-weight-medium;
   color: $primary-color;
   margin-bottom: 32px;
-  font-family: $font-family-display;
-
-  .material-symbols-outlined {
-    font-size: 18px;
-  }
+  transition: all $transition-speed ease;
 
   .about-page--dark & {
     background-color: rgba($dark-gray-color, 0.7);
@@ -157,8 +153,27 @@
 
   @include sm {
     font-size: $font-size-xs;
-    padding: 8px 16px;
-    margin-bottom: 24px;
+    padding: 6px 12px;
+    margin-bottom: 20px;
+  }
+}
+
+.about-hero__badge-dot {
+  width: 8px;
+  height: 8px;
+  background-color: $accent-color-1;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
   }
 }
 
@@ -428,9 +443,28 @@
     }
 
     .about-timeline__item-content {
-      text-align: right;
+      text-align: left;
       margin-left: auto;
       margin-right: 0;
+    }
+
+    .about-timeline__item-date {
+      display: block;
+      text-align: left;
+      margin-left: 0;
+      margin-right: auto;
+    }
+
+    .about-timeline__item-title {
+      text-align: left;
+    }
+
+    .about-timeline__item-description {
+      text-align: left;
+    }
+
+    .about-timeline__item-downloads {
+      justify-content: flex-start;
     }
   }
 
@@ -445,6 +479,25 @@
       text-align: left;
       margin-left: 0;
       margin-right: auto;
+    }
+
+    .about-timeline__item-date {
+      display: block;
+      text-align: left;
+      margin-left: 0;
+      margin-right: auto;
+    }
+
+    .about-timeline__item-title {
+      text-align: left;
+    }
+
+    .about-timeline__item-description {
+      text-align: left;
+    }
+
+    .about-timeline__item-downloads {
+      justify-content: flex-start;
     }
   }
   
@@ -495,7 +548,6 @@
 }
 
 .about-timeline__item-date {
-  display: inline-block;
   font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
   color: $accent-color-1;
@@ -1017,6 +1069,13 @@
   gap: 8px;
 }
 
+.about-timeline__tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
 .about-timeline__story-trigger {
   display: inline-flex;
   align-items: center;
@@ -1030,7 +1089,6 @@
   color: $accent-color-3;
   cursor: pointer;
   transition: all $transition-speed ease;
-  vertical-align: middle;
   flex-shrink: 0;
 
   .material-symbols-outlined {
@@ -1052,124 +1110,94 @@
   }
 }
 
-.about-timeline__story-modal {
-  position: fixed;
-  inset: 0;
-  z-index: $z-index-modal;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.about-timeline__tooltip {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  right: 0;
+  width: 360px;
+  max-width: min(90vw, 360px);
   padding: 20px;
-  background-color: rgba($primary-color, 0.7);
-  backdrop-filter: blur(4px);
-  animation: fadeIn 0.3s ease;
-
-  .about-page--dark & {
-    background-color: rgba(black, 0.8);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.about-timeline__story-content {
-  position: relative;
-  max-width: 600px;
-  width: 100%;
-  padding: 40px;
-  background-color: $light-color;
+  background-color: $primary-color;
+  color: $light-color;
   border-radius: $border-radius-lg;
   box-shadow: $box-shadow-lg;
-  animation: slideUp 0.3s ease;
+  z-index: 100;
+  pointer-events: none;
+  animation: tooltipFadeIn 0.2s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid $primary-color;
+  }
 
   .about-page--dark & {
     background-color: $dark-gray-color;
     box-shadow: $dark-box-shadow;
+
+    &::after {
+      border-top-color: $dark-gray-color;
+    }
+  }
+
+  @include md {
+    width: 320px;
+    max-width: min(85vw, 320px);
   }
 
   @include sm {
-    padding: 24px;
-    max-width: 90%;
-  }
-}
+    width: calc(100vw - 40px);
+    max-width: 320px;
+    right: 0;
+    left: auto;
 
-@keyframes slideUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.about-timeline__story-close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  background: transparent;
-  border: none;
-  border-radius: 50%;
-  color: $secondary-color;
-  cursor: pointer;
-  transition: all $transition-speed ease;
-
-  .material-symbols-outlined {
-    font-size: 24px;
-  }
-
-  &:hover {
-    color: $primary-color;
-    background-color: rgba($primary-color, 0.1);
-  }
-
-  .about-page--dark & {
-    color: rgba($light-color, 0.7);
-
-    &:hover {
-      color: $light-color;
-      background-color: rgba($light-color, 0.1);
+    &::after {
+      right: 20px;
     }
   }
+
+  @media (max-width: 400px) {
+    width: calc(100vw - 32px);
+    padding: 16px;
+    font-size: $font-size-sm;
+  }
 }
 
-.about-timeline__story-title {
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.about-timeline__tooltip-title {
   font-family: $font-family-display;
-  font-size: $font-size-2xl;
+  font-size: $font-size-base;
   font-weight: $font-weight-bold;
-  color: $primary-color;
-  margin-bottom: 20px;
-  padding-right: 40px;
+  color: $light-color;
+  margin-bottom: 12px;
 
   .about-page--dark & {
     color: $light-color;
   }
-
-  @include sm {
-    font-size: $font-size-xl;
-    margin-bottom: 16px;
-  }
 }
 
-.about-timeline__story-text {
-  font-size: $font-size-base;
+.about-timeline__tooltip-text {
+  font-size: $font-size-sm;
   line-height: $line-height-relaxed;
-  color: $secondary-color;
+  color: rgba($light-color, 0.95);
 
   .about-page--dark & {
-    color: rgba($light-color, 0.8);
+    color: rgba($light-color, 0.95);
   }
 }

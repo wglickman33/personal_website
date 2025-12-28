@@ -1,0 +1,408 @@
+@use "../../../assets/styles/partials/variables" as *;
+@use "../../../assets/styles/partials/fonts" as *;
+@use "../../../assets/styles/partials/mixins" as *;
+@use "../../../assets/styles/partials/breakpoints" as *;
+
+$toggler-size: 40px;
+$item-count: 6;
+$item-size: $toggler-size * 2;
+$item-transition: 0.5s;
+
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.circular-menu {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.circular-menu__toggler {
+  @include absolute-center;
+  width: $toggler-size;
+  height: $toggler-size;
+  z-index: 2;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.circular-menu__label {
+  @include absolute-center;
+  width: $toggler-size;
+  height: $toggler-size / 8;
+  display: block;
+  z-index: 1;
+  border-radius: $toggler-size / 16;
+  background: rgba($primary-color, 0.7);
+  transition: transform $item-transition, top $item-transition, background $transition-speed;
+
+  .circular-menu--dark & {
+    background: rgba($light-color, 0.7);
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: $toggler-size;
+    height: $toggler-size / 8;
+    display: block;
+    z-index: 1;
+    border-radius: $toggler-size / 16;
+    background: rgba($primary-color, 0.7);
+    transition: transform $item-transition, top $item-transition, background $transition-speed;
+
+    .circular-menu--dark & {
+      background: rgba($light-color, 0.7);
+    }
+  }
+
+  &::before {
+    top: $toggler-size / 4;
+  }
+
+  &::after {
+    top: -$toggler-size / 4;
+  }
+}
+
+.circular-menu__toggler:not(:checked):hover + .circular-menu__label,
+.circular-menu__toggler:not(:checked):hover + .circular-menu__label::before,
+.circular-menu__toggler:not(:checked):hover + .circular-menu__label::after {
+  background: $accent-color-1;
+
+  .circular-menu--dark & {
+    background: $accent-color-1;
+  }
+}
+
+.circular-menu__toggler:checked + .circular-menu__label {
+  background: transparent;
+}
+
+.circular-menu__toggler:checked:hover + .circular-menu__label::before,
+.circular-menu__toggler:checked:hover + .circular-menu__label::after {
+  background: $accent-color-1;
+
+  .circular-menu--dark & {
+    background: $accent-color-1;
+  }
+}
+
+.circular-menu__toggler:checked + .circular-menu__label::before,
+.circular-menu__toggler:checked + .circular-menu__label::after {
+  top: 0;
+  width: $toggler-size;
+  transform-origin: 50% 50%;
+}
+
+.circular-menu__toggler:checked + .circular-menu__label::before {
+  transform: rotate(45deg);
+}
+
+.circular-menu__toggler:checked + .circular-menu__label::after {
+  transform: rotate(-45deg);
+}
+
+.circular-menu__list {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.circular-menu__item {
+  @include absolute-center;
+  width: $item-size;
+  height: $item-size;
+  display: block;
+  opacity: 0;
+  transition: opacity $item-transition, transform $item-transition;
+  transform: translate(-50%, -50%);
+}
+
+.circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item {
+  opacity: 1;
+}
+
+.circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(1) {
+  transform: translate(-50%, -50%) rotate(0deg) translateX(-$item-size - 30px) rotate(0deg);
+}
+
+.circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(2) {
+  transform: translate(-50%, -50%) rotate(60deg) translateX(-$item-size - 30px) rotate(-60deg);
+}
+
+.circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(3) {
+  transform: translate(-50%, -50%) rotate(120deg) translateX(-$item-size - 30px) rotate(-120deg);
+}
+
+.circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(4) {
+  transform: translate(-50%, -50%) rotate(180deg) translateX(-$item-size - 30px) rotate(-180deg);
+}
+
+.circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(5) {
+  transform: translate(-50%, -50%) rotate(240deg) translateX(-$item-size - 30px) rotate(-240deg);
+}
+
+.circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(6) {
+  transform: translate(-50%, -50%) rotate(300deg) translateX(-$item-size - 30px) rotate(-300deg);
+}
+
+.circular-menu__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $item-size;
+  height: $item-size;
+  border-radius: 50%;
+  color: rgba($primary-color, 0.7);
+  background: rgba($light-color, 0.2);
+  border: 1px solid rgba($primary-color, 0.1);
+  text-align: center;
+  text-decoration: none;
+  font-size: $item-size / 2;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  position: relative;
+  outline: none;
+
+  .material-symbols-outlined {
+    font-size: $item-size / 2;
+    line-height: 1;
+  }
+
+  &::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 12px);
+    transform: translateX(-50%);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    letter-spacing: $letter-spacing-wide;
+    text-transform: uppercase;
+    white-space: nowrap;
+    background: rgba($primary-color, 0.95);
+    color: $light-color;
+    border: 1px solid rgba($light-color, 0.12);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity $transition-speed ease, transform $transition-speed ease;
+    transform: translateX(-50%) translateY(4px);
+    z-index: 1000;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 4px);
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid rgba($primary-color, 0.95);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity $transition-speed ease, transform $transition-speed ease;
+    transform: translateX(-50%) translateY(4px);
+    z-index: 1000;
+  }
+
+  &:hover {
+    box-shadow: 0 0 0 ($item-size / 40) rgba($accent-color-1, 0.3);
+    color: $accent-color-1;
+    background: rgba($accent-color-1, 0.15);
+    border-color: rgba($accent-color-1, 0.3);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  &:hover::before,
+  &:focus-visible::before {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .circular-menu--dark & {
+    color: rgba($light-color, 0.7);
+    background: rgba($light-color, 0.1);
+    border-color: rgba($light-color, 0.2);
+
+    &::after {
+      background: rgba($dark-color, 0.95);
+      border-color: rgba($light-color, 0.14);
+    }
+
+    &::before {
+      border-top-color: rgba($dark-color, 0.95);
+    }
+
+    &:hover {
+      color: $accent-color-1;
+      background: rgba($accent-color-1, 0.2);
+      border-color: rgba($accent-color-1, 0.4);
+    }
+  }
+}
+
+.circular-menu__item:nth-child(1) .circular-menu__link {
+  transform: rotate(0deg);
+  
+  &:hover {
+    transform: rotate(0deg) scale(1.1);
+  }
+
+  &::after,
+  &::before {
+    transform: translateX(-50%) translateY(4px) rotate(0deg);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: translateX(-50%) translateY(0) rotate(0deg);
+  }
+
+  &:hover::before,
+  &:focus-visible::before {
+    transform: translateX(-50%) translateY(0) rotate(0deg);
+  }
+}
+
+.circular-menu__item:nth-child(2) .circular-menu__link {
+  transform: rotate(-60deg);
+  
+  &:hover {
+    transform: rotate(-60deg) scale(1.1);
+  }
+
+  &::after,
+  &::before {
+    transform: translateX(-50%) translateY(4px) rotate(60deg);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: translateX(-50%) translateY(0) rotate(60deg);
+  }
+
+  &:hover::before,
+  &:focus-visible::before {
+    transform: translateX(-50%) translateY(0) rotate(60deg);
+  }
+}
+
+.circular-menu__item:nth-child(3) .circular-menu__link {
+  transform: rotate(-120deg);
+  
+  &:hover {
+    transform: rotate(-120deg) scale(1.1);
+  }
+
+  &::after,
+  &::before {
+    transform: translateX(-50%) translateY(4px) rotate(120deg);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: translateX(-50%) translateY(0) rotate(120deg);
+  }
+
+  &:hover::before,
+  &:focus-visible::before {
+    transform: translateX(-50%) translateY(0) rotate(120deg);
+  }
+}
+
+.circular-menu__item:nth-child(4) .circular-menu__link {
+  transform: rotate(-180deg);
+  
+  &:hover {
+    transform: rotate(-180deg) scale(1.1);
+  }
+
+  &::after,
+  &::before {
+    transform: translateX(-50%) translateY(4px) rotate(180deg);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: translateX(-50%) translateY(0) rotate(180deg);
+  }
+
+  &:hover::before,
+  &:focus-visible::before {
+    transform: translateX(-50%) translateY(0) rotate(180deg);
+  }
+}
+
+.circular-menu__item:nth-child(5) .circular-menu__link {
+  transform: rotate(-240deg);
+  
+  &:hover {
+    transform: rotate(-240deg) scale(1.1);
+  }
+
+  &::after,
+  &::before {
+    transform: translateX(-50%) translateY(4px) rotate(240deg);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: translateX(-50%) translateY(0) rotate(240deg);
+  }
+
+  &:hover::before,
+  &:focus-visible::before {
+    transform: translateX(-50%) translateY(0) rotate(240deg);
+  }
+}
+
+.circular-menu__item:nth-child(6) .circular-menu__link {
+  transform: rotate(-300deg);
+  
+  &:hover {
+    transform: rotate(-300deg) scale(1.1);
+  }
+
+  &::after,
+  &::before {
+    transform: translateX(-50%) translateY(4px) rotate(300deg);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: translateX(-50%) translateY(0) rotate(300deg);
+  }
+
+  &:hover::before,
+  &:focus-visible::before {
+    transform: translateX(-50%) translateY(0) rotate(300deg);
+  }
+}
+

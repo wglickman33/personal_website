@@ -1,4 +1,3 @@
-// animation.ts
 export const scrollToElement = (
   elementId: string,
   offset: number = 0,

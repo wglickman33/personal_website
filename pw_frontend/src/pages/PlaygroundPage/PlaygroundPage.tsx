@@ -4,8 +4,8 @@ const PlaygroundPage = () => {
   return (
     <div className="page-name-page">
       <div className="container">
-        <h1>Playground Page</h1>
-        <p>This is the content for this page.</p>
+        <h1>Playground</h1>
+        <p>Coming soon.</p>
       </div>
     </div>
   );

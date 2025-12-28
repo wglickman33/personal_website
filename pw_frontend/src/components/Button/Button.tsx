@@ -72,7 +72,6 @@ const Button: React.FC<ButtonProps> = ({
     </>
   );
 
-  // For internal links (React Router)
   if (to) {
     return (
       <Link
@@ -88,7 +87,6 @@ const Button: React.FC<ButtonProps> = ({
     );
   }
 
-  // For external links
   if (href) {
     return (
       <a
@@ -107,7 +105,6 @@ const Button: React.FC<ButtonProps> = ({
     );
   }
 
-  // Regular button
   return (
     <button
       type={type}

@@ -1,0 +1,300 @@
+@use "../../../assets/styles/partials/variables" as *;
+@use "../../../assets/styles/partials/fonts" as *;
+@use "../../../assets/styles/partials/mixins" as *;
+@use "../../../assets/styles/partials/breakpoints" as *;
+
+.afk-clock {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: transparent;
+
+  &.afk-clock--preview {
+    padding: 10px;
+    min-height: 180px;
+  }
+}
+
+.afk-clock__wrapper {
+  width: 100%;
+  max-width: 900px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  --primary-color: #80f6ff;
+  --primary-color-rgb: 128, 246, 255;
+  --secondary-color: #fffb2c;
+  --secondary-color-rgb: 255, 251, 44;
+}
+
+.afk-clock__display {
+  width: 100%;
+  max-width: 800px;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+
+  .afk-clock--preview & {
+    min-height: 150px;
+    margin-bottom: 0;
+  }
+}
+
+@property --i {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes afk-clock-anim {
+  0% {
+    --i: 0deg;
+  }
+  100% {
+    --i: 360deg;
+  }
+}
+
+.afk-clock__container {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 20px;
+  border-radius: 16px;
+  color: $light-color;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  --i: 0deg;
+  background: repeating-conic-gradient(
+    from var(--i),
+    var(--primary-color) 0%,
+    var(--primary-color) 5%,
+    transparent 5%,
+    transparent 40%,
+    var(--primary-color) 50%
+  );
+  animation: afk-clock-anim 4s linear infinite;
+
+  .afk-clock--dark & {
+    color: $light-color;
+  }
+
+  .afk-clock--light & {
+    color: $primary-color;
+  }
+
+  .afk-clock--preview & {
+    width: 80px;
+    height: 80px;
+    margin: 0 8px;
+    animation: none;
+    --i: 0deg;
+    background: repeating-conic-gradient(
+      from 0deg,
+      var(--primary-color) 0%,
+      var(--primary-color) 5%,
+      transparent 5%,
+      transparent 40%,
+      var(--primary-color) 50%
+    );
+  }
+
+  &::before {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    --i: 0deg;
+    background: repeating-conic-gradient(
+      from var(--i),
+      var(--secondary-color) 0%,
+      var(--secondary-color) 5%,
+      transparent 5%,
+      transparent 40%,
+      var(--secondary-color) 50%
+    );
+    border-radius: 16px;
+    animation: afk-clock-anim 4s linear infinite;
+    animation-delay: -1s;
+
+    .afk-clock--preview & {
+      animation: none;
+      --i: -90deg;
+      background: repeating-conic-gradient(
+        from -90deg,
+        var(--secondary-color) 0%,
+        var(--secondary-color) 5%,
+        transparent 5%,
+        transparent 40%,
+        var(--secondary-color) 50%
+      );
+    }
+  }
+
+  &::after {
+    position: absolute;
+    content: '';
+    inset: 4px;
+    background: $dark-color;
+    border: 4px solid rgba($light-color, 0.2);
+    border-radius: 14px;
+    transition: background $transition-speed ease, border $transition-speed ease;
+
+    .afk-clock--light & {
+      background: $light-color;
+      border-color: rgba($primary-color, 0.2);
+    }
+
+    .afk-clock--preview & {
+      inset: 2px;
+      border-width: 2px;
+    }
+  }
+}
+
+.afk-clock__time {
+  font-size: 70px;
+  font-weight: $font-weight-black;
+  line-height: 85px;
+  z-index: 1;
+  font-family: $font-family-display;
+
+  .afk-clock--preview & {
+    font-size: 32px;
+    line-height: 40px;
+  }
+}
+
+.afk-clock__unit {
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 2px;
+  z-index: 1;
+  text-transform: uppercase;
+
+  .afk-clock--preview & {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+}
+
+.afk-clock__controls {
+  position: relative;
+  background: rgba($dark-color, 0.8);
+  border-radius: $border-radius;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border: 1px solid rgba($light-color, 0.2);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  color: $light-color;
+  backdrop-filter: blur(5px);
+  transition: background $transition-speed ease, color $transition-speed ease, border $transition-speed ease;
+  width: 100%;
+  max-width: 400px;
+
+  .afk-clock--light & {
+    background: rgba($light-color, 0.9);
+    border-color: rgba($primary-color, 0.2);
+    color: $primary-color;
+  }
+}
+
+.afk-clock__timezone-selector,
+.afk-clock__color-pickers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.afk-clock__color-pickers {
+  gap: 10px;
+}
+
+.afk-clock__color-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.afk-clock__controls label {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  transition: color $transition-speed ease;
+}
+
+.afk-clock__controls select {
+  background-color: rgba($light-color, 0.1);
+  color: $light-color;
+  border: 1px solid rgba($light-color, 0.2);
+  padding: 8px 12px;
+  border-radius: $border-radius;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: background $transition-speed ease, color $transition-speed ease, border $transition-speed ease;
+
+  .afk-clock--light & {
+    background-color: rgba($primary-color, 0.1);
+    color: $primary-color;
+    border-color: rgba($primary-color, 0.2);
+  }
+
+  &:hover {
+    background-color: rgba($light-color, 0.15);
+    .afk-clock--light & {
+      background-color: rgba($primary-color, 0.15);
+    }
+  }
+}
+
+.afk-clock__controls input[type='color'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  overflow: hidden;
+  background: transparent;
+
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+  }
+}
+
+@include sm {
+  .afk-clock__display {
+    flex-wrap: wrap;
+    min-height: auto;
+    padding: 20px 0;
+  }
+
+  .afk-clock__container {
+    margin: 10px;
+  }
+
+  .afk-clock__controls {
+    width: 100%;
+    max-width: 800px;
+  }
+}
+

@@ -1,4 +1,3 @@
-// Experience.tsx
 import { useEffect, useRef } from 'react';
 import useTheme from '../../hooks/useTheme';
 import Section from '../Section/Section';

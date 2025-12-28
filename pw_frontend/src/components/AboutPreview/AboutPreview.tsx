@@ -1,4 +1,3 @@
-// AboutPreview.tsx
 import useTheme from '../../hooks/useTheme';
 import Button from '../Button/Button';
 import SectionDivider from '../SectionDivider/SectionDivider';

@@ -1,7 +1,6 @@
 @use "variables" as *;
 @use "fonts" as *;
 
-// Flexbox mixins
 @mixin flex($justify: center, $align: center, $direction: row, $wrap: nowrap) {
   display: flex;
   justify-content: $justify;
@@ -10,12 +9,10 @@
   flex-wrap: $wrap;
 }
 
-// Transition mixin
 @mixin transition($property: all, $duration: $transition-speed, $timing: ease) {
   transition: $property $duration $timing;
 }
 
-// Position mixins
 @mixin absolute($top: auto, $right: auto, $bottom: auto, $left: auto) {
   position: absolute;
   top: $top;
@@ -32,7 +29,6 @@
   left: $left;
 }
 
-// Container mixin
 @mixin container {
   width: 100%;
   max-width: $container-max-width;
@@ -40,7 +36,6 @@
   padding: 0 $content-padding;
 }
 
-// Typography mixins
 @mixin heading($size: lg, $weight: $font-weight-semibold, $color: $dark-color) {
   font-family: $font-family-primary;
   font-weight: $weight;
@@ -65,7 +60,6 @@
   }
 }
 
-// Responsive mixins
 @mixin respond-to($breakpoint) {
   @if $breakpoint == xs {
     @media (max-width: 576px) { @content; }
@@ -80,7 +74,6 @@
   }
 }
 
-// Button mixin
 @mixin button($bg-color: $primary-color, $text-color: $light-color, $hover-bg: color-mix(in srgb, $primary-color 90%, black 10%)) {
   display: inline-block;
   padding: 0.5rem 1.25rem;
@@ -103,7 +96,6 @@
   }
 }
 
-// Link hover animation mixin
 @mixin link-hover-animation {
   position: relative;
   
