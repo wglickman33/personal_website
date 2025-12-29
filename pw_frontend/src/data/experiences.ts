@@ -18,7 +18,7 @@ export const experiences: Experience[] = [
     skills: ['Python', 'JavaScript', 'TypeScript', 'OpenAI API', 'AI Agents', 'Flask', 'ServiceNow', 'CrewAI', 'DifyAI', 'Voice AI', 'Chat AI', 'Ansible', 'Docker'],
   },
   {
-    title: 'Agentic AI Engineer',
+    title: 'Agentic AI Software Engineer',
     company: 'Further (Talk Further)',
     location: 'Remote',
     period: 'June 2025 - Present',

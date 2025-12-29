@@ -2,50 +2,854 @@
 @use "../../assets/styles/partials/fonts" as *;
 @use "../../assets/styles/partials/mixins" as *;
 @use "../../assets/styles/partials/breakpoints" as *;
-@use "../../assets/styles/partials/animations" as *;
 
-.page-name-page {
+.resume-page {
   min-height: 100vh;
-  padding: $header-height 0 50px;
-  
-  .container {
-    @include container;
-    padding-top: 50px;
+  padding: calc(#{$header-height} + 40px) 0 0;
+  background:
+    radial-gradient(1400px 600px at 0% 0%, rgba($accent-color-1, 0.08), transparent 50%),
+    radial-gradient(1200px 600px at 100% 0%, rgba($accent-color-3, 0.06), transparent 55%),
+    linear-gradient(135deg, $gray-color-light 0%, rgba($light-color, 0.5) 100%);
+
+  &--dark {
+    background:
+      radial-gradient(1400px 600px at 0% 0%, rgba($accent-color-1, 0.12), transparent 50%),
+      radial-gradient(1200px 600px at 100% 0%, rgba($accent-color-3, 0.10), transparent 55%),
+      linear-gradient(135deg, $dark-color 0%, rgba($dark-gray-color, 0.8) 100%);
   }
-  
-  h1 {
-    font-size: $font-size-4xl;
-    margin-bottom: 30px;
-    color: $dark-color;
-    
-    .dark & {
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+
+    @include md {
+      padding: 0 24px;
+    }
+
+    @include sm {
+      padding: 0 16px;
+    }
+  }
+
+  &__header {
+    margin-bottom: 80px;
+    padding: 60px 0;
+    position: relative;
+  }
+
+  &__header-content {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+  }
+
+  &__header-main {
+    text-align: center;
+  }
+
+  &__name {
+    font-family: $font-family-display;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: $font-weight-black;
+    color: $primary-color;
+    margin-bottom: 16px;
+    letter-spacing: $letter-spacing-tight;
+    background: linear-gradient(135deg, $accent-color-1, $accent-color-3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+
+    .resume-page--dark & {
+      background: linear-gradient(135deg, $accent-color-1, $accent-color-3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+
+  &__tagline {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: $secondary-color;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.5px;
+
+    .resume-page--dark & {
+      color: rgba($light-color, 0.85);
+    }
+  }
+
+  &__header-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+  }
+
+  &__social-links {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  &__social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: rgba($light-color, 0.95);
+    border: 1px solid rgba($primary-color, 0.15);
+    border-radius: $border-radius;
+    color: $primary-color;
+    text-decoration: none;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-sm;
+    transition: all 0.4s ease;
+
+    .material-symbols-outlined {
+      font-size: 20px;
+      color: $accent-color-1;
+      transition: color 0.4s ease;
+    }
+
+    &:hover {
+      border-color: rgba($accent-color-1, 0.5);
+      background: rgba($accent-color-1, 0.08);
+      color: $accent-color-1;
+
+      .material-symbols-outlined {
+        color: $accent-color-3;
+      }
+    }
+
+    .resume-page--dark & {
+      background: rgba($dark-gray-color, 0.9);
+      border-color: rgba($light-color, 0.2);
+      color: $light-color;
+
+      .material-symbols-outlined {
+        color: $accent-color-3;
+      }
+
+      &:hover {
+        border-color: rgba($accent-color-1, 0.6);
+        background: rgba($accent-color-1, 0.12);
+        color: $light-color;
+
+        .material-symbols-outlined {
+          color: $accent-color-1;
+        }
+      }
+    }
+  }
+
+  &__social-link-text {
+    font-size: $font-size-sm;
+  }
+
+  &__download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 32px;
+    background: $accent-color-1;
+    border: 2px solid $accent-color-1;
+    border-radius: $border-radius-lg;
+    color: $light-color;
+    text-decoration: none;
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-base;
+    transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+
+    .material-symbols-outlined {
+      font-size: 22px;
+      color: $light-color;
+      transition: color 0.4s ease;
+    }
+
+    &:hover {
+      background: rgba($accent-color-1, 0.85);
+      border-color: rgba($accent-color-1, 0.85);
+      color: $light-color;
+
+      .material-symbols-outlined {
+        color: $light-color;
+      }
+    }
+
+    .resume-page--dark & {
+      background: $accent-color-1;
+      border-color: $accent-color-1;
+      color: $light-color;
+
+      .material-symbols-outlined {
+        color: $light-color;
+      }
+
+      &:hover {
+        background: rgba($accent-color-1, 0.85);
+        border-color: rgba($accent-color-1, 0.85);
+        color: $light-color;
+
+        .material-symbols-outlined {
+          color: $light-color;
+        }
+      }
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    padding-bottom: 80px;
+  }
+
+  &__section {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  &__section-title {
+    font-family: $font-family-display;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: $font-weight-bold;
+    color: $primary-color;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .material-symbols-outlined {
+      font-size: 32px;
+      color: $accent-color-1;
+    }
+
+    .resume-page--dark & {
       color: $light-color;
     }
   }
+
+  &__experience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+
+    @include md {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__experience-card {
+    background: rgba($light-color, 0.9);
+    border: 1px solid rgba($primary-color, 0.1);
+    border-radius: $border-radius-lg;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .resume-page--dark & {
+      background: rgba($dark-gray-color, 0.8);
+      border-color: rgba($light-color, 0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    &:hover {
+      box-shadow: 0 8px 24px rgba($accent-color-1, 0.15);
+      border-color: rgba($accent-color-1, 0.3);
+
+      .resume-page--dark & {
+        box-shadow: 0 8px 24px rgba($accent-color-1, 0.25);
+        border-color: rgba($accent-color-1, 0.4);
+      }
+    }
+  }
+
+  &__experience-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  &__experience-card-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__experience-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $primary-color;
+    margin-bottom: 8px;
+    line-height: $line-height-tight;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    .resume-page--dark & {
+      color: $light-color;
+    }
+  }
+
+  &__experience-company {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $accent-color-1;
+    margin-bottom: 8px;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__experience-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: $font-size-sm;
+    color: $secondary-color;
+    margin-top: auto;
+
+    .resume-page--dark & {
+      color: rgba($light-color, 0.7);
+    }
+  }
+
+  &__experience-location,
+  &__experience-period {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__expand-icon {
+    font-size: 24px;
+    color: $accent-color-1;
+    transition: transform 0.4s ease;
+    flex-shrink: 0;
+  }
+
+  &__skill-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba($accent-color-1, 0.1);
+    color: $accent-color-1;
+    border-radius: $border-radius;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+
+    .resume-page--dark & {
+      background: rgba($accent-color-1, 0.2);
+      color: $accent-color-3;
+    }
+  }
+
+  &__skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 32px;
+
+    @include md {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__skills-category {
+    background: rgba($light-color, 0.9);
+    border: 1px solid rgba($primary-color, 0.1);
+    border-radius: $border-radius-lg;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    .resume-page--dark & {
+      background: rgba($dark-gray-color, 0.8);
+      border-color: rgba($light-color, 0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  &__skills-category-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $primary-color;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba($accent-color-1, 0.2);
+
+    .resume-page--dark & {
+      color: $light-color;
+      border-bottom-color: rgba($accent-color-1, 0.3);
+    }
+  }
+
+  &__skills-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__skill-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__skill-name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $primary-color;
+
+    .resume-page--dark & {
+      color: $light-color;
+    }
+  }
+
+  &__skill-bar {
+    height: 6px;
+    background: rgba($primary-color, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+
+    .resume-page--dark & {
+      background: rgba($light-color, 0.1);
+    }
+  }
+
+  &__skill-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, $accent-color-1, $accent-color-3);
+    border-radius: 3px;
+    transition: width 0.8s ease-out;
+  }
+
+  &__education-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  &__education-card {
+    background: rgba($light-color, 0.9);
+    border: 1px solid rgba($primary-color, 0.1);
+    border-radius: $border-radius-lg;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.4s ease;
+
+    .resume-page--dark & {
+      background: rgba($dark-gray-color, 0.8);
+      border-color: rgba($light-color, 0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    &:hover {
+      border-color: rgba($accent-color-1, 0.3);
+
+      .resume-page--dark & {
+        border-color: rgba($accent-color-1, 0.4);
+      }
+    }
+  }
+
+  &__education-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $primary-color;
+    margin-bottom: 8px;
+
+    .resume-page--dark & {
+      color: $light-color;
+    }
+  }
+
+  &__education-details {
+    font-size: $font-size-base;
+    color: $accent-color-1;
+    font-weight: $font-weight-medium;
+    margin-bottom: 8px;
+  }
+
+  &__education-period {
+    font-size: $font-size-sm;
+    color: $secondary-color;
+    margin-bottom: 12px;
+
+    .resume-page--dark & {
+      color: rgba($light-color, 0.7);
+    }
+  }
+
+  &__education-note {
+    font-size: $font-size-xs;
+    color: $secondary-color;
+    font-style: italic;
+    line-height: $line-height-relaxed;
+
+    .resume-page--dark & {
+      color: rgba($light-color, 0.6);
+    }
+  }
+
+  &__achievements {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  &__achievement-item {
+    display: flex;
+    gap: 16px;
+    background: rgba($light-color, 0.9);
+    border: 1px solid rgba($primary-color, 0.1);
+    border-radius: $border-radius-lg;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.4s ease;
+
+    .resume-page--dark & {
+      background: rgba($dark-gray-color, 0.8);
+      border-color: rgba($light-color, 0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    &:hover {
+      border-color: rgba($accent-color-1, 0.3);
+
+      .resume-page--dark & {
+        border-color: rgba($accent-color-1, 0.4);
+      }
+    }
+
+    .material-symbols-outlined {
+      font-size: 32px;
+      color: $accent-color-1;
+      flex-shrink: 0;
+    }
+
+    strong {
+      display: block;
+      font-size: $font-size-base;
+      font-weight: $font-weight-bold;
+      color: $primary-color;
+      margin-bottom: 4px;
+
+      .resume-page--dark & {
+        color: $light-color;
+      }
+    }
+
+    p {
+      font-size: $font-size-sm;
+      color: $secondary-color;
+      margin: 0;
+      line-height: $line-height-relaxed;
+
+      .resume-page--dark & {
+        color: rgba($light-color, 0.7);
+      }
+    }
+  }
+  
+  &__footer-wrapper {
+    margin-top: 0;
+  }
   
   @include md {
-    padding-top: calc(#{$header-height} + 20px);
+    padding: calc(#{$header-height} + 24px) 0 0;
     
-    .container {
-      padding-top: 30px;
+    &__content {
+      gap: 48px;
+      padding-bottom: 60px;
     }
     
-    h1 {
-      font-size: $font-size-3xl;
-      margin-bottom: 20px;
+    &__section {
+      margin-bottom: 0;
     }
   }
   
   @include sm {
-    padding-bottom: 30px;
-    
-    .container {
-      padding-top: 20px;
+    padding: calc(#{$header-height} + 16px) 0 0;
+
+    &__header {
+      margin-bottom: 40px;
     }
-    
-    h1 {
-      font-size: $font-size-2xl;
-      margin-bottom: 15px;
+
+    &__content {
+      gap: 40px;
+      padding-bottom: 40px;
     }
+
+    &__experience-grid,
+    &__skills-grid,
+    &__education-grid,
+    &__achievements {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+}
+
+.resume-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+.resume-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  border: none;
+  background: rgba($primary-color, 0.55);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+.resume-modal--dark .resume-modal__backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.resume-modal__panel {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: $border-radius-lg;
+  background: rgba($light-color, 0.95);
+  border: 1px solid rgba($primary-color, 0.08);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(18px);
+  transition: opacity 0.4s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.resume-modal--dark .resume-modal__panel {
+  background: rgba($dark-gray-color, 0.95);
+  border-color: rgba($light-color, 0.12);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.5);
+}
+
+.resume-modal__close {
+  position: sticky;
+  top: 16px;
+  align-self: flex-end;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba($primary-color, 0.15);
+  background: rgba($light-color, 0.98);
+  backdrop-filter: blur(10px);
+  color: $primary-color;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all $transition-speed ease;
+  z-index: 50;
+  margin: 16px 16px 0 0;
+  flex-shrink: 0;
+  outline: none;
+
+  .material-symbols-outlined {
+    font-size: 24px;
+  }
+
+  &:hover {
+    background: rgba($accent-color-1, 0.12);
+    border-color: $accent-color-1;
+    color: $accent-color-1;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($accent-color-1, 0.3);
+    border-color: $accent-color-1;
+    background: rgba($accent-color-1, 0.12);
+    color: $accent-color-1;
+  }
+}
+
+.resume-modal--dark .resume-modal__close {
+  background: rgba($dark-gray-color, 0.95);
+  border-color: rgba($light-color, 0.25);
+  color: $light-color;
+
+  &:hover {
+    background: rgba($accent-color-1, 0.2);
+    border-color: $accent-color-1;
+    color: $light-color;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba($accent-color-1, 0.4);
+    border-color: $accent-color-1;
+    background: rgba($accent-color-1, 0.2);
+    color: $light-color;
+  }
+}
+
+.resume-modal__header {
+  padding: 24px 60px 20px 24px;
+  border-bottom: 1px solid rgba($primary-color, 0.08);
+}
+
+.resume-modal--dark .resume-modal__header {
+  border-bottom-color: rgba($light-color, 0.12);
+}
+
+.resume-modal__title {
+  font-family: $font-family-display;
+  font-size: clamp($font-size-xl, 3vw, $font-size-2xl);
+  font-weight: $font-weight-bold;
+  color: $primary-color;
+  margin-bottom: 8px;
+  line-height: $line-height-tight;
+}
+
+.resume-modal--dark .resume-modal__title {
+  color: $light-color;
+}
+
+.resume-modal__company {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $accent-color-1;
+  margin-bottom: 12px;
+}
+
+.resume-modal__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: $font-size-sm;
+  color: $secondary-color;
+}
+
+.resume-modal--dark .resume-modal__meta {
+  color: rgba($light-color, 0.7);
+}
+
+.resume-modal__location,
+.resume-modal__period {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.resume-modal__body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.resume-modal__section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.resume-modal__section-title {
+  font-family: $font-family-display;
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+  color: $primary-color;
+}
+
+.resume-modal--dark .resume-modal__section-title {
+  color: $light-color;
+}
+
+.resume-modal__description {
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
+  color: $secondary-color;
+}
+
+.resume-modal--dark .resume-modal__description {
+  color: rgba($light-color, 0.8);
+}
+
+.resume-modal__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.resume-modal__skill-tag {
+  display: inline-block;
+  padding: 6px 14px;
+  background: rgba($accent-color-1, 0.1);
+  color: $accent-color-1;
+  border-radius: $border-radius;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  transition: background-color 0.4s ease;
+
+  &:hover {
+    background: rgba($accent-color-1, 0.15);
+  }
+}
+
+.resume-modal--dark .resume-modal__skill-tag {
+  background: rgba($accent-color-1, 0.2);
+  color: $accent-color-3;
+
+  &:hover {
+    background: rgba($accent-color-1, 0.3);
+  }
+}
+
+@include sm {
+  .resume-modal {
+    padding: 16px;
+  }
+
+  .resume-modal__panel {
+    max-height: calc(100vh - 32px);
+  }
+
+  .resume-modal__header {
+    padding: 20px 50px 16px 20px;
+  }
+
+  .resume-modal__body {
+    padding: 20px;
+    gap: 20px;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

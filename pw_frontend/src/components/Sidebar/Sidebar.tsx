@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import useTheme from '../../hooks/useTheme';
+import wgLogo from '../../assets/styles/logos/wgLogo.png';
 import './Sidebar.scss';
 
 const Sidebar = () => {
@@ -86,7 +87,7 @@ const Sidebar = () => {
             </button>
           )}
           <Link to="/" className="sidebar__logo" onClick={handleNavClick}>
-            <span className="sidebar__logo-text">WG</span>
+            <img src={wgLogo} alt="William Glickman" className="sidebar__logo-img" />
           </Link>
         </div>
 

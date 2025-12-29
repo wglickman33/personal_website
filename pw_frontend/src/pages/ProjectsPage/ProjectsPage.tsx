@@ -5,6 +5,7 @@ import Footer from '../../components/Footer/Footer';
 import ProjectCaseStudyModal from '../../components/ProjectCaseStudyModal/ProjectCaseStudyModal';
 import whiteMKDIcon from '../../assets/styles/logos/whiteMKDIcon.png';
 import bgworkspaceLogo from '../../assets/styles/logos/bgworkspaceLogo.png';
+import toriLogo from '../../assets/styles/logos/toriLogo.png';
 import './ProjectsPage.scss';
 
 type ProjectCategory = 'all' | 'web' | 'widget' | 'game';
@@ -157,17 +158,23 @@ const ProjectsPage = () => {
             </div>
           )}
           
-          {!hasImages && !(isInteractive && project.id === 'afk-clock-screen') && project.id !== '2048-game' && project.id !== 'wordle' && project.id !== 'wavelength' && project.id !== 'my-kosher-delivery' && project.id !== 'bg-workspace' && (
+          {project.id === 'tori' && (
+            <div className="projects-portfolio__card-tori-preview">
+              <img src={toriLogo} alt="Tori" className="projects-portfolio__card-tori-icon" />
+            </div>
+          )}
+          
+          {!hasImages && !(isInteractive && project.id === 'afk-clock-screen') && project.id !== '2048-game' && project.id !== 'wordle' && project.id !== 'wavelength' && project.id !== 'my-kosher-delivery' && project.id !== 'bg-workspace' && project.id !== 'tori' && (
             <div className={`projects-portfolio__card-placeholder projects-portfolio__card-placeholder--${project.category} ${project.id === 'my-kosher-delivery' ? 'projects-portfolio__card-placeholder--mkd' : ''}`}>
               {project.id === 'my-kosher-delivery' ? (
                 <img src={whiteMKDIcon} alt="My Kosher Delivery" className="projects-portfolio__card-placeholder-mkd-icon" />
               ) : (
-                <span className="material-symbols-outlined">
-                  {project.category === 'web' ? 'web' : 
-                   project.category === 'widget' ? 'widgets' : 
-                   project.category === 'game' ? 'sports_esports' : 
-                   'code'}
-                </span>
+              <span className="material-symbols-outlined">
+                {project.category === 'web' ? 'web' : 
+                 project.category === 'widget' ? 'widgets' : 
+                 project.category === 'game' ? 'sports_esports' : 
+                 'code'}
+              </span>
               )}
             </div>
           )}
