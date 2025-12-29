@@ -1,0 +1,208 @@
+@use "../../../assets/styles/partials/variables" as *;
+@use "../../../assets/styles/partials/fonts" as *;
+@use "../../../assets/styles/partials/mixins" as *;
+@use "../../../assets/styles/partials/breakpoints" as *;
+
+.drawing-canvas {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background: rgba($gray-color-light, 0.98);
+  border: 1px solid rgba($primary-color, 0.1);
+  border-radius: $border-radius-xl;
+  padding: 20px;
+  box-shadow: $box-shadow-lg;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &--dark {
+    background: rgba($dark-gray-color, 0.98);
+    border-color: rgba($light-color, 0.1);
+    box-shadow: $dark-box-shadow;
+  }
+
+  &--preview {
+    max-width: 240px;
+    padding: 12px;
+    gap: 8px;
+  }
+
+  &__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba($primary-color, 0.1);
+
+    .drawing-canvas--dark & {
+      border-bottom-color: rgba($light-color, 0.1);
+    }
+  }
+
+  &__color-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+      font-family: $font-family-display;
+      font-size: 0.9rem;
+      font-weight: $font-weight-medium;
+      color: $primary-color;
+
+      .drawing-canvas--dark & {
+        color: $light-color;
+      }
+    }
+  }
+
+  &__colors {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  &__color-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all $transition-speed-fast ease;
+    position: relative;
+
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    &--active {
+      border-color: $primary-color;
+      box-shadow: 0 0 0 2px rgba($primary-color, 0.3);
+
+      .drawing-canvas--dark & {
+        border-color: $light-color;
+        box-shadow: 0 0 0 2px rgba($light-color, 0.3);
+      }
+    }
+  }
+
+  &__brush-size {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+      font-family: $font-family-display;
+      font-size: 0.9rem;
+      font-weight: $font-weight-medium;
+      color: $primary-color;
+
+      .drawing-canvas--dark & {
+        color: $light-color;
+      }
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba($primary-color, 0.1);
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+
+      .drawing-canvas--dark & {
+        background: rgba($light-color, 0.1);
+      }
+
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: $accent-color-1;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        transition: all $transition-speed-fast ease;
+
+        &:hover {
+          transform: scale(1.1);
+          box-shadow: 0 2px 8px rgba($accent-color-1, 0.4);
+        }
+      }
+
+      &::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: $accent-color-1;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        transition: all $transition-speed-fast ease;
+
+        &:hover {
+          transform: scale(1.1);
+          box-shadow: 0 2px 8px rgba($accent-color-1, 0.4);
+        }
+      }
+    }
+  }
+
+  &__clear-btn {
+    padding: 10px 20px;
+    background: rgba($accent-color-1, 0.1);
+    border: 1px solid $accent-color-1;
+    border-radius: $border-radius;
+    color: $accent-color-1;
+    font-family: $font-family-display;
+    font-size: 0.9rem;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: all $transition-speed-fast ease;
+
+    &:hover {
+      background: $accent-color-1;
+      color: $light-color;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba($accent-color-1, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &__canvas-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    background: $light-color;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .drawing-canvas--dark & {
+      background: #1a1a1a;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  &__canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: crosshair;
+    touch-action: none;
+  }
+
+  &--preview {
+    .drawing-canvas__canvas-container {
+      aspect-ratio: 4 / 3;
+    }
+  }
+}
+

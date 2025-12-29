@@ -13,10 +13,8 @@ const ThreeCanvas = ({ className = '' }: ThreeCanvasProps) => {
     const canvasElement = canvasRef.current;
     if (!canvasElement) return;
     
-    // Scene setup
     const scene = new THREE.Scene();
     
-    // Camera setup
     const camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
@@ -25,7 +23,6 @@ const ThreeCanvas = ({ className = '' }: ThreeCanvasProps) => {
     );
     camera.position.z = 5;
     
-    // Renderer setup
     const renderer = new THREE.WebGLRenderer({ 
       antialias: true,
       alpha: true
@@ -35,7 +32,6 @@ const ThreeCanvas = ({ className = '' }: ThreeCanvasProps) => {
     renderer.setClearColor(0x000000, 0);
     canvasElement.appendChild(renderer.domElement);
     
-    // Add some objects (example: particles)
     const particlesGeometry = new THREE.BufferGeometry();
     const particlesCount = 1000;
     

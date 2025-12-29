@@ -183,6 +183,11 @@ const getDailyWord = (date: Date): string => {
   return WORDS[index];
 };
 
+const getRandomWord = (): string => {
+  const index = Math.floor(Math.random() * WORDS.length);
+  return WORDS[index];
+};
+
 const Wordle = () => {
   const { theme } = useTheme();
   const [targetWord, setTargetWord] = useState(() => {
@@ -454,18 +459,15 @@ const Wordle = () => {
   ];
 
   const resetGame = useCallback(() => {
+    const word = getRandomWord();
     const today = new Date().toDateString();
-    const storedDate = localStorage.getItem('pw:wordle:date');
     
-    if (storedDate !== today) {
-      const word = getDailyWord(new Date());
-      localStorage.setItem('pw:wordle:word', word);
-      localStorage.setItem('pw:wordle:date', today);
-      setTargetWord(word);
-      localStorage.removeItem('pw:wordle:guesses');
-      localStorage.removeItem('pw:wordle:state');
-    }
+    localStorage.setItem('pw:wordle:word', word);
+    localStorage.setItem('pw:wordle:date', today);
+    localStorage.removeItem('pw:wordle:guesses');
+    localStorage.removeItem('pw:wordle:state');
     
+    setTargetWord(word);
     setCurrentGuess('');
     setGuesses([]);
     setGameState('playing');

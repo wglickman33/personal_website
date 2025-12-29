@@ -187,7 +187,7 @@
       background: $accent-color-1;
       border-color: $accent-color-1;
       color: $light-color;
-
+    
       .material-symbols-outlined {
         color: $light-color;
       }
@@ -690,7 +690,7 @@
     border-color: $accent-color-1;
     background: rgba($accent-color-1, 0.12);
     color: $accent-color-1;
-  }
+    }
 }
 
 .resume-modal--dark .resume-modal__close {
@@ -827,7 +827,7 @@
 @include sm {
   .resume-modal {
     padding: 16px;
-  }
+    }
 
   .resume-modal__panel {
     max-height: calc(100vh - 32px);

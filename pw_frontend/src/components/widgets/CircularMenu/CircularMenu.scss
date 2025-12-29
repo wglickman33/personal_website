@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../../../assets/styles/partials/variables" as *;
 @use "../../../assets/styles/partials/fonts" as *;
 @use "../../../assets/styles/partials/mixins" as *;
@@ -37,10 +38,10 @@ $item-transition: 0.5s;
 .circular-menu__label {
   @include absolute-center;
   width: $toggler-size;
-  height: $toggler-size / 8;
+  height: calc($toggler-size / 8);
   display: block;
   z-index: 1;
-  border-radius: $toggler-size / 16;
+  border-radius: calc($toggler-size / 16);
   background: rgba($primary-color, 0.7);
   transition: transform $item-transition, top $item-transition, background $transition-speed;
 
@@ -54,10 +55,10 @@ $item-transition: 0.5s;
     position: absolute;
     left: 0;
     width: $toggler-size;
-    height: $toggler-size / 8;
+    height: calc($toggler-size / 8);
     display: block;
     z-index: 1;
-    border-radius: $toggler-size / 16;
+    border-radius: calc($toggler-size / 16);
     background: rgba($primary-color, 0.7);
     transition: transform $item-transition, top $item-transition, background $transition-speed;
 
@@ -67,11 +68,11 @@ $item-transition: 0.5s;
   }
 
   &::before {
-    top: $toggler-size / 4;
+    top: calc($toggler-size / 4);
   }
 
   &::after {
-    top: -$toggler-size / 4;
+    top: calc(-#{math.div($toggler-size, 4)});
   }
 }
 
@@ -173,7 +174,7 @@ $item-transition: 0.5s;
   border: 1px solid rgba($primary-color, 0.1);
   text-align: center;
   text-decoration: none;
-  font-size: $item-size / 2;
+  font-size: calc($item-size / 2);
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 0;
@@ -181,7 +182,7 @@ $item-transition: 0.5s;
   outline: none;
 
   .material-symbols-outlined {
-    font-size: $item-size / 2;
+    font-size: calc($item-size / 2);
     line-height: 1;
   }
 
@@ -206,7 +207,7 @@ $item-transition: 0.5s;
     pointer-events: none;
     transition: opacity $transition-speed ease, transform $transition-speed ease;
     transform: translateX(-50%) translateY(4px);
-    z-index: 1000;
+    z-index: 99999;
   }
 
   &::before {
@@ -224,11 +225,11 @@ $item-transition: 0.5s;
     pointer-events: none;
     transition: opacity $transition-speed ease, transform $transition-speed ease;
     transform: translateX(-50%) translateY(4px);
-    z-index: 1000;
+    z-index: 99999;
   }
 
   &:hover {
-    box-shadow: 0 0 0 ($item-size / 40) rgba($accent-color-1, 0.3);
+    box-shadow: 0 0 0 calc($item-size / 40) rgba($accent-color-1, 0.3);
     color: $accent-color-1;
     background: rgba($accent-color-1, 0.15);
     border-color: rgba($accent-color-1, 0.3);

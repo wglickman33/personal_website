@@ -11,7 +11,6 @@ export const scrollToElement = (
   }
 
   const elementPosition = element.getBoundingClientRect().top;
-  // Using window.scrollY instead of the deprecated pageYOffset
   const offsetPosition = elementPosition + window.scrollY - offset;
   
   if ('scrollBehavior' in document.documentElement.style) {
@@ -22,7 +21,6 @@ export const scrollToElement = (
     return;
   }
   
-  // Using window.scrollY instead of the deprecated pageYOffset
   const startPosition = window.scrollY;
   const distance = offsetPosition - startPosition;
   let startTime: number | null = null;

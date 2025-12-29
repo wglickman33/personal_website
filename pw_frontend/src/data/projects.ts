@@ -4,6 +4,11 @@ import Game2048 from '../components/widgets/2048Game/2048Game';
 import Wordle from '../components/widgets/Wordle/Wordle';
 import WavelengthGame from '../components/widgets/WavelengthGame/WavelengthGame';
 import AFKClock from '../components/widgets/AFKClock/AFKClock';
+import IconsShowcase from '../components/widgets/IconsShowcase/IconsShowcase';
+import PomodoroTimer from '../components/widgets/PomodoroTimer/PomodoroTimer';
+import Calculator from '../components/widgets/Calculator/Calculator';
+import DrawingCanvas from '../components/widgets/DrawingCanvas/DrawingCanvas';
+import ColorSortPuzzle from '../components/widgets/ColorSortPuzzle/ColorSortPuzzle';
 
 import mkdImage0 from '../assets/styles/images/mkdImage0.png';
 import mkdImage1 from '../assets/styles/images/mkdImage1.png';
@@ -84,7 +89,7 @@ export const projects: Project[] = [
     id: 'tori',
     title: 'Tori - Home Inventory Management',
     description: 'A home inventory management system designed like a handwritten notebook to give users a "write in their notebook" vibe. Features my own handwriting font and was hand-drawn before being recreated with code. Created as my BrainStation bootcamp capstone project.',
-    techStack: ['React', 'JavaScript', 'SCSS', 'Custom Fonts'],
+    techStack: ['React', 'JavaScript', 'SCSS', 'Custom Fonts', 'Firebase'],
     githubLink: 'https://github.com/wglickman33/Tori',
     challenges: 'Designed the entire interface by hand first, then recreated it digitally. Created a custom handwriting font to match the aesthetic. Built item and category management functionality with a unique notebook-style UI.',
     results: 'Finished top of the class at BrainStation bootcamp with this project. Got very far along with the ability to manage items and categories, creating a unique and personal user experience.',
@@ -891,6 +896,61 @@ export default AFKClock;`,
     category: 'game',
     date: '2025',
     widgetComponent: WavelengthGame,
+  },
+  {
+    id: 'icons-showcase',
+    title: 'Icons Showcase',
+    description: 'A collection of custom-designed SVG icons featuring interactive morphing animations and static artistic, geometric, and organic designs. Demonstrates SVG path manipulation, morphing animations, and creative icon design.',
+    techStack: ['React', 'TypeScript', 'SCSS', 'SVG', 'SVG Morphing', 'Animations'],
+    challenges: 'Creating smooth SVG path morphing animations between different shapes, implementing interactive hover effects, and designing a diverse collection of icons across multiple categories (interactive, artistic, geometric, organic).',
+    results: 'A showcase of 18+ custom SVG icons with smooth morphing animations, interactive hover effects, and a clean grid layout that demonstrates advanced SVG manipulation techniques.',
+    category: 'widget',
+    date: '2025',
+    widgetComponent: IconsShowcase,
+  },
+  {
+    id: 'pomodoro-timer',
+    title: 'Pomodoro Timer',
+    description: 'A productivity-focused Pomodoro timer with work sessions, short breaks, and long breaks. Features a circular progress indicator, session tracking, and automatic mode switching to help you maintain focus and productivity.',
+    techStack: ['React', 'TypeScript', 'SCSS', 'SVG', 'Timer Logic'],
+    challenges: 'Implementing accurate countdown timer logic with proper cleanup, creating a smooth circular progress animation using SVG, managing state transitions between work and break modes, and ensuring the timer persists correctly through mode changes.',
+    results: 'A fully functional Pomodoro timer that automatically switches between 25-minute work sessions, 5-minute short breaks, and 15-minute long breaks after every 4 completed sessions. Perfect for maintaining focus and productivity.',
+    category: 'widget',
+    date: '2025',
+    widgetComponent: PomodoroTimer,
+  },
+  {
+    id: 'calculator',
+    title: 'Calculator',
+    description: 'A beautiful macOS-style calculator with a modern design that matches the app theme. Features basic arithmetic operations, percentage calculations, sign toggling, and a clean, intuitive interface.',
+    techStack: ['React', 'TypeScript', 'SCSS', 'State Management'],
+    challenges: 'Implementing accurate calculation logic with proper order of operations, handling edge cases like division by zero, managing state transitions between operations, and creating a responsive design that works in both full and preview modes.',
+    results: 'A fully functional calculator with a sleek dark theme, smooth button interactions, and proper mathematical operations. The design closely matches the macOS calculator aesthetic while maintaining consistency with the app\'s overall styling.',
+    category: 'widget',
+    date: '2025',
+    widgetComponent: Calculator,
+  },
+  {
+    id: 'drawing-canvas',
+    title: 'Drawing Canvas',
+    description: 'An interactive drawing canvas with color picker, adjustable brush size, and smooth drawing experience. Perfect for quick sketches, doodles, or creative expression. Supports both mouse and touch input for desktop and mobile devices.',
+    techStack: ['React', 'TypeScript', 'SCSS', 'HTML5 Canvas API'],
+    challenges: 'Implementing smooth drawing with HTML5 Canvas, handling both mouse and touch events for cross-device compatibility, managing canvas state and redraws, and creating an intuitive color picker and brush size controls.',
+    results: 'A fully functional drawing canvas with 10 vibrant colors, adjustable brush sizes (2-20px), smooth drawing strokes, and a clean interface. The canvas automatically adapts to light and dark themes, providing an enjoyable drawing experience on any device.',
+    category: 'widget',
+    date: '2025',
+    widgetComponent: DrawingCanvas,
+  },
+  {
+    id: 'color-sort-puzzle',
+    title: 'Color Sort Puzzle',
+    description: 'A satisfying puzzle game where you sort colored balls into test tubes. Tap a tube to select it, then tap another to pour. The goal is to have each tube contain only one color. Features smooth animations, move tracking, and a clean, modern game interface.',
+    techStack: ['React', 'TypeScript', 'SCSS', 'Game Logic', 'State Management'],
+    challenges: 'The primary challenge was ensuring that every generated puzzle is beatable. Since it is difficult to predict all possible game outcomes and validate every potential move sequence, the solution required generating puzzles by starting from a solved state and performing valid reverse moves. This guarantees solvability while still creating challenging, shuffled puzzles. Additional challenges included implementing the pouring logic that moves multiple balls of the same color at once, creating smooth animations, managing game state and win conditions, and building an intuitive game UI with move tracking and undo functionality.',
+    results: 'A fully functional puzzle game with 8 distinct colors, 9 test tubes (8 colors + 1 empty), and satisfying pour animations. The game guarantees every puzzle is solvable by using reverse-move generation from solved states. Features include move tracking, undo functionality, win detection, reset capability, and a polished game interface with visual feedback for valid and invalid moves.',
+    category: 'game',
+    date: '2025',
+    widgetComponent: ColorSortPuzzle,
   },
   {
     id: 'quant-ai-agents',

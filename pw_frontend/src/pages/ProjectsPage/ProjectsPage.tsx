@@ -1,8 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import useTheme from '../../hooks/useTheme';
 import { projectsPageProjects, Project } from '../../data/projects';
 import Footer from '../../components/Footer/Footer';
 import ProjectCaseStudyModal from '../../components/ProjectCaseStudyModal/ProjectCaseStudyModal';
+import PomodoroTimer from '../../components/widgets/PomodoroTimer/PomodoroTimer';
+import Calculator from '../../components/widgets/Calculator/Calculator';
+import DrawingCanvas from '../../components/widgets/DrawingCanvas/DrawingCanvas';
+import ColorSortPuzzle from '../../components/widgets/ColorSortPuzzle/ColorSortPuzzle';
 import whiteMKDIcon from '../../assets/styles/logos/whiteMKDIcon.png';
 import bgworkspaceLogo from '../../assets/styles/logos/bgworkspaceLogo.png';
 import toriLogo from '../../assets/styles/logos/toriLogo.png';
@@ -53,6 +57,140 @@ const ProjectsPage = () => {
   );
 
   const closeModal = () => setActiveProjectId(null);
+
+  useEffect(() => {
+    const tooltipMap = new WeakMap<HTMLElement, HTMLElement>();
+    let hideTimeout: NodeJS.Timeout | null = null;
+    let showTimeout: NodeJS.Timeout | null = null;
+    let currentLink: HTMLElement | null = null;
+
+    const hideAllTooltips = () => {
+      document.querySelectorAll('.projects-portfolio__tooltip').forEach(el => el.remove());
+      currentLink = null;
+    };
+
+    const showTooltip = (link: HTMLElement) => {
+      if (hideTimeout) {
+        clearTimeout(hideTimeout);
+        hideTimeout = null;
+      }
+
+      if (showTimeout) {
+        clearTimeout(showTimeout);
+      }
+
+      if (currentLink && currentLink !== link) {
+        const existingTooltip = tooltipMap.get(currentLink);
+        if (existingTooltip) {
+          existingTooltip.remove();
+          tooltipMap.delete(currentLink);
+        }
+      }
+
+      const tooltipText = link.getAttribute('data-tooltip');
+      if (!tooltipText) return;
+
+      const existingTooltip = tooltipMap.get(link);
+      if (existingTooltip && currentLink === link) {
+        return;
+      }
+
+      showTimeout = setTimeout(() => {
+        if (existingTooltip) {
+          existingTooltip.remove();
+          tooltipMap.delete(link);
+        }
+
+        const rect = link.getBoundingClientRect();
+        const tooltipEl = document.createElement('div');
+        tooltipEl.className = 'projects-portfolio__tooltip';
+        tooltipEl.textContent = tooltipText;
+        tooltipEl.style.position = 'fixed';
+        tooltipEl.style.left = `${rect.left + rect.width / 2}px`;
+        tooltipEl.style.top = `${rect.top - 10}px`;
+        tooltipEl.style.transform = 'translateX(-50%) translateY(-100%)';
+        tooltipEl.style.zIndex = '99999';
+        document.body.appendChild(tooltipEl);
+        tooltipMap.set(link, tooltipEl);
+        currentLink = link;
+        showTimeout = null;
+      }, 100);
+    };
+
+    const hideTooltip = (link: HTMLElement | null) => {
+      if (showTimeout) {
+        clearTimeout(showTimeout);
+        showTimeout = null;
+      }
+
+      if (hideTimeout) {
+        clearTimeout(hideTimeout);
+      }
+      
+      hideTimeout = setTimeout(() => {
+        if (link) {
+          const tooltipEl = tooltipMap.get(link);
+          if (tooltipEl) {
+            tooltipEl.remove();
+            tooltipMap.delete(link);
+            if (currentLink === link) {
+              currentLink = null;
+            }
+          }
+        } else {
+          hideAllTooltips();
+        }
+        hideTimeout = null;
+      }, 100);
+    };
+
+    const handleMouseEnter = (e: MouseEvent) => {
+      const target = e.target;
+      if (!target || !(target instanceof Element)) return;
+      const link = target.closest('.projects-portfolio__meta-link') as HTMLElement;
+      if (link) {
+        showTooltip(link);
+      }
+    };
+
+    const handleMouseLeave = (e: MouseEvent) => {
+      const target = e.target;
+      if (!target || !(target instanceof Element)) {
+        hideAllTooltips();
+        return;
+      }
+      const link = target.closest('.projects-portfolio__meta-link') as HTMLElement;
+      const relatedTarget = e.relatedTarget;
+      
+      if (link) {
+        if (relatedTarget && relatedTarget instanceof Element) {
+          const nextLink = relatedTarget.closest('.projects-portfolio__meta-link') as HTMLElement;
+          if (!nextLink || nextLink !== link) {
+            hideTooltip(link);
+          }
+        } else {
+          hideTooltip(link);
+        }
+      } else {
+        hideAllTooltips();
+      }
+    };
+
+    document.addEventListener('mouseenter', handleMouseEnter, true);
+    document.addEventListener('mouseleave', handleMouseLeave, true);
+
+    return () => {
+      if (hideTimeout) {
+        clearTimeout(hideTimeout);
+      }
+      if (showTimeout) {
+        clearTimeout(showTimeout);
+      }
+      document.removeEventListener('mouseenter', handleMouseEnter, true);
+      document.removeEventListener('mouseleave', handleMouseLeave, true);
+      hideAllTooltips();
+    };
+  }, []);
 
   const renderProject = (project: Project, isWidget: boolean = false) => {
     const isFeatured = project.id === 'my-kosher-delivery';
@@ -131,6 +269,27 @@ const ProjectsPage = () => {
             </div>
           )}
           
+          {!hasImages && project.id === 'icons-showcase' && (
+            <div className="projects-portfolio__card-icons-preview">
+              <div className="projects-portfolio__card-icons-grid" aria-hidden="true">
+                {[
+                  { id: 'cart', path: 'M9 21a1 1 0 1 0 2 0 1 1 0 0 0-2 0zm12 0a1 1 0 1 0 2 0 1 1 0 0 0-2 0zM1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6' },
+                  { id: 'account', path: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2 M12 7a4 4 0 1 0 0 8 4 4 0 0 0 0-8z' },
+                  { id: 'shop', path: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z M9 22V12h6v10' },
+                  { id: 'file', path: 'M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z M13 2v7h7' },
+                  { id: 'folder', path: 'M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z' },
+                  { id: 'star', path: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' },
+                ].map((icon) => (
+                  <div key={icon.id} className="projects-portfolio__card-icon-item">
+                    <svg viewBox="0 0 24 24" className="projects-portfolio__card-icon-svg" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d={icon.path} />
+                    </svg>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
           {!hasImages && project.id === 'wavelength' && (
             <div className="projects-portfolio__card-wavelength-preview">
               <div className="projects-portfolio__card-wavelength-board" aria-hidden="true">
@@ -139,10 +298,34 @@ const ProjectsPage = () => {
                   <div className="projects-portfolio__card-wavelength-needle" />
                 </div>
                 <div className="projects-portfolio__card-wavelength-labels">
-                  <span>Bad Company</span>
-                  <span>Good Company</span>
+                  <span>Bad NHL Team</span>
+                  <span>Good NHL Team</span>
                 </div>
               </div>
+            </div>
+          )}
+
+          {!hasImages && project.id === 'pomodoro-timer' && (
+            <div className="projects-portfolio__card-pomodoro-preview">
+              <PomodoroTimer isPreview={true} />
+            </div>
+          )}
+
+          {!hasImages && project.id === 'calculator' && (
+            <div className="projects-portfolio__card-calculator-preview">
+              <Calculator isPreview={true} />
+            </div>
+          )}
+
+          {!hasImages && project.id === 'drawing-canvas' && (
+            <div className="projects-portfolio__card-drawing-canvas-preview">
+              <DrawingCanvas isPreview={true} />
+            </div>
+          )}
+
+          {!hasImages && project.id === 'color-sort-puzzle' && (
+            <div className="projects-portfolio__card-color-sort-puzzle-preview">
+              <ColorSortPuzzle isPreview={true} />
             </div>
           )}
           
