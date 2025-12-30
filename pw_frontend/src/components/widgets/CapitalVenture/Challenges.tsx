@@ -64,8 +64,9 @@ const Challenges = ({ challenges, onClose }: ChallengesProps) => {
             onClick={onClose}
             type="button"
             aria-label="Close challenges"
+            autoFocus
           >
-            <span className="material-symbols-outlined">close</span>
+            <span className="material-symbols-outlined" aria-hidden="true">close</span>
           </button>
         </div>
 
