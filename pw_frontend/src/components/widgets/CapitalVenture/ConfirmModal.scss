@@ -1,0 +1,117 @@
+@use "../../../assets/styles/partials/variables" as *;
+
+.confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  &__content {
+    position: relative;
+    background: rgba($light-color, 0.98);
+    border: 2px solid rgba($primary-color, 0.2);
+    border-radius: $border-radius-lg;
+    padding: 24px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+
+    .confirm-modal--dark & {
+      background: rgba($dark-gray-color, 0.98);
+      border-color: rgba($light-color, 0.2);
+    }
+  }
+
+  &__title {
+    font-family: $font-family-display;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $primary-color;
+    margin: 0 0 12px 0;
+
+    .confirm-modal--dark & {
+      color: $light-color;
+    }
+  }
+
+  &__message {
+    font-size: $font-size-base;
+    color: rgba($primary-color, 0.8);
+    line-height: 1.6;
+    margin: 0 0 24px 0;
+    white-space: pre-line;
+
+    .confirm-modal--dark & {
+      color: rgba($light-color, 0.8);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+
+  &__button {
+    padding: 10px 20px;
+    border-radius: $border-radius;
+    font-family: $font-family-primary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    transition: all $transition-speed-fast ease;
+    border: 2px solid transparent;
+
+    &--cancel {
+      background: rgba($primary-color, 0.1);
+      color: $primary-color;
+      border-color: rgba($primary-color, 0.2);
+
+      .confirm-modal--dark & {
+        background: rgba($light-color, 0.1);
+        color: $light-color;
+        border-color: rgba($light-color, 0.2);
+      }
+
+      &:hover {
+        background: rgba($primary-color, 0.15);
+        border-color: rgba($primary-color, 0.3);
+      }
+    }
+
+    &--confirm {
+      background: $accent-color-1;
+      color: $light-color;
+      border-color: $accent-color-1;
+
+      &:hover {
+        background: darken($accent-color-1, 10%);
+        border-color: darken($accent-color-1, 10%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba($accent-color-1, 0.3);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+}
+

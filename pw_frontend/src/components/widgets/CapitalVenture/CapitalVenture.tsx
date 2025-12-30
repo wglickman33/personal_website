@@ -7,6 +7,7 @@ import { useGameLoop } from './hooks/useGameLoop';
 import { useLocalSave } from './hooks/useLocalSave';
 import * as BN from './utils/bigNumber';
 import * as Economy from './utils/economy';
+import ConfirmModal from './ConfirmModal';
 import './CapitalVenture.scss';
 
 interface CapitalVentureProps {
@@ -30,6 +31,9 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
   useEffect(() => {
     gameStateRef.current = gameState;
   }, [gameState]);
+
+  const [prestigeModalOpen, setPrestigeModalOpen] = useState(false);
+  const [resetModalOpen, setResetModalOpen] = useState(false);
 
   const { saveNow } = useLocalSave(gameState);
 
@@ -311,32 +315,29 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
     const currentState = gameStateRef.current;
     const prestigePoints = Economy.calculatePrestigePoints(currentState.totalEarned);
     if (prestigePoints === 0) return;
+    setPrestigeModalOpen(true);
+  }, []);
 
-    const multiplierPercent = (prestigePoints * Economy.PRESTIGE_MULTIPLIER_PER_POINT * 100).toFixed(1);
-    const confirmed = window.confirm(
-      `Prestige will reset your progress and grant ${prestigePoints} prestige points.\n\n` +
-      `This will give you a ${multiplierPercent}% permanent multiplier.\n\n` +
-      `Continue?`
-    );
-
-    if (!confirmed) return;
-
+  const confirmPrestige = useCallback(() => {
+    const currentState = gameStateRef.current;
+    const prestigePoints = Economy.calculatePrestigePoints(currentState.totalEarned);
     const newState = createInitialGameState();
     newState.prestigePoints = currentState.prestigePoints + prestigePoints;
     newState.lastSavedAt = Date.now();
 
     setGameState(newState);
     saveGameState(newState);
+    setPrestigeModalOpen(false);
   }, []);
 
   const handleReset = useCallback(() => {
-    const confirmed = window.confirm(
-      'Are you sure you want to reset your save? This cannot be undone.'
-    );
-    if (!confirmed) return;
+    setResetModalOpen(true);
+  }, []);
 
+  const confirmReset = useCallback(() => {
     clearGameState();
     setGameState(createInitialGameState());
+    setResetModalOpen(false);
   }, []);
 
   const availableUpgrades = useMemo(
@@ -786,6 +787,28 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
           Reset Save
         </button>
       </div>
+
+      {canPrestige && (
+        <ConfirmModal
+          isOpen={prestigeModalOpen}
+          title="Prestige"
+          message={`Prestige will reset your progress and grant ${Economy.calculatePrestigePoints(gameState.totalEarned)} prestige points.\n\nThis will give you a ${(Economy.calculatePrestigePoints(gameState.totalEarned) * Economy.PRESTIGE_MULTIPLIER_PER_POINT * 100).toFixed(1)}% permanent multiplier.\n\nContinue?`}
+          confirmText="Prestige"
+          cancelText="Cancel"
+          onConfirm={confirmPrestige}
+          onCancel={() => setPrestigeModalOpen(false)}
+        />
+      )}
+
+      <ConfirmModal
+        isOpen={resetModalOpen}
+        title="Reset Save"
+        message="Are you sure you want to reset your save? This cannot be undone."
+        confirmText="Reset"
+        cancelText="Cancel"
+        onConfirm={confirmReset}
+        onCancel={() => setResetModalOpen(false)}
+      />
     </div>
   );
 };
