@@ -24,15 +24,15 @@
 
   &__content {
     position: relative;
-    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-    border: 2px solid rgba($primary-color, 0.2);
+    background: linear-gradient(135deg, #faf8f3 0%, #f5f1e8 100%);
+    border: 2px solid rgba(139, 115, 85, 0.25);
     border-radius: $border-radius-lg;
     padding: 24px;
     max-width: 800px;
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px rgba(139, 115, 85, 0.15);
     z-index: 1;
     animation: slideIn 0.3s ease-out;
 
@@ -59,7 +59,7 @@
     font-family: $font-family-display;
     font-size: $font-size-xl;
     font-weight: $font-weight-bold;
-    color: $primary-color;
+    color: #654321;
     margin: 0;
 
     .challenges--dark & {
@@ -101,9 +101,9 @@
   &__summary {
     margin-bottom: 24px;
     padding: 16px;
-    background: rgba($accent-color-1, 0.1);
+    background: rgba(254, 243, 199, 0.5);
     border-radius: $border-radius;
-    border: 1px solid rgba($accent-color-1, 0.2);
+    border: 1px solid rgba(217, 119, 6, 0.2);
   }
 
   &__summary-stat {
@@ -114,7 +114,7 @@
 
   &__summary-label {
     font-size: $font-size-sm;
-    color: rgba($primary-color, 0.7);
+    color: rgba(101, 67, 33, 0.75);
     font-weight: $font-weight-medium;
 
     .challenges--dark & {
@@ -144,7 +144,7 @@
     font-family: $font-family-display;
     font-size: $font-size-lg;
     font-weight: $font-weight-bold;
-    color: $primary-color;
+    color: #654321;
     margin: 0;
     display: flex;
     align-items: center;
@@ -156,7 +156,7 @@
 
     .material-symbols-outlined {
       font-size: 1.25rem;
-      color: $accent-color-1;
+      color: #d97706;
     }
   }
 
@@ -217,14 +217,14 @@
   &__item-name {
     font-size: $font-size-base;
     font-weight: $font-weight-semibold;
-    color: $primary-color;
+    color: #654321;
 
     .challenges--dark & {
       color: $light-color;
     }
 
     .challenges__item--completed & {
-      color: $accent-color-2;
+      color: #b45309;
     }
   }
 
@@ -236,7 +236,7 @@
 
   &__item-description {
     font-size: $font-size-sm;
-    color: rgba($primary-color, 0.7);
+    color: rgba(101, 67, 33, 0.75);
     margin: 0 0 12px 0;
     line-height: 1.5;
 
@@ -273,7 +273,7 @@
 
   &__progress-text {
     font-size: $font-size-xs;
-    color: rgba($primary-color, 0.6);
+    color: rgba(101, 67, 33, 0.7);
     font-weight: $font-weight-medium;
 
     .challenges--dark & {
@@ -286,15 +286,15 @@
     align-items: center;
     gap: 6px;
     font-size: $font-size-xs;
-    color: $accent-color-2;
+    color: #b45309;
     font-weight: $font-weight-semibold;
     margin-top: 8px;
     padding-top: 8px;
-    border-top: 1px solid rgba($accent-color-2, 0.2);
+    border-top: 1px solid rgba(217, 119, 6, 0.2);
 
     .material-symbols-outlined {
       font-size: 1rem;
-      color: $accent-color-2;
+      color: #b45309;
     }
   }
 }
@@ -312,9 +312,9 @@
 
 @keyframes completedPulse {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba($accent-color-2, 0.4);
+    box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.4);
   }
   50% {
-    box-shadow: 0 0 0 4px rgba($accent-color-2, 0);
+    box-shadow: 0 0 0 4px rgba(217, 119, 6, 0);
   }
 }
