@@ -118,6 +118,15 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
     true
   );
 
+  // Save periodically to ensure progress is saved
+  useEffect(() => {
+    const saveInterval = setInterval(() => {
+      saveNow();
+    }, 3000); // Save every 3 seconds
+
+    return () => clearInterval(saveInterval);
+  }, [saveNow]);
+
   const capitalPerClickRef = useRef(capitalPerClick);
   useEffect(() => {
     capitalPerClickRef.current = capitalPerClick;
@@ -151,6 +160,7 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
     }, []),
     true
   );
+
 
   const handleClick = useCallback(() => {
     setGameState((prev) => {
@@ -221,12 +231,14 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
       
       if (BN.greaterThan(cost, prev.capital)) return prev;
       
-      saveNow();
-      return {
+      const newState = {
         ...prev,
         capital: BN.subtract(prev.capital, cost),
         clickSpeedLevel: currentLevel + 1
       };
+      gameStateRef.current = newState;
+      setTimeout(() => saveNow(), 0);
+      return newState;
     });
   }, [saveNow]);
 
@@ -237,12 +249,14 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
       
       if (BN.greaterThan(cost, prev.capital)) return prev;
       
-      saveNow();
-      return {
+      const newState = {
         ...prev,
         capital: BN.subtract(prev.capital, cost),
         clickValueLevel: currentLevel + 1
       };
+      gameStateRef.current = newState;
+      setTimeout(() => saveNow(), 0);
+      return newState;
     });
   }, [saveNow]);
 
@@ -317,24 +331,28 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
             actualLevels
           );
 
-          saveNow();
-          return {
+          const newState = {
             ...prev,
             capital: BN.subtract(prev.capital, affordableCost),
             ventures: prev.ventures.map((v) =>
               v.id === ventureId ? { ...v, level: v.level + actualLevels } : v
             )
           };
+          gameStateRef.current = newState;
+          setTimeout(() => saveNow(), 0);
+          return newState;
         }
 
-        saveNow();
-        return {
+        const newState = {
           ...prev,
           capital: BN.subtract(prev.capital, cost),
           ventures: prev.ventures.map((v) =>
             v.id === ventureId ? { ...v, level: v.level + levelsToBuy } : v
           )
         };
+        gameStateRef.current = newState;
+        setTimeout(() => saveNow(), 0);
+        return newState;
       });
     },
     [calculateLevelsToBuy, saveNow]
@@ -349,14 +367,16 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
         const managerCost = Economy.calculateManagerCost(venture, venture.managerLevel);
         if (BN.greaterThan(managerCost, prev.capital)) return prev;
 
-        saveNow();
-        return {
+        const newState = {
           ...prev,
           capital: BN.subtract(prev.capital, managerCost),
           ventures: prev.ventures.map((v) =>
             v.id === ventureId ? { ...v, managerLevel: v.managerLevel + 1 } : v
           )
         };
+        gameStateRef.current = newState;
+        setTimeout(() => saveNow(), 0);
+        return newState;
       });
     },
     [saveNow]
@@ -385,12 +405,14 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
           u.id === upgradeId ? { ...u, unlocked: true } : u
         );
 
-        saveNow();
-        return {
+        const newState = {
           ...prev,
           capital: BN.subtract(prev.capital, upgrade.cost),
           upgrades: newUpgrades
         };
+        gameStateRef.current = newState;
+        setTimeout(() => saveNow(), 0);
+        return newState;
       });
     },
     [saveNow]

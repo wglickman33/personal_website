@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react';
 import { GameState } from '../types/capitalVentureTypes';
 import { saveGameState } from '../utils/storage';
 
-const SAVE_INTERVAL_MS = 500;
-const DEBOUNCE_MS = 300;
+const SAVE_INTERVAL_MS = 2000;
+const DEBOUNCE_MS = 500;
 
 export function useLocalSave(gameState: GameState) {
   const lastSaveRef = useRef<number>(0);
@@ -41,7 +41,19 @@ export function useLocalSave(gameState: GameState) {
         clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, [gameState.capital, gameState.totalEarned, gameState.ventures, gameState.upgrades, gameState.clickSpeedLevel, gameState.clickValueLevel, gameState.autoClickEnabled]);
+  }, [
+    gameState.capital.mantissa,
+    gameState.capital.exponent,
+    gameState.totalEarned.mantissa,
+    gameState.totalEarned.exponent,
+    JSON.stringify(gameState.ventures.map(v => ({ id: v.id, level: v.level, managerLevel: v.managerLevel }))),
+    JSON.stringify(gameState.upgrades.map(u => ({ id: u.id, unlocked: u.unlocked }))),
+    gameState.clickSpeedLevel,
+    gameState.clickValueLevel,
+    gameState.autoClickEnabled,
+    gameState.buyMode,
+    gameState.prestigePoints
+  ]);
 
   const saveNow = () => {
     if (saveTimeoutRef.current) {
