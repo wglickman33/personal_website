@@ -166,6 +166,24 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
     });
   }, [saveNow]);
 
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        if (document.activeElement?.tagName === 'BUTTON') {
+          return;
+        }
+        if (!e.target || (e.target as HTMLElement).tagName === 'INPUT' || (e.target as HTMLElement).tagName === 'TEXTAREA') {
+          return;
+        }
+        e.preventDefault();
+        handleClick();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [handleClick]);
+
   const toggleAutoClick = useCallback(() => {
     setGameState((prev) => {
       const now = Date.now();
@@ -630,9 +648,11 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
             className={`capital-venture__autoclick-toggle ${gameState.autoClickEnabled ? 'capital-venture__autoclick-toggle--active' : ''}`}
             onClick={toggleAutoClick}
             type="button"
+            aria-label={gameState.autoClickEnabled ? `Disable Auto-Click (currently ${currentClickSpeed} clicks per second)` : 'Enable Auto-Click'}
+            aria-pressed={gameState.autoClickEnabled}
             title={gameState.autoClickEnabled ? 'Disable Auto-Click' : 'Enable Auto-Click'}
           >
-            <span className="material-symbols-outlined">
+            <span className="material-symbols-outlined" aria-hidden="true">
               {gameState.autoClickEnabled ? 'auto_awesome' : 'touch_app'}
             </span>
             <span className="capital-venture__autoclick-label">
@@ -643,8 +663,9 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
             className="capital-venture__click-btn"
             onClick={handleClick}
             type="button"
+            aria-label={`Click to earn ${BN.formatCompact(capitalPerClick)} capital`}
           >
-            <span className="material-symbols-outlined">add_circle</span>
+            <span className="material-symbols-outlined" aria-hidden="true">add_circle</span>
             <span className="capital-venture__click-btn-value">
               +{BN.formatCompact(capitalPerClick)}
             </span>
@@ -669,8 +690,9 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
           onClick={buyClickSpeed}
           disabled={BN.greaterThan(clickSpeedCost, gameState.capital)}
           type="button"
+          aria-label={`Upgrade click speed for ${BN.formatCompact(clickSpeedCost)}. Current speed: ${currentClickSpeed} clicks per second`}
         >
-          <span className="material-symbols-outlined">trending_up</span>
+          <span className="material-symbols-outlined" aria-hidden="true">trending_up</span>
           <span className="capital-venture__click-speed-btn-text">Upgrade Speed</span>
           <span className="capital-venture__click-speed-btn-cost">
             {BN.formatCompact(clickSpeedCost)}
@@ -695,8 +717,9 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
           onClick={buyClickValue}
           disabled={BN.greaterThan(clickValueCost, gameState.capital)}
           type="button"
+          aria-label={`Upgrade click value for ${BN.formatCompact(clickValueCost)}. Current value: ${BN.formatCompact(baseClickValue)} per click`}
         >
-          <span className="material-symbols-outlined">trending_up</span>
+          <span className="material-symbols-outlined" aria-hidden="true">trending_up</span>
           <span className="capital-venture__click-value-btn-text">Upgrade Value</span>
           <span className="capital-venture__click-value-btn-cost">
             {BN.formatCompact(clickValueCost)}
@@ -704,7 +727,7 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
         </button>
       </div>
 
-      <div className="capital-venture__buy-mode-bar">
+      <div className="capital-venture__buy-mode-bar" role="group" aria-label="Purchase quantity selector">
         {(['x1', 'x5', 'x10', 'x100', 'Next', 'Max'] as BuyMode[]).map((mode) => (
           <button
             key={mode}
@@ -713,6 +736,8 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
             }`}
             onClick={() => setGameState((prev) => ({ ...prev, buyMode: mode }))}
             type="button"
+            aria-label={`Set purchase mode to ${mode === 'Next' ? 'next milestone' : mode === 'Max' ? 'maximum affordable' : mode}`}
+            aria-pressed={gameState.buyMode === mode}
           >
             {mode}
           </button>
@@ -818,8 +843,9 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
                         onClick={() => buyManager(venture.id)}
                         disabled={BN.greaterThan(managerCost, gameState.capital)}
                         type="button"
+                        aria-label={`Upgrade ${venture.name} manager to level ${venture.managerLevel + 1} for ${BN.formatCompact(managerCost)}`}
                       >
-                        <span className="material-symbols-outlined">person</span>
+                        <span className="material-symbols-outlined" aria-hidden="true">person</span>
                         <span className="capital-venture__venture-manager-text">
                           Manager {venture.managerLevel ? `Lv.${venture.managerLevel + 1}` : ''}
                         </span>
@@ -868,8 +894,9 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
                   onClick={() => buyUpgrade(upgrade.id)}
                   disabled={!canAfford}
                   type="button"
+                  aria-label={`Purchase ${upgrade.name} upgrade for ${BN.formatCompact(upgrade.cost)}. ${upgrade.description}`}
                 >
-                  <span className="material-symbols-outlined">flash_on</span>
+                  <span className="material-symbols-outlined" aria-hidden="true">flash_on</span>
                   <span className="capital-venture__upgrade-cost">
                     {BN.formatCompact(upgrade.cost)}
                   </span>
@@ -904,6 +931,7 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
               className="capital-venture__prestige-btn"
               onClick={handlePrestige}
               type="button"
+              aria-label={`Prestige: Reset progress and gain ${Economy.calculatePrestigePoints(gameState.totalEarned)} prestige points for a ${(Economy.calculatePrestigePoints(gameState.totalEarned) * Economy.PRESTIGE_MULTIPLIER_PER_POINT * 100).toFixed(1)}% permanent multiplier`}
             >
               Prestige (Reset & Reinvest)
             </button>
@@ -916,11 +944,12 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
           className="capital-venture__challenges-btn"
           onClick={() => setChallengesOpen(true)}
           type="button"
+          aria-label={`View challenges. ${gameState.challenges ? `${gameState.challenges.filter(c => c.completed).length} completed` : ''}`}
         >
-          <span className="material-symbols-outlined">emoji_events</span>
+          <span className="material-symbols-outlined" aria-hidden="true">emoji_events</span>
           Challenges
           {gameState.challenges && gameState.challenges.filter(c => c.completed).length > 0 && (
-            <span className="capital-venture__challenges-badge">
+            <span className="capital-venture__challenges-badge" aria-label={`${gameState.challenges.filter(c => c.completed).length} challenges completed`}>
               {gameState.challenges.filter(c => c.completed).length}
             </span>
           )}
@@ -929,6 +958,7 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
           className="capital-venture__reset-btn"
           onClick={handleReset}
           type="button"
+          aria-label="Reset game save. This action cannot be undone."
         >
           Reset Save
         </button>
