@@ -120,11 +120,10 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
     true
   );
 
-  // Save periodically to ensure progress is saved
   useEffect(() => {
     const saveInterval = setInterval(() => {
       saveNow();
-    }, 3000); // Save every 3 seconds
+    }, 3000);
 
     return () => clearInterval(saveInterval);
   }, [saveNow]);

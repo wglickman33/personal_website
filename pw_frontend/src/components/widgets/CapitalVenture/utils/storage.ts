@@ -6,7 +6,6 @@ const STORAGE_KEY = 'pw:capital-venture:state';
 
 export function saveGameState(state: GameState): void {
   try {
-    // Explicitly save all fields to ensure nothing is missed
     const serialized = {
       capital: BN.toJSON(state.capital),
       totalEarned: BN.toJSON(state.totalEarned),
@@ -83,7 +82,6 @@ export function loadGameState(): GameState | null {
       return null;
     }
     
-    // Ensure all numeric fields are properly loaded
     if (typeof parsed.autoClickEnabled !== 'boolean') {
       parsed.autoClickEnabled = false;
     }
