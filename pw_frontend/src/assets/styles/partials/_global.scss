@@ -15,8 +15,8 @@ body {
   font-family: $font-family-primary;
   font-size: $font-size-base;
   line-height: $line-height-base;
-  color: $primary-color;
-  background-color: $gray-color-light;
+  color: #654321;
+  background-color: #faf8f3;
   overflow-x: hidden;
   transition: background-color $transition-speed ease, color $transition-speed ease;
   -webkit-font-smoothing: antialiased;
@@ -30,11 +30,19 @@ body {
 
 a {
   text-decoration: none;
-  color: $primary-color;
+  color: #654321;
   transition: color $transition-speed ease;
   
   &:hover {
-    color: color-mix(in srgb, $primary-color 90%, white 10%);
+    color: #b45309;
+  }
+  
+  body.dark & {
+    color: $primary-color;
+    
+    &:hover {
+      color: color-mix(in srgb, $primary-color 90%, white 10%);
+    }
   }
 }
 
