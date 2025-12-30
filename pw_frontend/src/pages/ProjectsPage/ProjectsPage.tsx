@@ -7,6 +7,7 @@ import PomodoroTimer from '../../components/widgets/PomodoroTimer/PomodoroTimer'
 import Calculator from '../../components/widgets/Calculator/Calculator';
 import DrawingCanvas from '../../components/widgets/DrawingCanvas/DrawingCanvas';
 import ColorSortPuzzle from '../../components/widgets/ColorSortPuzzle/ColorSortPuzzle';
+import CapitalVenture from '../../components/widgets/CapitalVenture/CapitalVenture';
 import whiteMKDIcon from '../../assets/styles/logos/whiteMKDIcon.png';
 import bgworkspaceLogo from '../../assets/styles/logos/bgworkspaceLogo.png';
 import toriLogo from '../../assets/styles/logos/toriLogo.png';
@@ -326,6 +327,12 @@ const ProjectsPage = () => {
           {!hasImages && project.id === 'color-sort-puzzle' && (
             <div className="projects-portfolio__card-color-sort-puzzle-preview">
               <ColorSortPuzzle isPreview={true} />
+            </div>
+          )}
+
+          {!hasImages && project.id === 'capital-venture' && (
+            <div className="projects-portfolio__card-capital-venture-preview">
+              <CapitalVenture isPreview={true} />
             </div>
           )}
           

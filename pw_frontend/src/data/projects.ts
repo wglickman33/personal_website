@@ -9,6 +9,7 @@ import PomodoroTimer from '../components/widgets/PomodoroTimer/PomodoroTimer';
 import Calculator from '../components/widgets/Calculator/Calculator';
 import DrawingCanvas from '../components/widgets/DrawingCanvas/DrawingCanvas';
 import ColorSortPuzzle from '../components/widgets/ColorSortPuzzle/ColorSortPuzzle';
+import CapitalVenture from '../components/widgets/CapitalVenture/CapitalVenture';
 
 import mkdImage0 from '../assets/styles/images/mkdImage0.png';
 import mkdImage1 from '../assets/styles/images/mkdImage1.png';
@@ -951,6 +952,17 @@ export default AFKClock;`,
     category: 'game',
     date: '2025',
     widgetComponent: ColorSortPuzzle,
+  },
+  {
+    id: 'capital-venture',
+    title: 'Capital Venture',
+    description: 'An idle clicker game inspired by AdVenture Capitalist, themed around building a portfolio of creative and business ventures. Click to earn capital, invest in 10 different ventures, hire managers for automation, purchase upgrades, and prestige for permanent multipliers. Features a custom BigNumber system for handling extremely large values without precision loss.',
+    techStack: ['React', 'TypeScript', 'SCSS', 'Game Loop', 'State Management', 'LocalStorage', 'BigNumber System'],
+    challenges: 'Implementing a custom BigNumber system to handle very large numbers without floating-point precision issues. Creating an accurate economic model with geometric cost scaling, milestone multipliers, and prestige calculations. Optimizing performance with memoization and binary search algorithms. Ensuring all edge cases are handled including negative numbers, Infinity, NaN, and corrupted save data. Implementing a smooth game loop using requestAnimationFrame with proper delta time handling.',
+    results: 'A fully functional idle clicker game with 10 brand-themed ventures, managers for automation, global and venture-specific upgrades, prestige system with permanent multipliers, and comprehensive buy modes (x1, x5, x10, x100, Next, Max). The game features accurate BigNumber calculations, optimized performance, auto-save functionality, and a polished UI that matches the site theme. All edge cases are handled, and the game is production-ready with zero known bugs.',
+    category: 'game',
+    date: '2025',
+    widgetComponent: CapitalVenture,
   },
   {
     id: 'quant-ai-agents',

@@ -1,3 +1,4 @@
+import CapitalVenture from '../../components/widgets/CapitalVenture/CapitalVenture';
 import './PlaygroundPage.scss';
 
 const PlaygroundPage = () => {
@@ -5,7 +6,7 @@ const PlaygroundPage = () => {
     <div className="page-name-page">
       <div className="container">
         <h1>Playground</h1>
-        <p>Coming soon.</p>
+        <CapitalVenture />
       </div>
     </div>
   );
