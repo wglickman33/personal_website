@@ -1,5 +1,6 @@
 import { Venture, Upgrade, GameState, BuyMode, UpgradeType, BigNumber } from '../types/capitalVentureTypes';
 import * as BN from '../utils/bigNumber';
+import { createInitialChallenges } from './challenges';
 
 export const INITIAL_BUY_MODE: BuyMode = 'x1';
 
@@ -382,6 +383,7 @@ export function createInitialUpgrades(): Upgrade[] {
 }
 
 export function createInitialGameState(): GameState {
+  const sessionStartTime = Date.now();
   return {
     capital: BN.create(0),
     totalEarned: BN.create(0),
@@ -394,7 +396,15 @@ export function createInitialGameState(): GameState {
     autoClickRate: 10,
     clickSpeedLevel: 0,
     clickValueLevel: 0,
-    lastSavedAt: Date.now()
+    lastSavedAt: Date.now(),
+    challenges: createInitialChallenges(),
+    challengeProgress: {
+      refreshCount: 0,
+      longestSession: 0,
+      sessionStartTime,
+      autoClickerTime: 0,
+      lastAutoClickerState: false
+    }
   };
 }
 

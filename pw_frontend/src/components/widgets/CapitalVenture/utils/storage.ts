@@ -1,5 +1,6 @@
 import { GameState } from '../types/capitalVentureTypes';
 import * as BN from './bigNumber';
+import { createInitialChallenges } from '../data/challenges';
 
 const STORAGE_KEY = 'pw:capital-venture:state';
 
@@ -29,7 +30,15 @@ export function saveGameState(state: GameState): void {
       autoClickRate: state.autoClickRate || 10,
       clickSpeedLevel: state.clickSpeedLevel || 0,
       clickValueLevel: state.clickValueLevel || 0,
-      lastSavedAt: Date.now()
+      lastSavedAt: Date.now(),
+      challenges: state.challenges || [],
+      challengeProgress: state.challengeProgress || {
+        refreshCount: 0,
+        longestSession: 0,
+        sessionStartTime: Date.now(),
+        autoClickerTime: 0,
+        lastAutoClickerState: false
+      }
     };
     const serializedString = JSON.stringify(serialized);
     localStorage.setItem(STORAGE_KEY, serializedString);
@@ -65,6 +74,19 @@ export function loadGameState(): GameState | null {
       parsed.clickValueLevel = 0;
     }
     
+    if (!parsed.challengeProgress) {
+      parsed.challengeProgress = {
+        refreshCount: 0,
+        longestSession: 0,
+        sessionStartTime: Date.now(),
+        autoClickerTime: 0,
+        lastAutoClickerState: false
+      };
+    } else {
+      parsed.challengeProgress.refreshCount = (parsed.challengeProgress.refreshCount || 0) + 1;
+      parsed.challengeProgress.sessionStartTime = parsed.challengeProgress.sessionStartTime || Date.now();
+    }
+    
     return {
       ...parsed,
       capital: BN.fromJSON(parsed.capital),
@@ -96,7 +118,15 @@ export function loadGameState(): GameState | null {
         ...u,
         cost: BN.fromJSON(u.cost),
         unlockAtTotalEarned: u.unlockAtTotalEarned ? BN.fromJSON(u.unlockAtTotalEarned) : undefined
-      }))
+      })),
+      challenges: parsed.challenges || createInitialChallenges(),
+      challengeProgress: parsed.challengeProgress || {
+        refreshCount: 0,
+        longestSession: 0,
+        sessionStartTime: Date.now(),
+        autoClickerTime: 0,
+        lastAutoClickerState: false
+      }
     };
   } catch (error) {
     console.error('Failed to load game state:', error);

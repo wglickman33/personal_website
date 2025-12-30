@@ -51,6 +51,15 @@ export interface GameState {
   clickSpeedLevel: number;
   clickValueLevel: number;
   lastSavedAt: number;
+  challenges?: Challenge[];
+  challengeProgress?: {
+    refreshCount: number;
+    longestSession: number;
+    sessionStartTime: number;
+    autoClickerTime: number;
+    lastAutoClickerState: boolean;
+    autoClickerStartTime?: number;
+  };
 }
 
 export interface PrestigeConfig {
@@ -58,5 +67,28 @@ export interface PrestigeConfig {
   minTotalEarned: BigNumber;
   prestigeScale: number;
   multiplierPerPoint: number;
+}
+
+export type ChallengeType = 'scaling' | 'saving' | 'progress';
+
+export interface Challenge {
+  id: string;
+  name: string;
+  description: string;
+  type: ChallengeType;
+  completed: boolean;
+  completedAt?: number;
+  progress: number;
+  target: number;
+  reward?: string;
+}
+
+export interface ChallengeProgress {
+  challenges: Challenge[];
+  totalCompleted: number;
+  lastSaveVerified: number;
+  refreshCount: number;
+  longestSession: number;
+  sessionStartTime: number;
 }
 

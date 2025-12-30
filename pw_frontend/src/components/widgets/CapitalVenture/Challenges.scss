@@ -1,0 +1,277 @@
+@use "../../../assets/styles/partials/variables" as *;
+
+.challenges {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  &__content {
+    position: relative;
+    background: rgba($light-color, 0.98);
+    border: 2px solid rgba($primary-color, 0.2);
+    border-radius: $border-radius-lg;
+    padding: 24px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+
+    .challenges--dark & {
+      background: rgba($dark-gray-color, 0.98);
+      border-color: rgba($light-color, 0.2);
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba($primary-color, 0.1);
+
+    .challenges--dark & {
+      border-bottom-color: rgba($light-color, 0.1);
+    }
+  }
+
+  &__title {
+    font-family: $font-family-display;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $primary-color;
+    margin: 0;
+
+    .challenges--dark & {
+      color: $light-color;
+    }
+  }
+
+  &__close-btn {
+    background: transparent;
+    border: none;
+    color: rgba($primary-color, 0.7);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: $border-radius;
+    transition: all $transition-speed-fast ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .challenges--dark & {
+      color: rgba($light-color, 0.7);
+    }
+
+    &:hover {
+      background: rgba($primary-color, 0.1);
+      color: $primary-color;
+
+      .challenges--dark & {
+        background: rgba($light-color, 0.1);
+        color: $light-color;
+      }
+    }
+
+    .material-symbols-outlined {
+      font-size: 1.5rem;
+    }
+  }
+
+  &__summary {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: rgba($accent-color-1, 0.1);
+    border-radius: $border-radius;
+    border: 1px solid rgba($accent-color-1, 0.2);
+  }
+
+  &__summary-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__summary-label {
+    font-size: $font-size-sm;
+    color: rgba($primary-color, 0.7);
+    font-weight: $font-weight-medium;
+
+    .challenges--dark & {
+      color: rgba($light-color, 0.7);
+    }
+  }
+
+  &__summary-value {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $accent-color-1;
+  }
+
+  &__sections {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__section-title {
+    font-family: $font-family-display;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $primary-color;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .challenges--dark & {
+      color: $light-color;
+    }
+
+    .material-symbols-outlined {
+      font-size: 1.25rem;
+      color: $accent-color-1;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__item {
+    padding: 16px;
+    background: rgba($primary-color, 0.03);
+    border: 1px solid rgba($primary-color, 0.1);
+    border-radius: $border-radius;
+    transition: all $transition-speed-fast ease;
+
+    .challenges--dark & {
+      background: rgba($light-color, 0.03);
+      border-color: rgba($light-color, 0.1);
+    }
+
+    &--completed {
+      background: rgba($accent-color-2, 0.1);
+      border-color: rgba($accent-color-2, 0.3);
+    }
+  }
+
+  &__item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  &__item-name {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $primary-color;
+
+    .challenges--dark & {
+      color: $light-color;
+    }
+
+    .challenges__item--completed & {
+      color: $accent-color-2;
+    }
+  }
+
+  &__item-check {
+    color: $accent-color-2;
+    font-size: 1.25rem;
+    font-variation-settings: 'FILL' 1;
+  }
+
+  &__item-description {
+    font-size: $font-size-sm;
+    color: rgba($primary-color, 0.7);
+    margin: 0 0 12px 0;
+    line-height: 1.5;
+
+    .challenges--dark & {
+      color: rgba($light-color, 0.7);
+    }
+  }
+
+  &__item-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  &__progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba($primary-color, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+
+    .challenges--dark & {
+      background: rgba($light-color, 0.1);
+    }
+  }
+
+  &__progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, $accent-color-1, $accent-color-2);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+
+  &__progress-text {
+    font-size: $font-size-xs;
+    color: rgba($primary-color, 0.6);
+    font-weight: $font-weight-medium;
+
+    .challenges--dark & {
+      color: rgba($light-color, 0.6);
+    }
+  }
+
+  &__item-reward {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: $font-size-xs;
+    color: $accent-color-2;
+    font-weight: $font-weight-semibold;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba($accent-color-2, 0.2);
+
+    .material-symbols-outlined {
+      font-size: 1rem;
+      color: $accent-color-2;
+    }
+  }
+}
+

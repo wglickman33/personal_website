@@ -945,12 +945,61 @@
   &__footer {
     display: flex;
     justify-content: center;
+    gap: 12px;
     padding-top: 8px;
     border-top: 1px solid rgba($primary-color, 0.1);
 
     .capital-venture--dark & {
       border-top-color: rgba($light-color, 0.1);
     }
+  }
+
+  &__challenges-btn {
+    padding: 6px 12px;
+    background: linear-gradient(135deg, $accent-color-2, $accent-color-3);
+    border: 1px solid rgba($accent-color-2, 0.3);
+    border-radius: $border-radius;
+    color: $light-color;
+    font-family: $font-family-primary;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    transition: all $transition-speed-fast ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+
+    &:hover {
+      background: linear-gradient(135deg, lighten($accent-color-2, 5%), lighten($accent-color-3, 5%));
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba($accent-color-2, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    .material-symbols-outlined {
+      font-size: 1rem;
+    }
+  }
+
+  &__challenges-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: $accent-color-1;
+    color: $light-color;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: $font-weight-bold;
+    border: 2px solid $light-color;
   }
 
   &__reset-btn {

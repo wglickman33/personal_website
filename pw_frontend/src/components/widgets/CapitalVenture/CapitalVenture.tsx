@@ -7,7 +7,9 @@ import { useGameLoop } from './hooks/useGameLoop';
 import { useLocalSave } from './hooks/useLocalSave';
 import * as BN from './utils/bigNumber';
 import * as Economy from './utils/economy';
+import { updateChallengeProgress } from './data/challenges';
 import ConfirmModal from './ConfirmModal';
+import Challenges from './Challenges';
 import './CapitalVenture.scss';
 
 interface CapitalVentureProps {
@@ -47,6 +49,7 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
 
   const [prestigeModalOpen, setPrestigeModalOpen] = useState(false);
   const [resetModalOpen, setResetModalOpen] = useState(false);
+  const [challengesOpen, setChallengesOpen] = useState(false);
 
   const { saveNow } = useLocalSave(gameState);
 
@@ -164,10 +167,33 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
   }, [saveNow]);
 
   const toggleAutoClick = useCallback(() => {
-    setGameState((prev) => ({
-      ...prev,
-      autoClickEnabled: !prev.autoClickEnabled
-    }));
+    setGameState((prev) => {
+      const now = Date.now();
+      const progress = prev.challengeProgress || {
+        refreshCount: 0,
+        longestSession: 0,
+        sessionStartTime: now,
+        autoClickerTime: 0,
+        lastAutoClickerState: false
+      };
+      
+      let newAutoClickerTime = progress.autoClickerTime;
+      if (progress.lastAutoClickerState && !prev.autoClickEnabled) {
+        const sessionTime = now - (progress.autoClickerStartTime || now);
+        newAutoClickerTime += sessionTime;
+      }
+      
+      return {
+        ...prev,
+        autoClickEnabled: !prev.autoClickEnabled,
+        challengeProgress: {
+          ...progress,
+          autoClickerTime: newAutoClickerTime,
+          lastAutoClickerState: !prev.autoClickEnabled,
+          autoClickerStartTime: !prev.autoClickEnabled ? now : progress.autoClickerStartTime
+        }
+      };
+    });
   }, []);
 
   const buyClickSpeed = useCallback(() => {
@@ -425,6 +451,72 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
       generatingUpgradesRef.current = false;
     }
   }, [availableUpgrades.length, gameState.upgrades.length, gameState.totalEarned, gameState.ventures]);
+
+  useEffect(() => {
+    if (gameState.challenges && gameState.challengeProgress) {
+      const updatedChallenges = updateChallengeProgress(
+        gameState.challenges,
+        {
+          capital: gameState.capital,
+          totalEarned: gameState.totalEarned,
+          ventures: gameState.ventures,
+          upgrades: gameState.upgrades,
+          autoClickEnabled: gameState.autoClickEnabled
+        },
+        {
+          refreshCount: gameState.challengeProgress.refreshCount,
+          longestSession: gameState.challengeProgress.longestSession,
+          sessionStartTime: gameState.challengeProgress.sessionStartTime,
+          autoClickerTime: gameState.challengeProgress.autoClickerTime
+        }
+      );
+      
+      const hasNewCompletion = updatedChallenges.some((c, i) => 
+        c.completed && !gameState.challenges![i].completed
+      );
+      
+      if (hasNewCompletion || JSON.stringify(updatedChallenges) !== JSON.stringify(gameState.challenges)) {
+        setGameState(prev => ({
+          ...prev,
+          challenges: updatedChallenges
+        }));
+      }
+    }
+  }, [gameState.capital, gameState.totalEarned, gameState.ventures, gameState.upgrades, gameState.autoClickEnabled, gameState.challengeProgress, gameState.challenges]);
+
+  useEffect(() => {
+    if (gameState.challengeProgress) {
+      const interval = setInterval(() => {
+        const now = Date.now();
+        const sessionTime = now - gameState.challengeProgress!.sessionStartTime;
+        const longestSession = Math.max(sessionTime, gameState.challengeProgress!.longestSession);
+        
+        if (gameState.autoClickEnabled && gameState.challengeProgress!.lastAutoClickerState) {
+          const autoClickerTime = gameState.challengeProgress!.autoClickerTime + 
+            (now - (gameState.challengeProgress!.autoClickerStartTime || now));
+          
+          setGameState(prev => ({
+            ...prev,
+            challengeProgress: {
+              ...prev.challengeProgress!,
+              longestSession,
+              autoClickerTime
+            }
+          }));
+        } else {
+          setGameState(prev => ({
+            ...prev,
+            challengeProgress: {
+              ...prev.challengeProgress!,
+              longestSession
+            }
+          }));
+        }
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [gameState.challengeProgress?.sessionStartTime, gameState.autoClickEnabled, gameState.challengeProgress]);
 
   const ventureCalculations = useMemo(() => {
     return gameState.ventures.map((venture) => {
@@ -821,6 +913,19 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
 
       <div className="capital-venture__footer">
         <button
+          className="capital-venture__challenges-btn"
+          onClick={() => setChallengesOpen(true)}
+          type="button"
+        >
+          <span className="material-symbols-outlined">emoji_events</span>
+          Challenges
+          {gameState.challenges && gameState.challenges.filter(c => c.completed).length > 0 && (
+            <span className="capital-venture__challenges-badge">
+              {gameState.challenges.filter(c => c.completed).length}
+            </span>
+          )}
+        </button>
+        <button
           className="capital-venture__reset-btn"
           onClick={handleReset}
           type="button"
@@ -850,6 +955,13 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
         onConfirm={confirmReset}
         onCancel={() => setResetModalOpen(false)}
       />
+
+      {gameState.challenges && challengesOpen && (
+        <Challenges
+          challenges={gameState.challenges}
+          onClose={() => setChallengesOpen(false)}
+        />
+      )}
     </div>
   );
 };
