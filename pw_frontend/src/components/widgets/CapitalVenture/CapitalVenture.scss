@@ -598,6 +598,35 @@
     font-weight: $font-weight-bold;
   }
 
+  &__venture-active-boosts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  &__venture-boost-badge {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 6px;
+    background: linear-gradient(135deg, $accent-color-2, $accent-color-3);
+    color: $light-color;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: $font-weight-bold;
+    white-space: nowrap;
+
+    .material-symbols-outlined {
+      font-size: 0.75rem;
+      font-variation-settings: 'FILL' 1;
+    }
+  }
+
+  &__venture-boost-text {
+    font-weight: $font-weight-bold;
+  }
+
   &__venture-manager-badge {
     display: flex;
     align-items: center;

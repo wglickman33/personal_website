@@ -268,7 +268,7 @@ export function createInitialVentures(): Venture[] {
   ];
 }
 
-function generateRandomUpgrade(
+export function generateRandomUpgrade(
   baseCost: BigNumber,
   unlockAt: BigNumber,
   upgradeIndex: number,

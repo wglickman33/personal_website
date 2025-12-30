@@ -140,11 +140,24 @@ export function calculateVentureIncomePerSec(
   
   let income = BN.multiplyScalar(venture.baseIncomePerSec, venture.level);
   
-  const milestoneMultiplier = venture.milestoneMultipliers
-    .filter(m => venture.level >= m.level)
-    .reduce((acc, m) => acc * m.multiplier, 1);
+  const activeBoosts = getActiveMilestoneBoosts(venture);
+  let incomeBoost = 0;
+  let multiplierBoost = 1;
   
-  income = BN.multiplyScalar(income, milestoneMultiplier);
+  activeBoosts.forEach(boost => {
+    if (boost.type === 'income') {
+      incomeBoost += boost.value;
+    } else if (boost.type === 'multiplier') {
+      multiplierBoost *= boost.value;
+    }
+  });
+  
+  if (incomeBoost > 0) {
+    const boostAmount = BN.multiplyScalar(venture.baseIncomePerSec, incomeBoost);
+    income = BN.add(income, boostAmount);
+  }
+  
+  income = BN.multiplyScalar(income, multiplierBoost);
   
   if (venture.managerLevel > 0) {
     const managerMultiplier = 1 + (venture.managerLevel * 2);
@@ -238,25 +251,21 @@ export function calculateClickSpeed(currentLevel: number): number {
   return BASE_CLICK_SPEED + (currentLevel * CLICK_SPEED_INCREASE_PER_LEVEL);
 }
 
-export function calculateClickSpeedCost(currentLevel: number, totalEarned: BigNumber): BigNumber {
+export function calculateClickSpeedCost(currentLevel: number): BigNumber {
   const baseCost = BN.create(1000);
   const levelMultiplier = Math.pow(1.5, currentLevel);
-  const totalValue = totalEarned.mantissa * Math.pow(10, totalEarned.exponent);
-  const earnedMultiplier = Math.max(1, Math.log10(Math.max(1, totalValue)));
   
-  return BN.multiplyScalar(baseCost, levelMultiplier * earnedMultiplier);
+  return BN.multiplyScalar(baseCost, levelMultiplier);
 }
 
 export function calculateClickValue(currentLevel: number): BigNumber {
   return BN.create(BASE_CLICK_VALUE + (currentLevel * CLICK_VALUE_INCREASE_PER_LEVEL));
 }
 
-export function calculateClickValueCost(currentLevel: number, totalEarned: BigNumber): BigNumber {
+export function calculateClickValueCost(currentLevel: number): BigNumber {
   const baseCost = BN.create(500);
   const levelMultiplier = Math.pow(1.8, currentLevel);
-  const totalValue = totalEarned.mantissa * Math.pow(10, totalEarned.exponent);
-  const earnedMultiplier = Math.max(1, Math.log10(Math.max(1, totalValue)));
   
-  return BN.multiplyScalar(baseCost, levelMultiplier * earnedMultiplier);
+  return BN.multiplyScalar(baseCost, levelMultiplier);
 }
 

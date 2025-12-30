@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import useTheme from '../../../hooks/useTheme';
-import { GameState, Venture, BuyMode, BigNumber } from './types/capitalVentureTypes';
-import { createInitialGameState } from './data/capitalVentureData';
+import { GameState, Venture, BuyMode, BigNumber, Upgrade } from './types/capitalVentureTypes';
+import { createInitialGameState, generateRandomUpgrade } from './data/capitalVentureData';
 import { loadGameState, saveGameState, clearGameState } from './utils/storage';
 import { useGameLoop } from './hooks/useGameLoop';
 import { useLocalSave } from './hooks/useLocalSave';
@@ -47,8 +47,8 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
   );
   const baseClickSpeed = Economy.calculateClickSpeed(gameState.clickSpeedLevel || 0);
   const currentClickSpeed = Economy.calculateClickSpeedWithUpgrades(baseClickSpeed, gameState.upgrades);
-  const clickSpeedCost = Economy.calculateClickSpeedCost(gameState.clickSpeedLevel || 0, gameState.totalEarned);
-  const clickValueCost = Economy.calculateClickValueCost(gameState.clickValueLevel || 0, gameState.totalEarned);
+  const clickSpeedCost = Economy.calculateClickSpeedCost(gameState.clickSpeedLevel || 0);
+  const clickValueCost = Economy.calculateClickValueCost(gameState.clickValueLevel || 0);
   const baseClickValue = Economy.calculateClickValue(gameState.clickValueLevel || 0);
 
   useGameLoop(
@@ -128,7 +128,7 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
   const buyClickSpeed = useCallback(() => {
     setGameState((prev) => {
       const currentLevel = prev.clickSpeedLevel || 0;
-      const cost = Economy.calculateClickSpeedCost(currentLevel, prev.totalEarned);
+      const cost = Economy.calculateClickSpeedCost(currentLevel);
       
       if (BN.greaterThan(cost, prev.capital)) return prev;
       
@@ -144,7 +144,7 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
   const buyClickValue = useCallback(() => {
     setGameState((prev) => {
       const currentLevel = prev.clickValueLevel || 0;
-      const cost = Economy.calculateClickValueCost(currentLevel, prev.totalEarned);
+      const cost = Economy.calculateClickValueCost(currentLevel);
       
       if (BN.greaterThan(cost, prev.capital)) return prev;
       
@@ -357,6 +357,33 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
     [gameState.upgrades, gameState.totalEarned, gameState.ventures]
   );
 
+  const generatingUpgradesRef = useRef(false);
+  
+  useEffect(() => {
+    if (availableUpgrades.length < 3 && gameState.upgrades.length < 100 && !generatingUpgradesRef.current) {
+      generatingUpgradesRef.current = true;
+      const totalValue = gameState.totalEarned.mantissa * Math.pow(10, gameState.totalEarned.exponent);
+      const currentUpgradeCount = gameState.upgrades.length;
+      const neededUpgrades = 3 - availableUpgrades.length;
+      
+      const newUpgrades: Upgrade[] = [];
+      for (let i = 0; i < neededUpgrades; i++) {
+        const baseCost = BN.multiplyScalar(BN.create(1000000), Math.pow(2, currentUpgradeCount + i));
+        const unlockAt = BN.multiplyScalar(BN.create(Math.max(1, totalValue * 0.5)), Math.pow(1.5, i));
+        const upgrade = generateRandomUpgrade(baseCost, unlockAt, currentUpgradeCount + i, gameState.ventures);
+        newUpgrades.push(upgrade);
+      }
+      
+      if (newUpgrades.length > 0) {
+        setGameState((prev) => ({
+          ...prev,
+          upgrades: [...prev.upgrades, ...newUpgrades]
+        }));
+      }
+      generatingUpgradesRef.current = false;
+    }
+  }, [availableUpgrades.length, gameState.upgrades.length, gameState.totalEarned, gameState.ventures]);
+
   const ventureCalculations = useMemo(() => {
     return gameState.ventures.map((venture) => {
       const isUnlocked = BN.greaterThanOrEqual(
@@ -387,6 +414,7 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
         : BN.ZERO;
 
       const milestoneProgress = Economy.getCurrentMilestoneProgress(venture);
+      const activeBoosts = Economy.getActiveMilestoneBoosts(venture);
 
       return {
         venture,
@@ -396,7 +424,8 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
         cost,
         canAfford,
         managerCost,
-        milestoneProgress
+        milestoneProgress,
+        activeBoosts
       };
     });
   }, [
@@ -558,7 +587,7 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
 
       <div className="capital-venture__ventures">
         {ventureCalculations.map((calc) => {
-          const { venture, isUnlocked, incomePerSec, levelsToBuy, cost, canAfford, managerCost, milestoneProgress } = calc;
+          const { venture, isUnlocked, incomePerSec, levelsToBuy, cost, canAfford, managerCost, milestoneProgress, activeBoosts } = calc;
 
           return (
             <div
@@ -595,6 +624,20 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
                       <span className="capital-venture__venture-milestone-text">
                         {milestoneProgress.current}/{milestoneProgress.next}
                       </span>
+                    </div>
+                  )}
+                  {activeBoosts && activeBoosts.length > 0 && (
+                    <div className="capital-venture__venture-active-boosts">
+                      {activeBoosts.map((boost, idx) => (
+                        <div key={idx} className="capital-venture__venture-boost-badge">
+                          <span className="material-symbols-outlined">
+                            {boost.type === 'income' ? 'trending_up' : boost.type === 'multiplier' ? 'auto_awesome' : 'speed'}
+                          </span>
+                          <span className="capital-venture__venture-boost-text">
+                            {boost.type === 'income' ? `+${boost.value}x` : boost.type === 'multiplier' ? `${boost.value}x` : `${boost.value}x`}
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>

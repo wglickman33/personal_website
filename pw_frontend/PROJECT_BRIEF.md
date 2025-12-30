@@ -329,6 +329,182 @@ Visitors should see a **mix of everything**:
 
 ---
 
+## Capital Venture Game Widget
+
+### Overview
+An idle clicker game widget inspired by AdVenture Capitalist, themed around building a portfolio of creative and business ventures. Players click to earn capital, invest in various business ventures, purchase upgrades, and progress through milestones.
+
+### Core Mechanics
+
+#### Ventures
+- **10 Different Ventures**: Creative Studio, Productized Service, Newsletter, Micro-SaaS, Templates & Assets, Consulting Retainer, Online Courses, Developer Tooling, Strategic Partnerships, Holdings Company
+- **Leveling System**: Each venture can be leveled up, increasing income exponentially
+- **Cost Growth**: Each venture has a cost growth rate (1.15-1.4) that determines how expensive it becomes per level
+- **Unlock System**: Ventures unlock based on total earned capital
+- **Managers**: Each venture can have managers that multiply income (1 + managerLevel * 2)
+- **Milestone System**: Ventures earn boosts at specific level thresholds (income boosts, multiplier boosts)
+
+#### Clicking System
+- **Manual Clicking**: Click button to earn capital per click
+- **Auto-Click**: Toggleable auto-clicking system
+- **Click Speed Upgrades**: Purchaseable upgrades that increase clicks per second (base: 10/s, +5 per level)
+- **Click Value Upgrades**: Purchaseable upgrades that increase capital per click (base: 1, +1 per level)
+- **Cost Scaling**: Click speed/value costs scale only with level (1.5x for speed, 1.8x for value) - NOT with total earned
+
+#### Income System
+- **Passive Income**: Ventures generate income per second based on level
+- **Income Calculation**: 
+  - Base: `baseIncomePerSec * level`
+  - Milestone boosts: Income type adds to base, multiplier type multiplies total
+  - Manager multiplier: `1 + (managerLevel * 2)`
+  - Upgrade multipliers: Venture-specific, global, click value/speed upgrades
+  - Prestige multiplier: `1 + (prestigePoints * 0.02)`
+
+#### Milestone System
+- **Thresholds**: Each venture has milestone thresholds (e.g., 30, 60, 120, 240, 480, 960)
+- **Boost Types**:
+  - `income`: Adds to base income per second
+  - `multiplier`: Multiplies total income
+  - `speed`: (Future implementation for click speed)
+- **Progress Display**: Shows current level / next milestone (e.g., "20/30")
+- **Active Boost Indicators**: Visual badges showing active boosts on venture cards
+
+#### Upgrade System
+- **Dynamic Generation**: System automatically generates new upgrades when fewer than 3 are available
+- **Upgrade Types**:
+  - `global`: Multiplies all income
+  - `venture`: Multiplies specific venture income
+  - `clickValue`: Multiplies click value
+  - `clickSpeed`: Multiplies click speed
+- **Unlock Conditions**: Based on total earned or specific venture level
+- **Cost Scaling**: Upgrades have fixed costs (no inflation based on progress)
+
+#### Prestige System
+- **Prestige Points**: Earned based on total earned capital
+  - Formula: `floor(sqrt(totalEarned / 1e12))`
+  - Minimum: 1e15 total earned required
+- **Prestige Multiplier**: Each point provides 2% permanent multiplier
+- **Reset**: Prestiging resets all progress but keeps prestige points
+
+#### Buy Modes
+- `x1`, `x5`, `x10`, `x100`: Buy exactly N levels (or as many as affordable)
+- `Next`: Buy to next milestone level
+- `Max`: Buy as many levels as affordable (capped at 1000 per purchase for safety)
+
+### Technical Implementation
+
+#### BigNumber System
+- Custom implementation to handle very large numbers without floating-point precision issues
+- Numbers stored as `{ mantissa, exponent }` where mantissa is normalized to [1, 10) range
+- Allows accurate calculations up to extremely large values (10^30+)
+- Formatting with suffixes: K, M, B, T, Qa, Qi, Sx, Sp, Oc, No, Dc...
+
+#### Game Loop
+- Uses `requestAnimationFrame` for smooth 60fps updates
+- Income calculated based on delta time: `income = incomePerSec * deltaTime`
+- Delta time clamped to 0.1 seconds to prevent large jumps if tab is inactive
+- All calculations use refs to ensure latest state snapshot
+
+#### Storage System
+- Auto-saves to `localStorage` every 2 seconds and on important events
+- Storage key: `pw:capital-venture:state`
+- Includes migration logic for backward compatibility with older saves
+- Serializes/deserializes BigNumber objects properly
+
+#### Economy Calculations
+- **Venture Cost**: Geometric series calculation for buying multiple levels
+- **Max Affordable**: Binary search algorithm to find maximum affordable levels (capped at 1000)
+- **Income Per Second**: Complex calculation incorporating all multipliers and boosts
+- **Manager Cost**: Scales with current manager level and venture cost growth
+
+### UI/UX Features
+
+#### Visual Indicators
+- **Milestone Progress**: Flag icon with "current/next" display
+- **Active Boosts**: Colored badges showing active milestone boosts (income, multiplier icons)
+- **Manager Badge**: Shows manager level and multiplier on venture cards
+- **Affordable Highlighting**: Ventures/upgrades you can afford are highlighted
+- **Locked State**: Locked ventures show unlock requirement prominently
+
+#### Responsive Design
+- Compact, game-like UI optimized for rapid buying
+- All buttons and cards sized for quick interaction
+- Mobile-friendly touch interactions
+- Clear visual hierarchy
+
+### Recent Fixes & Improvements
+
+#### Milestone System Fix
+- **Problem**: Milestone boosts weren't being applied (using old `milestoneMultipliers` system)
+- **Solution**: Switched to `milestoneBoosts` system with proper type handling (income, multiplier, speed)
+- **Result**: Milestone boosts now properly apply when ventures reach threshold levels
+
+#### Upgrade Cost Inflation Fix
+- **Problem**: Click speed/value upgrade costs were increasing as player earned money
+- **Solution**: Removed `totalEarned` scaling from cost calculations
+- **Result**: Upgrade costs now only scale with level, making them predictable and fair
+
+#### Upgrade Generation
+- **Problem**: Upgrades were locked and not generating dynamically
+- **Solution**: Added automatic upgrade generation when fewer than 3 are available
+- **Result**: Players always have upgrades to purchase as they progress
+
+#### UI Indicators
+- **Added**: Active milestone boost badges on venture cards
+- **Added**: Better milestone progress display
+- **Added**: Clearer locked venture display with unlock requirements
+
+### Game Balance Considerations
+
+#### Cost Scaling
+- **Venture Costs**: Exponential growth (1.15-1.4 per level) ensures progression feels meaningful
+- **Manager Costs**: Scale with manager level and venture cost (2^managerLevel multiplier)
+- **Click Upgrades**: Fixed exponential scaling (1.5x for speed, 1.8x for value) - no inflation
+- **Upgrade Costs**: Fixed costs based on upgrade index - no dynamic inflation
+
+#### Income Scaling
+- **Base Income**: Linear with level (baseIncomePerSec * level)
+- **Milestone Boosts**: Provide significant income jumps at key thresholds
+- **Manager Multipliers**: Significant boost (2x per manager level)
+- **Upgrade Multipliers**: Stack multiplicatively for exponential growth
+
+#### Progression Curve
+- **Early Game**: Fast progression, many unlocks
+- **Mid Game**: Milestone boosts provide meaningful progression gates
+- **Late Game**: Prestige system provides long-term progression
+- **No Offline Earnings**: Keeps game balanced and prevents exploitation
+
+### File Structure
+
+```
+CapitalVenture/
+├── CapitalVenture.tsx          # Main component
+├── CapitalVenture.scss         # Styling (BEM naming)
+├── types/
+│   └── capitalVentureTypes.ts  # TypeScript interfaces
+├── data/
+│   └── capitalVentureData.ts   # Initial game state, ventures, upgrades
+├── utils/
+│   ├── bigNumber.ts         # BigNumber implementation
+│   ├── economy.ts           # Economic calculations
+│   └── storage.ts           # LocalStorage save/load with migration
+└── hooks/
+    ├── useGameLoop.ts       # Game loop using requestAnimationFrame
+    └── useLocalSave.ts      # Auto-save hook (throttled)
+```
+
+### Key Design Decisions
+
+1. **No Offline Earnings**: Intentional design to keep game balanced
+2. **Fixed Upgrade Costs**: Costs don't inflate with progress - only scale with level
+3. **Milestone System**: Provides meaningful progression gates and visual feedback
+4. **Dynamic Upgrade Generation**: Ensures players always have options
+5. **BigNumber System**: Handles extremely large numbers accurately
+6. **Ref-Based State**: Game loop uses refs to ensure latest state in calculations
+7. **Safety Caps**: Max purchase capped at 1000 levels to prevent accidental large purchases
+
+---
+
 ## Animation System
 
 ### Global Toggle
