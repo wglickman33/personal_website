@@ -1,4 +1,4 @@
-import { Venture, Upgrade, GameState, BuyMode } from '../types/capitalVentureTypes';
+import { Venture, Upgrade, GameState, BuyMode, UpgradeType, BigNumber } from '../types/capitalVentureTypes';
 import * as BN from '../utils/bigNumber';
 
 export const INITIAL_BUY_MODE: BuyMode = 'x1';
@@ -20,6 +20,15 @@ export function createInitialVentures(): Venture[] {
         { level: 25, multiplier: 2 },
         { level: 50, multiplier: 3 },
         { level: 100, multiplier: 5 }
+      ],
+      milestoneThresholds: [30, 60, 120, 240, 480, 960],
+      milestoneBoosts: [
+        { threshold: 30, type: 'income', value: 0.5 },
+        { threshold: 60, type: 'multiplier', value: 2 },
+        { threshold: 120, type: 'income', value: 1 },
+        { threshold: 240, type: 'multiplier', value: 3 },
+        { threshold: 480, type: 'income', value: 2 },
+        { threshold: 960, type: 'multiplier', value: 5 }
       ]
     },
     {
@@ -37,6 +46,15 @@ export function createInitialVentures(): Venture[] {
         { level: 25, multiplier: 2 },
         { level: 50, multiplier: 3 },
         { level: 100, multiplier: 5 }
+      ],
+      milestoneThresholds: [40, 80, 160, 320, 640, 1280],
+      milestoneBoosts: [
+        { threshold: 40, type: 'income', value: 0.5 },
+        { threshold: 80, type: 'multiplier', value: 2 },
+        { threshold: 160, type: 'income', value: 1 },
+        { threshold: 320, type: 'multiplier', value: 3 },
+        { threshold: 640, type: 'income', value: 2 },
+        { threshold: 1280, type: 'multiplier', value: 5 }
       ]
     },
     {
@@ -54,6 +72,15 @@ export function createInitialVentures(): Venture[] {
         { level: 25, multiplier: 2 },
         { level: 50, multiplier: 3 },
         { level: 100, multiplier: 5 }
+      ],
+      milestoneThresholds: [50, 100, 200, 400, 800, 1600],
+      milestoneBoosts: [
+        { threshold: 50, type: 'income', value: 0.5 },
+        { threshold: 100, type: 'multiplier', value: 2 },
+        { threshold: 200, type: 'income', value: 1 },
+        { threshold: 400, type: 'multiplier', value: 3 },
+        { threshold: 800, type: 'income', value: 2 },
+        { threshold: 1600, type: 'multiplier', value: 5 }
       ]
     },
     {
@@ -71,6 +98,15 @@ export function createInitialVentures(): Venture[] {
         { level: 25, multiplier: 2 },
         { level: 50, multiplier: 3 },
         { level: 100, multiplier: 5 }
+      ],
+      milestoneThresholds: [60, 120, 240, 480, 960, 1920],
+      milestoneBoosts: [
+        { threshold: 60, type: 'income', value: 0.5 },
+        { threshold: 120, type: 'multiplier', value: 2 },
+        { threshold: 240, type: 'income', value: 1 },
+        { threshold: 480, type: 'multiplier', value: 3 },
+        { threshold: 960, type: 'income', value: 2 },
+        { threshold: 1920, type: 'multiplier', value: 5 }
       ]
     },
     {
@@ -88,6 +124,15 @@ export function createInitialVentures(): Venture[] {
         { level: 25, multiplier: 2 },
         { level: 50, multiplier: 3 },
         { level: 100, multiplier: 5 }
+      ],
+      milestoneThresholds: [70, 140, 280, 560, 1120, 2240],
+      milestoneBoosts: [
+        { threshold: 70, type: 'income', value: 0.5 },
+        { threshold: 140, type: 'multiplier', value: 2 },
+        { threshold: 280, type: 'income', value: 1 },
+        { threshold: 560, type: 'multiplier', value: 3 },
+        { threshold: 1120, type: 'income', value: 2 },
+        { threshold: 2240, type: 'multiplier', value: 5 }
       ]
     },
     {
@@ -105,6 +150,15 @@ export function createInitialVentures(): Venture[] {
         { level: 25, multiplier: 2 },
         { level: 50, multiplier: 3 },
         { level: 100, multiplier: 5 }
+      ],
+      milestoneThresholds: [80, 160, 320, 640, 1280, 2560],
+      milestoneBoosts: [
+        { threshold: 80, type: 'income', value: 0.5 },
+        { threshold: 160, type: 'multiplier', value: 2 },
+        { threshold: 320, type: 'income', value: 1 },
+        { threshold: 640, type: 'multiplier', value: 3 },
+        { threshold: 1280, type: 'income', value: 2 },
+        { threshold: 2560, type: 'multiplier', value: 5 }
       ]
     },
     {
@@ -122,6 +176,15 @@ export function createInitialVentures(): Venture[] {
         { level: 25, multiplier: 2 },
         { level: 50, multiplier: 3 },
         { level: 100, multiplier: 5 }
+      ],
+      milestoneThresholds: [90, 180, 360, 720, 1440, 2880],
+      milestoneBoosts: [
+        { threshold: 90, type: 'income', value: 0.5 },
+        { threshold: 180, type: 'multiplier', value: 2 },
+        { threshold: 360, type: 'income', value: 1 },
+        { threshold: 720, type: 'multiplier', value: 3 },
+        { threshold: 1440, type: 'income', value: 2 },
+        { threshold: 2880, type: 'multiplier', value: 5 }
       ]
     },
     {
@@ -139,6 +202,15 @@ export function createInitialVentures(): Venture[] {
         { level: 25, multiplier: 2 },
         { level: 50, multiplier: 3 },
         { level: 100, multiplier: 5 }
+      ],
+      milestoneThresholds: [100, 200, 400, 800, 1600, 3200],
+      milestoneBoosts: [
+        { threshold: 100, type: 'income', value: 0.5 },
+        { threshold: 200, type: 'multiplier', value: 2 },
+        { threshold: 400, type: 'income', value: 1 },
+        { threshold: 800, type: 'multiplier', value: 3 },
+        { threshold: 1600, type: 'income', value: 2 },
+        { threshold: 3200, type: 'multiplier', value: 5 }
       ]
     },
     {
@@ -156,6 +228,15 @@ export function createInitialVentures(): Venture[] {
         { level: 25, multiplier: 2 },
         { level: 50, multiplier: 3 },
         { level: 100, multiplier: 5 }
+      ],
+      milestoneThresholds: [120, 240, 480, 960, 1920, 3840],
+      milestoneBoosts: [
+        { threshold: 120, type: 'income', value: 0.5 },
+        { threshold: 240, type: 'multiplier', value: 2 },
+        { threshold: 480, type: 'income', value: 1 },
+        { threshold: 960, type: 'multiplier', value: 3 },
+        { threshold: 1920, type: 'income', value: 2 },
+        { threshold: 3840, type: 'multiplier', value: 5 }
       ]
     },
     {
@@ -173,13 +254,72 @@ export function createInitialVentures(): Venture[] {
         { level: 25, multiplier: 2 },
         { level: 50, multiplier: 3 },
         { level: 100, multiplier: 5 }
+      ],
+      milestoneThresholds: [150, 300, 600, 1200, 2400, 4800],
+      milestoneBoosts: [
+        { threshold: 150, type: 'income', value: 0.5 },
+        { threshold: 300, type: 'multiplier', value: 2 },
+        { threshold: 600, type: 'income', value: 1 },
+        { threshold: 1200, type: 'multiplier', value: 3 },
+        { threshold: 2400, type: 'income', value: 2 },
+        { threshold: 4800, type: 'multiplier', value: 5 }
       ]
     }
   ];
 }
 
+function generateRandomUpgrade(
+  baseCost: BigNumber,
+  unlockAt: BigNumber,
+  upgradeIndex: number,
+  ventures: Venture[]
+): Upgrade {
+  const randomMultiplier = Math.floor(Math.random() * 10) + 1;
+  const upgradeTypes: UpgradeType[] = ['global', 'clickValue', 'clickSpeed', 'venture'];
+  const type = upgradeTypes[Math.floor(Math.random() * upgradeTypes.length)];
+  
+  let name = '';
+  let description = '';
+  let ventureId: string | undefined;
+  
+  switch (type) {
+    case 'global':
+      name = `${randomMultiplier}x Global Boost`;
+      description = `${randomMultiplier}x all income`;
+      break;
+    case 'clickValue':
+      name = `${randomMultiplier}x Click Power`;
+      description = `${randomMultiplier}x click value`;
+      break;
+    case 'clickSpeed':
+      name = `Speed Boost ${randomMultiplier}x`;
+      description = `${randomMultiplier}x click speed`;
+      break;
+    case 'venture': {
+      const randomVenture = ventures[Math.floor(Math.random() * ventures.length)];
+      ventureId = randomVenture.id;
+      name = `${randomMultiplier}x ${randomVenture.name}`;
+      description = `${randomMultiplier}x ${randomVenture.name} income`;
+      break;
+    }
+  }
+  
+  return {
+    id: `random_upgrade_${upgradeIndex}`,
+    name,
+    description,
+    cost: baseCost,
+    unlocked: false,
+    unlockAtTotalEarned: unlockAt,
+    type,
+    ventureId,
+    multiplier: randomMultiplier,
+    boostType: 'multiplier'
+  };
+}
+
 export function createInitialUpgrades(): Upgrade[] {
-  return [
+  const baseUpgrades: Upgrade[] = [
     {
       id: 'click_2x',
       name: 'Double Click',
@@ -187,8 +327,9 @@ export function createInitialUpgrades(): Upgrade[] {
       cost: BN.create(100),
       unlocked: false,
       unlockAtTotalEarned: BN.create(100),
-      type: 'global',
-      multiplier: 2
+      type: 'clickValue',
+      multiplier: 2,
+      boostType: 'multiplier'
     },
     {
       id: 'click_5x',
@@ -197,8 +338,9 @@ export function createInitialUpgrades(): Upgrade[] {
       cost: BN.create(10000),
       unlocked: false,
       unlockAtTotalEarned: BN.create(10000),
-      type: 'global',
-      multiplier: 5
+      type: 'clickValue',
+      multiplier: 5,
+      boostType: 'multiplier'
     },
     {
       id: 'global_2x',
@@ -208,7 +350,8 @@ export function createInitialUpgrades(): Upgrade[] {
       unlocked: false,
       unlockAtTotalEarned: BN.create(100000),
       type: 'global',
-      multiplier: 2
+      multiplier: 2,
+      boostType: 'multiplier'
     },
     {
       id: 'global_5x',
@@ -218,9 +361,21 @@ export function createInitialUpgrades(): Upgrade[] {
       unlocked: false,
       unlockAtTotalEarned: BN.create(10000000),
       type: 'global',
-      multiplier: 5
+      multiplier: 5,
+      boostType: 'multiplier'
     }
   ];
+  
+  const randomUpgrades: Upgrade[] = [];
+  const ventures = createInitialVentures();
+  
+  for (let i = 0; i < 50; i++) {
+    const baseCost = BN.multiplyScalar(BN.create(1000000), Math.pow(2, i));
+    const unlockAt = BN.multiplyScalar(BN.create(100000), Math.pow(2, i + 1));
+    randomUpgrades.push(generateRandomUpgrade(baseCost, unlockAt, i, ventures));
+  }
+  
+  return [...baseUpgrades, ...randomUpgrades];
 }
 
 export function createInitialGameState(): GameState {

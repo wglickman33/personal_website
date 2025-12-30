@@ -66,17 +66,19 @@ export function calculateMaxAffordableLevels(
 ): number {
   if (BN.lessThan(capital, baseCost) || currentLevel < 0 || costGrowth <= 0) return 0;
   
+  const MAX_LEVELS_PER_PURCHASE = 1000;
+  
   if (costGrowth === 1) {
     const singleCost = BN.multiply(baseCost, BN.create(Math.pow(costGrowth, currentLevel)));
     if (BN.greaterThan(singleCost, capital)) return 0;
     const capitalValue = capital.mantissa * Math.pow(10, capital.exponent);
     const costValue = singleCost.mantissa * Math.pow(10, singleCost.exponent);
     if (costValue === 0) return 0;
-    return Math.min(Math.max(0, Math.floor(capitalValue / costValue)), 10000);
+    return Math.min(Math.max(0, Math.floor(capitalValue / costValue)), MAX_LEVELS_PER_PURCHASE);
   }
   
   let low = 0;
-  let high = 10000;
+  let high = MAX_LEVELS_PER_PURCHASE;
   let best = 0;
   
   while (low <= high) {
@@ -95,19 +97,38 @@ export function calculateMaxAffordableLevels(
     }
   }
   
-  return Math.max(0, best);
+  return Math.max(0, Math.min(best, MAX_LEVELS_PER_PURCHASE));
 }
 
 export function calculateNextMilestoneLevel(
-  venture: Venture,
-  milestones: number[] = [10, 25, 50, 100, 200, 500, 1000]
+  venture: Venture
 ): number | null {
-  for (const milestone of milestones) {
-    if (venture.level < milestone) {
-      return milestone;
+  if (!venture.milestoneThresholds || venture.milestoneThresholds.length === 0) {
+    return null;
+  }
+  for (const threshold of venture.milestoneThresholds) {
+    if (venture.level < threshold) {
+      return threshold;
     }
   }
   return null;
+}
+
+export function getCurrentMilestoneProgress(venture: Venture): { current: number; next: number | null } {
+  const next = calculateNextMilestoneLevel(venture);
+  return {
+    current: venture.level,
+    next: next
+  };
+}
+
+export function getActiveMilestoneBoosts(venture: Venture): Array<{ type: 'income' | 'speed' | 'multiplier'; value: number }> {
+  if (!venture.milestoneBoosts || venture.milestoneBoosts.length === 0) {
+    return [];
+  }
+  return venture.milestoneBoosts
+    .filter(boost => venture.level >= boost.threshold)
+    .map(boost => ({ type: boost.type, value: boost.value }));
 }
 
 export function calculateVentureIncomePerSec(
@@ -169,15 +190,32 @@ export function calculateCapitalPerClick(
 ): BigNumber {
   let clickValue = BN.add(baseClickValue, BN.create(clickValueLevel * CLICK_VALUE_INCREASE_PER_LEVEL));
   
-  const clickUpgrades = upgrades.filter(
+  const clickValueUpgrades = upgrades.filter(
+    u => u.unlocked && u.type === 'clickValue'
+  );
+  const clickValueMultiplier = clickValueUpgrades.reduce((acc, u) => acc * u.multiplier, 1);
+  
+  const legacyClickUpgrades = upgrades.filter(
     u => u.unlocked && u.type === 'global' && u.id.startsWith('click_')
   );
-  const upgradeMultiplier = clickUpgrades.reduce((acc, u) => acc * u.multiplier, 1);
+  const legacyMultiplier = legacyClickUpgrades.reduce((acc, u) => acc * u.multiplier, 1);
   
-  clickValue = BN.multiplyScalar(clickValue, upgradeMultiplier);
+  clickValue = BN.multiplyScalar(clickValue, clickValueMultiplier * legacyMultiplier);
   clickValue = BN.multiplyScalar(clickValue, 1 + prestigeMultiplier);
   
   return clickValue;
+}
+
+export function calculateClickSpeedWithUpgrades(
+  baseSpeed: number,
+  upgrades: Upgrade[]
+): number {
+  const speedUpgrades = upgrades.filter(
+    u => u.unlocked && u.type === 'clickSpeed'
+  );
+  const speedMultiplier = speedUpgrades.reduce((acc, u) => acc * u.multiplier, 1);
+  
+  return baseSpeed * speedMultiplier;
 }
 
 export function calculatePrestigePoints(totalEarned: BigNumber): number {

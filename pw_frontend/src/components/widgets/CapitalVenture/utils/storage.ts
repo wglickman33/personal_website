@@ -75,7 +75,9 @@ export function loadGameState(): GameState | null {
         unlockAtTotalEarned: BN.fromJSON(v.unlockAtTotalEarned),
         managerLevel: v.managerLevel !== undefined 
           ? v.managerLevel 
-          : (v.hasManager === true ? 1 : 0)
+          : (v.hasManager === true ? 1 : 0),
+        milestoneThresholds: v.milestoneThresholds || [],
+        milestoneBoosts: v.milestoneBoosts || []
       })),
       upgrades: parsed.upgrades.map((u: {
         cost: { mantissa: number; exponent: number };

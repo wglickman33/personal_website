@@ -573,6 +573,31 @@
     }
   }
 
+  &__venture-milestone-progress {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: $font-size-xs;
+    color: rgba($primary-color, 0.7);
+    font-weight: $font-weight-semibold;
+    margin-top: 4px;
+
+    .capital-venture--dark & {
+      color: rgba($light-color, 0.7);
+    }
+
+    .material-symbols-outlined {
+      font-size: 0.875rem;
+      color: $accent-color-4;
+      font-variation-settings: 'FILL' 1;
+    }
+  }
+
+  &__venture-milestone-text {
+    color: $accent-color-4;
+    font-weight: $font-weight-bold;
+  }
+
   &__venture-manager-badge {
     display: flex;
     align-items: center;
@@ -599,22 +624,49 @@
 
   &__venture-locked {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 6px;
-    padding: 8px 12px;
-    font-size: $font-size-xs;
-    color: rgba($primary-color, 0.6);
-    font-style: italic;
+    gap: 8px;
+    padding: 12px 16px;
     width: 100%;
     justify-content: center;
+    background: rgba($primary-color, 0.05);
+    border-radius: $border-radius;
+    border: 1px solid rgba($primary-color, 0.1);
 
     .capital-venture--dark & {
-      color: rgba($light-color, 0.6);
+      background: rgba($light-color, 0.05);
+      border-color: rgba($light-color, 0.1);
+    }
+  }
+
+  &__venture-locked-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: $font-size-xs;
+    color: rgba($primary-color, 0.7);
+    font-weight: $font-weight-medium;
+
+    .capital-venture--dark & {
+      color: rgba($light-color, 0.7);
     }
 
     .material-symbols-outlined {
       font-size: 1rem;
       font-variation-settings: 'FILL' 1;
+    }
+  }
+
+  &__venture-locked-amount {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $accent-color-1;
+    font-family: $font-family-display;
+    text-align: center;
+
+    .capital-venture--dark & {
+      color: $accent-color-1;
     }
   }
 
@@ -688,8 +740,12 @@
 
   &__upgrades-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
+
+    @include md {
+      grid-template-columns: repeat(2, 1fr);
+    }
 
     @include sm {
       grid-template-columns: 1fr;
@@ -715,6 +771,11 @@
     &--affordable {
       border-color: $accent-color-1;
       box-shadow: 0 0 0 2px rgba($accent-color-1, 0.2), $box-shadow-md;
+    }
+
+    &--locked {
+      opacity: 0.5;
+      filter: grayscale(0.3);
     }
   }
 

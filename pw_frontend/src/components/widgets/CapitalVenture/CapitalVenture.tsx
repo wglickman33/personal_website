@@ -45,7 +45,8 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
     gameState.upgrades,
     prestigeMultiplier
   );
-  const currentClickSpeed = Economy.calculateClickSpeed(gameState.clickSpeedLevel || 0);
+  const baseClickSpeed = Economy.calculateClickSpeed(gameState.clickSpeedLevel || 0);
+  const currentClickSpeed = Economy.calculateClickSpeedWithUpgrades(baseClickSpeed, gameState.upgrades);
   const clickSpeedCost = Economy.calculateClickSpeedCost(gameState.clickSpeedLevel || 0, gameState.totalEarned);
   const clickValueCost = Economy.calculateClickValueCost(gameState.clickValueLevel || 0, gameState.totalEarned);
   const baseClickValue = Economy.calculateClickValue(gameState.clickValueLevel || 0);
@@ -82,7 +83,8 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
     useCallback((deltaTime: number) => {
       const state = gameStateRef.current;
       if (state.autoClickEnabled) {
-        const currentClickSpeed = Economy.calculateClickSpeed(state.clickSpeedLevel || 0);
+        const baseSpeed = Economy.calculateClickSpeed(state.clickSpeedLevel || 0);
+        const currentClickSpeed = Economy.calculateClickSpeedWithUpgrades(baseSpeed, state.upgrades);
         if (currentClickSpeed > 0) {
           const clicksPerSecond = currentClickSpeed;
           const clicksThisFrame = clicksPerSecond * deltaTime;
@@ -194,8 +196,13 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
           return prev;
         }
 
-        const levelsToBuy = calculateLevelsToBuy(venture, prev.buyMode, prev.capital);
+        let levelsToBuy = calculateLevelsToBuy(venture, prev.buyMode, prev.capital);
         if (levelsToBuy === 0) return prev;
+
+        const MAX_SAFE_LEVELS = 1000;
+        if (levelsToBuy > MAX_SAFE_LEVELS) {
+          levelsToBuy = MAX_SAFE_LEVELS;
+        }
 
         const cost = Economy.calculateVentureCost(
           venture.baseCost,
@@ -213,11 +220,12 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
           );
           if (affordable === 0) return prev;
 
+          const actualLevels = Math.min(affordable, MAX_SAFE_LEVELS);
           const affordableCost = Economy.calculateVentureCost(
             venture.baseCost,
             venture.costGrowth,
             venture.level,
-            affordable
+            actualLevels
           );
 
           saveNow();
@@ -225,7 +233,7 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
             ...prev,
             capital: BN.subtract(prev.capital, affordableCost),
             ventures: prev.ventures.map((v) =>
-              v.id === ventureId ? { ...v, level: v.level + affordable } : v
+              v.id === ventureId ? { ...v, level: v.level + actualLevels } : v
             )
           };
         }
@@ -378,6 +386,8 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
         ? Economy.calculateManagerCost(venture, venture.managerLevel || 0)
         : BN.ZERO;
 
+      const milestoneProgress = Economy.getCurrentMilestoneProgress(venture);
+
       return {
         venture,
         isUnlocked,
@@ -385,7 +395,8 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
         levelsToBuy,
         cost,
         canAfford,
-        managerCost
+        managerCost,
+        milestoneProgress
       };
     });
   }, [
@@ -547,7 +558,7 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
 
       <div className="capital-venture__ventures">
         {ventureCalculations.map((calc) => {
-          const { venture, isUnlocked, incomePerSec, levelsToBuy, cost, canAfford, managerCost } = calc;
+          const { venture, isUnlocked, incomePerSec, levelsToBuy, cost, canAfford, managerCost, milestoneProgress } = calc;
 
           return (
             <div
@@ -578,13 +589,26 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
                       {BN.formatCompact(incomePerSec)}/sec
                     </div>
                   )}
+                  {milestoneProgress && milestoneProgress.next !== null && (
+                    <div className="capital-venture__venture-milestone-progress">
+                      <span className="material-symbols-outlined">flag</span>
+                      <span className="capital-venture__venture-milestone-text">
+                        {milestoneProgress.current}/{milestoneProgress.next}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="capital-venture__venture-card-actions">
                 {!isUnlocked ? (
                   <div className="capital-venture__venture-locked">
-                    <span className="material-symbols-outlined">lock</span>
-                    Unlocks at {BN.formatCompact(venture.unlockAtTotalEarned)}
+                    <div className="capital-venture__venture-locked-label">
+                      <span className="material-symbols-outlined">lock</span>
+                      Unlocks at
+                    </div>
+                    <div className="capital-venture__venture-locked-amount">
+                      {BN.formatCompact(venture.unlockAtTotalEarned)}
+                    </div>
                   </div>
                 ) : (
                   <>
@@ -635,36 +659,49 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
         })}
       </div>
 
-      {availableUpgrades.length > 0 && (
-        <div className="capital-venture__upgrades">
-          <div className="capital-venture__upgrades-grid">
-            {availableUpgrades.map((upgrade) => {
-              const canAfford = BN.lessThanOrEqual(upgrade.cost, gameState.capital);
+      <div className="capital-venture__upgrades">
+        <div className="capital-venture__upgrades-grid">
+          {Array.from({ length: 3 }, (_, index) => {
+            const upgrade = availableUpgrades[index];
+            if (!upgrade) {
               return (
-                <div key={upgrade.id} className={`capital-venture__upgrade-card ${canAfford ? 'capital-venture__upgrade-card--affordable' : ''}`}>
+                <div key={`placeholder-${index}`} className="capital-venture__upgrade-card capital-venture__upgrade-card--locked">
                   <div className="capital-venture__upgrade-card-content">
-                    <div className="capital-venture__upgrade-card-name">{upgrade.name}</div>
-                    <div className="capital-venture__upgrade-card-desc">{upgrade.description}</div>
+                    <div className="capital-venture__upgrade-card-name">Locked</div>
+                    <div className="capital-venture__upgrade-card-desc">More upgrades unlock as you progress</div>
                   </div>
-                  <button
-                    className={`capital-venture__upgrade-buy-btn ${
-                      !canAfford ? 'capital-venture__upgrade-buy-btn--disabled' : ''
-                    }`}
-                    onClick={() => buyUpgrade(upgrade.id)}
-                    disabled={!canAfford}
-                    type="button"
-                  >
-                    <span className="material-symbols-outlined">flash_on</span>
-                    <span className="capital-venture__upgrade-cost">
-                      {BN.formatCompact(upgrade.cost)}
-                    </span>
-                  </button>
+                  <div className="capital-venture__upgrade-buy-btn capital-venture__upgrade-buy-btn--disabled">
+                    <span className="material-symbols-outlined">lock</span>
+                    <span className="capital-venture__upgrade-cost">—</span>
+                  </div>
                 </div>
               );
-            })}
-          </div>
+            }
+            const canAfford = BN.lessThanOrEqual(upgrade.cost, gameState.capital);
+            return (
+              <div key={upgrade.id} className={`capital-venture__upgrade-card ${canAfford ? 'capital-venture__upgrade-card--affordable' : ''}`}>
+                <div className="capital-venture__upgrade-card-content">
+                  <div className="capital-venture__upgrade-card-name">{upgrade.name}</div>
+                  <div className="capital-venture__upgrade-card-desc">{upgrade.description}</div>
+                </div>
+                <button
+                  className={`capital-venture__upgrade-buy-btn ${
+                    !canAfford ? 'capital-venture__upgrade-buy-btn--disabled' : ''
+                  }`}
+                  onClick={() => buyUpgrade(upgrade.id)}
+                  disabled={!canAfford}
+                  type="button"
+                >
+                  <span className="material-symbols-outlined">flash_on</span>
+                  <span className="capital-venture__upgrade-cost">
+                    {BN.formatCompact(upgrade.cost)}
+                  </span>
+                </button>
+              </div>
+            );
+          })}
         </div>
-      )}
+      </div>
 
       {canPrestige && (
         <div className="capital-venture__prestige">
