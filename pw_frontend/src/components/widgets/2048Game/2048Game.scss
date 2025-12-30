@@ -11,7 +11,7 @@
   border-radius: $border-radius-xl;
   position: relative;
   user-select: none;
-  touch-action: manipulation;
+  touch-action: pan-y;
   background:
     radial-gradient(1200px 500px at 10% 0%, rgba($accent-color-1, 0.25), transparent 55%),
     radial-gradient(900px 500px at 90% 15%, rgba($accent-color-3, 0.18), transparent 60%),
@@ -198,6 +198,10 @@
   background: rgba($dark-color, 0.35);
   border: 1px solid rgba($light-color, 0.10);
   overflow: hidden;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .g2048--light .g2048__board {
@@ -371,6 +375,9 @@
   place-items: center;
   background: rgba($dark-color, 0.65);
   backdrop-filter: blur(10px);
+  padding: clamp(12px, 3vw, 20px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .g2048--light .g2048__overlay {
@@ -379,13 +386,17 @@
 }
 
 .g2048__overlay-card {
-  width: min(460px, 100%);
-  padding: 18px;
-  border-radius: $border-radius-xl;
+  width: min(460px, calc(100% - clamp(24px, 4vw, 40px)));
+  max-width: 95vw;
+  padding: clamp(16px, 3vw, 18px);
+  border-radius: clamp($border-radius, 2vw, $border-radius-xl);
   background: rgba($dark-gray-color, 0.92);
   border: 1px solid rgba($light-color, 0.10);
   box-shadow: $dark-box-shadow;
   text-align: center;
+  max-height: calc(100vh - clamp(24px, 4vw, 40px));
+  overflow-y: auto;
+  margin: auto;
 }
 
 .g2048--light .g2048__overlay-card {
@@ -399,9 +410,10 @@
 
 .g2048__overlay-title {
   font-family: $font-family-display;
-  font-size: 28px;
+  font-size: clamp(22px, 4vw, 28px);
   font-weight: $font-weight-extrabold;
   color: $light-color;
+  margin-bottom: clamp(8px, 1.5vw, 12px);
 }
 
 .g2048--light .g2048__overlay-title {
@@ -412,9 +424,10 @@
 }
 
 .g2048__overlay-subtitle {
-  margin-top: 6px;
+  margin-top: clamp(4px, 1vw, 6px);
   color: rgba($light-color, 0.75);
-  font-size: $font-size-sm;
+  font-size: clamp($font-size-xs, 2vw, $font-size-sm);
+  padding: 0 clamp(8px, 2vw, 12px);
 }
 
 .g2048--light .g2048__overlay-subtitle {
@@ -422,10 +435,59 @@
 }
 
 .g2048__overlay-actions {
-  margin-top: 14px;
+  margin-top: clamp(12px, 2vw, 14px);
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: clamp(8px, 1.5vw, 10px);
   flex-wrap: wrap;
+  padding: 0 clamp(8px, 2vw, 12px);
+}
+
+@include sm {
+  .g2048__overlay {
+    padding: 12px;
+  }
+
+  .g2048__overlay-card {
+    padding: 16px;
+    border-radius: $border-radius-lg;
+    max-height: calc(100vh - 24px);
+  }
+
+  .g2048__overlay-title {
+    font-size: 20px;
+  }
+}
+
+@include xs {
+  .g2048__overlay {
+    padding: 8px;
+  }
+
+  .g2048__overlay-card {
+    padding: 12px;
+    border-radius: $border-radius;
+    max-height: calc(100vh - 16px);
+  }
+
+  .g2048__overlay-title {
+    font-size: 18px;
+  }
+
+  .g2048__overlay-subtitle {
+    font-size: $font-size-xs;
+  }
+}
+
+@include min(1400px) {
+  .g2048__overlay-card {
+    max-width: 520px;
+  }
+}
+
+@include min(2000px) {
+  .g2048__overlay-card {
+    max-width: 580px;
+  }
 }
 

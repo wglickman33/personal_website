@@ -268,12 +268,13 @@
     inset: 0;
     z-index: 5000;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    padding: 32px;
+    padding: clamp(12px, 2vw, 32px);
+    padding-top: clamp(12px, 2vw, 32px);
     background: rgba($primary-color, 0.6);
     backdrop-filter: blur(8px);
-    overflow: hidden;
+    overflow-y: auto;
     overscroll-behavior: contain;
 
     .icons-showcase--dark & {
@@ -283,14 +284,17 @@
 
   &__modal-content {
     width: 100%;
-    max-width: 600px;
-    max-height: 90vh;
+    max-width: min(600px, 95vw);
+    max-height: calc(100vh - clamp(24px, 4vw, 64px));
     overflow-y: auto;
+    overflow-x: hidden;
     background: rgba(250, 248, 245, 0.98);
     border: 1px solid rgba($primary-color, 0.15);
-    border-radius: $border-radius-xl;
+    border-radius: clamp($border-radius, 2vw, $border-radius-xl);
     box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(20px);
+    margin: auto;
+    margin-top: 0;
 
     .icons-showcase--dark & {
       background: rgba($dark-gray-color, 0.95);
@@ -303,8 +307,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 24px;
+    padding: clamp(16px, 3vw, 24px);
     border-bottom: 1px solid rgba($primary-color, 0.1);
+    flex-shrink: 0;
+    gap: 12px;
 
     .icons-showcase--dark & {
       border-bottom-color: rgba($light-color, 0.15);
@@ -313,7 +319,7 @@
 
   &__modal-title {
     font-family: $font-family-display;
-    font-size: $font-size-2xl;
+    font-size: clamp($font-size-lg, 3.5vw, $font-size-2xl);
     font-weight: $font-weight-bold;
     color: $primary-color;
 
@@ -323,8 +329,10 @@
   }
 
   &__modal-close {
-    width: 36px;
-    height: 36px;
+    width: clamp(32px, 4vw, 36px);
+    height: clamp(32px, 4vw, 36px);
+    min-width: 32px;
+    min-height: 32px;
     border: none;
     background: rgba($primary-color, 0.1);
     border-radius: $border-radius;
@@ -334,6 +342,8 @@
     align-items: center;
     justify-content: center;
     transition: all 0.4s ease;
+    flex-shrink: 0;
+    touch-action: manipulation;
 
     .icons-showcase--dark & {
       background: rgba($light-color, 0.1);
@@ -352,7 +362,7 @@
     }
 
     .material-symbols-outlined {
-      font-size: 24px;
+      font-size: clamp(20px, 3vw, 24px);
     }
   }
 
@@ -360,16 +370,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 48px 24px;
+    padding: clamp(32px, 6vw, 48px) clamp(16px, 3vw, 24px);
     background: rgba($primary-color, 0.03);
+    flex-shrink: 0;
 
     .icons-showcase--dark & {
       background: rgba($light-color, 0.03);
     }
 
     .icons-showcase__svg {
-      width: 120px;
-      height: 120px;
+      width: clamp(80px, 15vw, 120px);
+      height: clamp(80px, 15vw, 120px);
       color: $accent-color-1;
 
       .icons-showcase--dark & {
@@ -379,8 +390,10 @@
   }
 
   &__modal-code {
-    padding: 24px;
+    padding: clamp(16px, 3vw, 24px);
     border-top: 1px solid rgba($primary-color, 0.1);
+    flex: 1;
+    min-height: 0;
 
     .icons-showcase--dark & {
       border-top-color: rgba($light-color, 0.15);
@@ -444,13 +457,13 @@
 
   &__code-block {
     margin: 0;
-    padding: 20px;
+    padding: clamp(12px, 2.5vw, 20px);
     background: rgba($primary-color, 0.05);
     border: 1px solid rgba($primary-color, 0.1);
     border-radius: $border-radius;
     overflow-x: auto;
     font-family: 'Courier New', 'Monaco', 'Consolas', monospace;
-    font-size: $font-size-sm;
+    font-size: clamp($font-size-xs, 2vw, $font-size-sm);
     line-height: $line-height-relaxed;
     color: $primary-color;
 
@@ -465,6 +478,71 @@
       font-size: inherit;
       color: inherit;
       white-space: pre;
+    }
+  }
+
+  @include sm {
+    &__modal {
+      padding: 12px;
+      padding-top: 12px;
+    }
+
+    &__modal-content {
+      max-height: calc(100vh - 24px);
+      border-radius: $border-radius-lg;
+    }
+
+    &__modal-header {
+      padding: 16px;
+    }
+
+    &__modal-preview {
+      padding: 32px 16px;
+    }
+
+    &__modal-code {
+      padding: 16px;
+    }
+  }
+
+  @include xs {
+    &__modal {
+      padding: 8px;
+      padding-top: 8px;
+    }
+
+    &__modal-content {
+      max-height: calc(100vh - 16px);
+      border-radius: $border-radius;
+    }
+
+    &__modal-header {
+      padding: 12px;
+    }
+
+    &__modal-preview {
+      padding: 24px 12px;
+
+      .icons-showcase__svg {
+        width: 60px;
+        height: 60px;
+      }
+    }
+
+    &__modal-code {
+      padding: 12px;
+    }
+  }
+
+  @include min(1400px) {
+    &__modal-content {
+      max-width: 700px;
+    }
+  }
+
+  @include min(2000px) {
+    &__modal-content {
+      max-width: 800px;
     }
   }
 }

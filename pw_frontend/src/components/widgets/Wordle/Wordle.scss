@@ -263,24 +263,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 10000;
   animation: wordle-fade-in 0.2s ease;
+  padding: clamp(12px, 3vw, 20px);
 }
 
 .wordle__stats-modal {
   background: rgba($dark-gray-color, 0.98);
-  border-radius: $border-radius-xl;
-  padding: 24px;
-  padding-bottom: 32px;
-  max-width: 400px;
+  border-radius: clamp($border-radius, 2vw, $border-radius-xl);
+  padding: clamp(16px, 3vw, 24px);
+  padding-bottom: clamp(20px, 4vw, 32px);
+  max-width: min(400px, 90vw);
   width: 90%;
-  max-height: 100vh;
+  max-height: calc(100vh - clamp(24px, 4vw, 40px));
   overflow-y: auto;
   overflow-x: hidden;
   animation: wordle-scale-in 0.2s ease;
   border: 1px solid rgba($light-color, 0.1);
   position: relative;
-  z-index: 1001;
+  z-index: 10001;
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -295,12 +296,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: clamp(16px, 3vw, 24px);
+  flex-shrink: 0;
+  gap: 12px;
 }
 
 .wordle__stats-title {
   font-family: $font-family-display;
-  font-size: 24px;
+  font-size: clamp(20px, 4vw, 24px);
   font-weight: $font-weight-bold;
   color: $light-color;
   margin: 0;
@@ -311,12 +314,14 @@
 }
 
 .wordle__stats-close {
-  width: 32px;
-  height: 32px;
+  width: clamp(28px, 4vw, 32px);
+  height: clamp(28px, 4vw, 32px);
+  min-width: 28px;
+  min-height: 28px;
   border: none;
   background: transparent;
   color: $light-color;
-  font-size: 28px;
+  font-size: clamp(24px, 3.5vw, 28px);
   cursor: pointer;
   line-height: 1;
   padding: 0;
@@ -325,6 +330,8 @@
   justify-content: center;
   border-radius: $border-radius;
   transition: background 0.2s ease;
+  flex-shrink: 0;
+  touch-action: manipulation;
 
   &:hover {
     background: rgba($light-color, 0.1);
@@ -342,8 +349,8 @@
 .wordle__stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 32px;
+  gap: clamp(8px, 1.5vw, 12px);
+  margin-bottom: clamp(20px, 4vw, 32px);
 }
 
 .wordle__stat-item {
@@ -583,5 +590,49 @@
   .wordle__key--special {
     min-width: 50px;
     font-size: 10px;
+  }
+
+  .wordle__overlay {
+    padding: 12px;
+  }
+
+  .wordle__stats-modal {
+    max-height: calc(100vh - 24px);
+    padding: 16px;
+    width: 95%;
+    border-radius: $border-radius-lg;
+  }
+}
+
+@include xs {
+  .wordle__overlay {
+    padding: 8px;
+  }
+
+  .wordle__stats-modal {
+    max-height: calc(100vh - 16px);
+    padding: 12px;
+    width: 98%;
+    border-radius: $border-radius;
+  }
+
+  .wordle__stats-grid {
+    gap: 6px;
+  }
+
+  .wordle__stat-value {
+    font-size: 24px;
+  }
+}
+
+@include min(1400px) {
+  .wordle__stats-modal {
+    max-width: 450px;
+  }
+}
+
+@include min(2000px) {
+  .wordle__stats-modal {
+    max-width: 500px;
   }
 }

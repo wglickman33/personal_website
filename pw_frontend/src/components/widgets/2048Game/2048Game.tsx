@@ -338,11 +338,23 @@ const Game2048 = () => {
     if (!el) return;
 
     const onPointerDown = (e: PointerEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
       touchRef.current = { x: e.clientX, y: e.clientY, active: true };
     };
+    
+    const onPointerMove = (e: PointerEvent) => {
+      if (touchRef.current.active) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    
     const onPointerUp = (e: PointerEvent) => {
       const t = touchRef.current;
       if (!t.active) return;
+      e.preventDefault();
+      e.stopPropagation();
       touchRef.current.active = false;
       const dx = e.clientX - t.x;
       const dy = e.clientY - t.y;
@@ -354,11 +366,59 @@ const Game2048 = () => {
       else doMove(dy > 0 ? 'down' : 'up');
     };
 
-    el.addEventListener('pointerdown', onPointerDown);
-    el.addEventListener('pointerup', onPointerUp);
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        e.preventDefault();
+        e.stopPropagation();
+        const touch = e.touches[0];
+        touchRef.current = { x: touch.clientX, y: touch.clientY, active: true };
+      }
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (touchRef.current.active && e.touches.length === 1) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      const t = touchRef.current;
+      if (!t.active) return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.changedTouches.length === 1) {
+        const touch = e.changedTouches[0];
+        touchRef.current.active = false;
+        const dx = touch.clientX - t.x;
+        const dy = touch.clientY - t.y;
+        const ax = Math.abs(dx);
+        const ay = Math.abs(dy);
+        const threshold = 28;
+        if (Math.max(ax, ay) < threshold) return;
+        if (ax > ay) doMove(dx > 0 ? 'right' : 'left');
+        else doMove(dy > 0 ? 'down' : 'up');
+      }
+    };
+
+    el.addEventListener('pointerdown', onPointerDown, { passive: false });
+    el.addEventListener('pointermove', onPointerMove, { passive: false });
+    el.addEventListener('pointerup', onPointerUp, { passive: false });
+    el.addEventListener('pointercancel', onPointerUp, { passive: false });
+    el.addEventListener('touchstart', onTouchStart, { passive: false });
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    el.addEventListener('touchend', onTouchEnd, { passive: false });
+    el.addEventListener('touchcancel', onTouchEnd, { passive: false });
+    
     return () => {
       el.removeEventListener('pointerdown', onPointerDown);
+      el.removeEventListener('pointermove', onPointerMove);
       el.removeEventListener('pointerup', onPointerUp);
+      el.removeEventListener('pointercancel', onPointerUp);
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+      el.removeEventListener('touchend', onTouchEnd);
+      el.removeEventListener('touchcancel', onTouchEnd);
     };
   }, [doMove]);
 

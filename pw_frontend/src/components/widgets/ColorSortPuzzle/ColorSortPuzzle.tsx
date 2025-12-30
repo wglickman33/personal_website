@@ -104,7 +104,7 @@ function generateSolvablePuzzle(opts: {
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     let tubes = solved.map(t => [...t]);
     
-    for (let mix = 0; mix < 500; mix++) {
+    for (let mix = 0; mix < 1500; mix++) {
       const from = Math.floor(Math.random() * numTubes);
       const to = Math.floor(Math.random() * numTubes);
       if (from !== to && tubes[from].length > 0 && tubes[to].length < maxPerTube) {
@@ -173,7 +173,7 @@ function generateSolvablePuzzle(opts: {
 
   let tubes = solved.map(t => [...t]);
   
-  for (let mix = 0; mix < 1000; mix++) {
+  for (let mix = 0; mix < 1500; mix++) {
     const from = Math.floor(Math.random() * numTubes);
     const to = Math.floor(Math.random() * numTubes);
     if (from !== to && tubes[from].length > 0 && tubes[to].length < maxPerTube) {
@@ -252,7 +252,7 @@ const ColorSortPuzzle = ({ isPreview = false }: ColorSortPuzzleProps) => {
 
   const initializeGame = useCallback(() => {
     const emptyTubes = 1;
-    const scrambleMoves = 10000 + Math.floor(Math.random() * 10000);
+    const scrambleMoves = 100000 + Math.floor(Math.random() * 100000);
 
     const newTubes = generateSolvablePuzzle({
       colors: COLORS,
