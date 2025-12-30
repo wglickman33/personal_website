@@ -32,7 +32,9 @@ export function useLocalSave(gameState: GameState) {
     }
 
     saveTimeoutRef.current = setTimeout(() => {
-      saveGameState(gameStateRef.current);
+      // Use the latest state from ref to ensure we save the most current data
+      const currentState = gameStateRef.current;
+      saveGameState(currentState);
       lastSaveRef.current = Date.now();
     }, DEBOUNCE_MS);
 
@@ -46,20 +48,33 @@ export function useLocalSave(gameState: GameState) {
     gameState.capital.exponent,
     gameState.totalEarned.mantissa,
     gameState.totalEarned.exponent,
-    JSON.stringify(gameState.ventures.map(v => ({ id: v.id, level: v.level, managerLevel: v.managerLevel }))),
-    JSON.stringify(gameState.upgrades.map(u => ({ id: u.id, unlocked: u.unlocked }))),
+    // Track venture levels and manager levels more precisely
+    JSON.stringify(gameState.ventures.map(v => ({ 
+      id: v.id, 
+      level: v.level, 
+      managerLevel: v.managerLevel 
+    }))),
+    // Track upgrade unlock status
+    JSON.stringify(gameState.upgrades.map(u => ({ 
+      id: u.id, 
+      unlocked: u.unlocked 
+    }))),
     gameState.clickSpeedLevel,
     gameState.clickValueLevel,
     gameState.autoClickEnabled,
     gameState.buyMode,
-    gameState.prestigePoints
+    gameState.prestigePoints,
+    gameState.autoClickRate
   ]);
 
   const saveNow = () => {
     if (saveTimeoutRef.current) {
       clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = null;
     }
-    saveGameState(gameStateRef.current);
+    // Always use the ref to get the most current state
+    const currentState = gameStateRef.current;
+    saveGameState(currentState);
     lastSaveRef.current = Date.now();
   };
 

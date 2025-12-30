@@ -105,15 +105,17 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
       if (currentTotalIncomePerSec.mantissa === 0) return;
 
       const income = BN.multiplyScalar(currentTotalIncomePerSec, deltaTime);
-      setGameState((prev) => {
-        const newState = {
-          ...prev,
-          capital: BN.add(prev.capital, income),
-          totalEarned: BN.add(prev.totalEarned, income)
-        };
-        gameStateRef.current = newState;
-        return newState;
-      });
+      if (income.mantissa > 0 || income.exponent > 0) {
+        setGameState((prev) => {
+          const newState = {
+            ...prev,
+            capital: BN.add(prev.capital, income),
+            totalEarned: BN.add(prev.totalEarned, income)
+          };
+          gameStateRef.current = newState;
+          return newState;
+        });
+      }
     }, []),
     true
   );
