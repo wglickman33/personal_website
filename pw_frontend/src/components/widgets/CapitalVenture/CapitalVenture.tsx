@@ -27,6 +27,19 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
     return createInitialGameState();
   });
 
+  useEffect(() => {
+    if (isPreview) {
+      const interval = setInterval(() => {
+        const saved = loadGameState();
+        if (saved && saved.ventures && saved.upgrades && saved.prestigePoints !== undefined) {
+          setGameState(saved);
+        }
+      }, 500);
+
+      return () => clearInterval(interval);
+    }
+  }, [isPreview]);
+
   const gameStateRef = useRef<GameState>(gameState);
   useEffect(() => {
     gameStateRef.current = gameState;
@@ -89,11 +102,15 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
       if (currentTotalIncomePerSec.mantissa === 0) return;
 
       const income = BN.multiplyScalar(currentTotalIncomePerSec, deltaTime);
-      setGameState((prev) => ({
-        ...prev,
-        capital: BN.add(prev.capital, income),
-        totalEarned: BN.add(prev.totalEarned, income)
-      }));
+      setGameState((prev) => {
+        const newState = {
+          ...prev,
+          capital: BN.add(prev.capital, income),
+          totalEarned: BN.add(prev.totalEarned, income)
+        };
+        gameStateRef.current = newState;
+        return newState;
+      });
     }, []),
     true
   );
@@ -116,11 +133,15 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
           const autoClickIncome = BN.multiplyScalar(clickValue, clicksThisFrame);
           
           if (autoClickIncome.mantissa > 0) {
-            setGameState((prev) => ({
-              ...prev,
-              capital: BN.add(prev.capital, autoClickIncome),
-              totalEarned: BN.add(prev.totalEarned, autoClickIncome)
-            }));
+            setGameState((prev) => {
+              const newState = {
+                ...prev,
+                capital: BN.add(prev.capital, autoClickIncome),
+                totalEarned: BN.add(prev.totalEarned, autoClickIncome)
+              };
+              gameStateRef.current = newState;
+              return newState;
+            });
           }
         }
       }
