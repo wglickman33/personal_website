@@ -274,9 +274,12 @@ export function generateRandomUpgrade(
   upgradeIndex: number,
   ventures: Venture[]
 ): Upgrade {
-  const randomMultiplier = Math.floor(Math.random() * 10) + 1;
+  const multiplierOptions = [1.5, 2, 2.5, 3, 3.5, 4];
+  const randomMultiplier = multiplierOptions[Math.floor(Math.random() * multiplierOptions.length)];
   const upgradeTypes: UpgradeType[] = ['global', 'clickValue', 'clickSpeed', 'venture'];
   const type = upgradeTypes[Math.floor(Math.random() * upgradeTypes.length)];
+  
+  const multiplierDisplay = randomMultiplier % 1 === 0 ? randomMultiplier.toString() : randomMultiplier.toFixed(1);
   
   let name = '';
   let description = '';
@@ -284,22 +287,22 @@ export function generateRandomUpgrade(
   
   switch (type) {
     case 'global':
-      name = `${randomMultiplier}x Global Boost`;
-      description = `${randomMultiplier}x all income`;
+      name = `${multiplierDisplay}x Global Boost`;
+      description = `${multiplierDisplay}x all income`;
       break;
     case 'clickValue':
-      name = `${randomMultiplier}x Click Power`;
-      description = `${randomMultiplier}x click value`;
+      name = `${multiplierDisplay}x Click Power`;
+      description = `${multiplierDisplay}x click value`;
       break;
     case 'clickSpeed':
-      name = `Speed Boost ${randomMultiplier}x`;
-      description = `${randomMultiplier}x click speed`;
+      name = `Speed Boost ${multiplierDisplay}x`;
+      description = `${multiplierDisplay}x click speed`;
       break;
     case 'venture': {
       const randomVenture = ventures[Math.floor(Math.random() * ventures.length)];
       ventureId = randomVenture.id;
-      name = `${randomMultiplier}x ${randomVenture.name}`;
-      description = `${randomMultiplier}x ${randomVenture.name} income`;
+      name = `${multiplierDisplay}x ${randomVenture.name}`;
+      description = `${multiplierDisplay}x ${randomVenture.name} income`;
       break;
     }
   }
@@ -324,9 +327,9 @@ export function createInitialUpgrades(): Upgrade[] {
       id: 'click_2x',
       name: 'Double Click',
       description: '2x click value',
-      cost: BN.create(100),
+      cost: BN.create(1000),
       unlocked: false,
-      unlockAtTotalEarned: BN.create(100),
+      unlockAtTotalEarned: BN.create(1000),
       type: 'clickValue',
       multiplier: 2,
       boostType: 'multiplier'
@@ -335,9 +338,9 @@ export function createInitialUpgrades(): Upgrade[] {
       id: 'click_5x',
       name: 'Mega Click',
       description: '5x click value',
-      cost: BN.create(10000),
+      cost: BN.create(100000),
       unlocked: false,
-      unlockAtTotalEarned: BN.create(10000),
+      unlockAtTotalEarned: BN.create(100000),
       type: 'clickValue',
       multiplier: 5,
       boostType: 'multiplier'
@@ -346,9 +349,9 @@ export function createInitialUpgrades(): Upgrade[] {
       id: 'global_2x',
       name: 'Global Boost',
       description: '2x all income',
-      cost: BN.create(100000),
+      cost: BN.create(1000000),
       unlocked: false,
-      unlockAtTotalEarned: BN.create(100000),
+      unlockAtTotalEarned: BN.create(1000000),
       type: 'global',
       multiplier: 2,
       boostType: 'multiplier'
@@ -357,9 +360,9 @@ export function createInitialUpgrades(): Upgrade[] {
       id: 'global_5x',
       name: 'Global Surge',
       description: '5x all income',
-      cost: BN.create(10000000),
+      cost: BN.create(100000000),
       unlocked: false,
-      unlockAtTotalEarned: BN.create(10000000),
+      unlockAtTotalEarned: BN.create(100000000),
       type: 'global',
       multiplier: 5,
       boostType: 'multiplier'
@@ -370,8 +373,8 @@ export function createInitialUpgrades(): Upgrade[] {
   const ventures = createInitialVentures();
   
   for (let i = 0; i < 50; i++) {
-    const baseCost = BN.multiplyScalar(BN.create(1000000), Math.pow(2, i));
-    const unlockAt = BN.multiplyScalar(BN.create(100000), Math.pow(2, i + 1));
+    const baseCost = BN.multiplyScalar(BN.create(10000000), Math.pow(3, i));
+    const unlockAt = BN.multiplyScalar(BN.create(1000000), Math.pow(2.5, i + 1));
     randomUpgrades.push(generateRandomUpgrade(baseCost, unlockAt, i, ventures));
   }
   

@@ -368,8 +368,8 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
       
       const newUpgrades: Upgrade[] = [];
       for (let i = 0; i < neededUpgrades; i++) {
-        const baseCost = BN.multiplyScalar(BN.create(1000000), Math.pow(2, currentUpgradeCount + i));
-        const unlockAt = BN.multiplyScalar(BN.create(Math.max(1, totalValue * 0.5)), Math.pow(1.5, i));
+        const baseCost = BN.multiplyScalar(BN.create(10000000), Math.pow(3, currentUpgradeCount + i));
+        const unlockAt = BN.multiplyScalar(BN.create(Math.max(1, totalValue * 2)), Math.pow(2, i));
         const upgrade = generateRandomUpgrade(baseCost, unlockAt, currentUpgradeCount + i, gameState.ventures);
         newUpgrades.push(upgrade);
       }

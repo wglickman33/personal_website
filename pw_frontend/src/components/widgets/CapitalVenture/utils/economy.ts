@@ -1,9 +1,9 @@
 import { BigNumber, Venture, Upgrade } from '../types/capitalVentureTypes';
 import * as BN from './bigNumber';
 
-export const PRESTIGE_SCALE = 1e12;
-export const PRESTIGE_MULTIPLIER_PER_POINT = 0.02;
-export const MIN_PRESTIGE_TOTAL_EARNED = BN.create(1e15);
+export const PRESTIGE_SCALE = 1e18;
+export const PRESTIGE_MULTIPLIER_PER_POINT = 0.01;
+export const MIN_PRESTIGE_TOTAL_EARNED = BN.create(1e20);
 export const BASE_CLICK_SPEED = 10;
 export const CLICK_SPEED_INCREASE_PER_LEVEL = 5;
 export const BASE_CLICK_VALUE = 1;
