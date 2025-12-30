@@ -37,6 +37,26 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
 
   const { saveNow } = useLocalSave(gameState);
 
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      saveGameState(gameStateRef.current);
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        saveGameState(gameStateRef.current);
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
   const prestigeMultiplier = Economy.calculatePrestigeMultiplier(gameState.prestigePoints);
   const totalIncomePerSec = Economy.calculateTotalIncomePerSec(
     gameState.ventures,

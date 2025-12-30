@@ -14,16 +14,25 @@ export function saveGameState(state: GameState): void {
         ...v,
         baseCost: BN.toJSON(v.baseCost),
         baseIncomePerSec: BN.toJSON(v.baseIncomePerSec),
-        unlockAtTotalEarned: BN.toJSON(v.unlockAtTotalEarned)
+        unlockAtTotalEarned: BN.toJSON(v.unlockAtTotalEarned),
+        managerLevel: v.managerLevel || 0,
+        milestoneThresholds: v.milestoneThresholds || [],
+        milestoneBoosts: v.milestoneBoosts || []
       })),
       upgrades: state.upgrades.map(u => ({
         ...u,
         cost: BN.toJSON(u.cost),
         unlockAtTotalEarned: u.unlockAtTotalEarned ? BN.toJSON(u.unlockAtTotalEarned) : undefined
       })),
+      buyMode: state.buyMode || 'x1',
+      autoClickEnabled: state.autoClickEnabled || false,
+      autoClickRate: state.autoClickRate || 10,
+      clickSpeedLevel: state.clickSpeedLevel || 0,
+      clickValueLevel: state.clickValueLevel || 0,
       lastSavedAt: Date.now()
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(serialized));
+    const serializedString = JSON.stringify(serialized);
+    localStorage.setItem(STORAGE_KEY, serializedString);
   } catch (error) {
     console.error('Failed to save game state:', error);
   }
