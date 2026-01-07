@@ -25,13 +25,13 @@
 
   &__content {
     position: relative;
-    background: linear-gradient(135deg, #faf8f3 0%, #f5f1e8 100%);
-    border: 2px solid rgba(139, 115, 85, 0.25);
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    border: 2px solid rgba($primary-color, 0.2);
     border-radius: $border-radius-lg;
     padding: 24px;
     max-width: 500px;
     width: 100%;
-    box-shadow: 0 8px 32px rgba(139, 115, 85, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     z-index: 1;
     animation: slideIn 0.3s ease-out;
 
@@ -45,7 +45,7 @@
     font-family: $font-family-display;
     font-size: $font-size-lg;
     font-weight: $font-weight-bold;
-    color: #654321;
+    color: $primary-color;
     margin: 0 0 12px 0;
 
     .confirm-modal--dark & {
@@ -55,7 +55,7 @@
 
   &__message {
     font-size: $font-size-base;
-    color: rgba(101, 67, 33, 0.85);
+    color: rgba($primary-color, 0.8);
     line-height: 1.6;
     margin: 0 0 24px 0;
     white-space: pre-line;
@@ -82,9 +82,9 @@
     border: 2px solid transparent;
 
     &--cancel {
-      background: rgba(245, 237, 220, 0.6);
-      color: #654321;
-      border-color: rgba(139, 115, 85, 0.25);
+      background: rgba($primary-color, 0.1);
+      color: $primary-color;
+      border-color: rgba($primary-color, 0.2);
 
       .confirm-modal--dark & {
         background: rgba($light-color, 0.1);
@@ -93,8 +93,8 @@
       }
 
       &:hover {
-        background: rgba(254, 243, 199, 0.8);
-        border-color: rgba(139, 115, 85, 0.35);
+        background: rgba($primary-color, 0.15);
+        border-color: rgba($primary-color, 0.3);
       }
     }
 
@@ -104,8 +104,8 @@
       border-color: $accent-color-1;
 
       &:hover {
-        background: darken($accent-color-1, 10%);
-        border-color: darken($accent-color-1, 10%);
+        background: color-mix(in srgb, $accent-color-1 90%, black 10%);
+        border-color: color-mix(in srgb, $accent-color-1 90%, black 10%);
         transform: translateY(-1px);
         box-shadow: 0 4px 8px rgba($accent-color-1, 0.3);
       }

@@ -5,7 +5,7 @@
 
 .projects {
   padding: 100px 40px;
-  background: #faf8f3;
+  background: $gray-color-light;
   position: relative;
 
   &.projects--dark {
@@ -30,7 +30,7 @@
   font-family: $font-family-display;
   font-size: clamp($font-size-3xl, 5vw, $font-size-5xl);
   font-weight: $font-weight-black;
-  color: #654321;
+  color: $primary-color;
   text-align: center;
   margin-bottom: 16px;
   letter-spacing: $letter-spacing-tighter;
@@ -42,7 +42,7 @@
 
 .projects__subtitle {
   font-size: $font-size-lg;
-  color: rgba(101, 67, 33, 0.75);
+  color: $secondary-color;
   text-align: center;
   margin-bottom: 80px;
 
@@ -173,12 +173,12 @@
 }
 
 .projects__content {
-  background-color: rgba(250, 245, 235, 0.8);
+  background-color: rgba($light-color, 0.7);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(139, 115, 85, 0.15);
+  border: 1px solid rgba($primary-color, 0.08);
   border-radius: $border-radius-lg;
   padding: 28px;
-  box-shadow: 0 4px 6px rgba(139, 115, 85, 0.08), 0 2px 4px rgba(139, 115, 85, 0.06);
+  box-shadow: $box-shadow-md;
   transition: all $transition-speed ease;
   position: relative;
   overflow: hidden;
@@ -190,7 +190,7 @@
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, #f59e0b, #d97706, #b45309);
+    background: linear-gradient(90deg, $accent-color-3, $accent-color-1, $accent-color-2);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -198,9 +198,8 @@
 
   &:hover {
     transform: translateY(-6px);
-    box-shadow: 0 20px 25px rgba(139, 115, 85, 0.1), 0 10px 10px rgba(139, 115, 85, 0.04);
-    border-color: rgba(217, 119, 6, 0.3);
-    background-color: rgba(254, 243, 199, 0.9);
+    box-shadow: $box-shadow-xl;
+    border-color: rgba($accent-color-1, 0.3);
 
     &::before {
       transform: scaleX(1);
@@ -249,7 +248,7 @@
   font-family: $font-family-display;
   font-size: $font-size-2xl;
   font-weight: $font-weight-bold;
-  color: #654321;
+  color: $primary-color;
   margin-bottom: 16px;
   letter-spacing: $letter-spacing-tight;
 
@@ -264,7 +263,7 @@
 
 .projects__description {
   font-size: $font-size-base;
-  color: rgba(101, 67, 33, 0.75);
+  color: $secondary-color;
   line-height: $line-height-relaxed;
   margin-bottom: 24px;
 
@@ -283,18 +282,18 @@
 .projects__tech-tag {
   display: inline-block;
   padding: 6px 14px;
-  background-color: rgba(254, 243, 199, 0.6);
-  color: #b45309;
+  background-color: rgba($accent-color-1, 0.1);
+  color: $accent-color-1;
   border-radius: 100px;
   font-size: $font-size-xs;
   font-weight: $font-weight-semibold;
-  border: 1px solid rgba(217, 119, 6, 0.25);
+  border: 1px solid rgba($accent-color-1, 0.2);
   transition: all $transition-speed ease;
   font-family: $font-family-display;
 
   &:hover {
-    background-color: rgba(254, 243, 199, 0.8);
-    border-color: rgba(217, 119, 6, 0.4);
+    background-color: rgba($accent-color-1, 0.2);
+    border-color: rgba($accent-color-1, 0.4);
     transform: translateY(-2px);
   }
 
@@ -315,10 +314,10 @@
 }
 
 .projects__detail-section {
-  background-color: rgba(245, 237, 220, 0.6);
+  background-color: rgba($gray-color, 0.5);
   padding: 20px;
   border-radius: $border-radius;
-  border-left: 3px solid #d97706;
+  border-left: 3px solid $accent-color-1;
 
   .projects--dark & {
     background-color: rgba($primary-color, 0.2);
@@ -329,7 +328,7 @@
   font-family: $font-family-display;
   font-size: $font-size-sm;
   font-weight: $font-weight-bold;
-  color: #d97706;
+  color: $accent-color-1;
   margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: $letter-spacing-wide;
@@ -337,7 +336,7 @@
 
 .projects__detail-text {
   font-size: $font-size-sm;
-  color: rgba(101, 67, 33, 0.75);
+  color: $secondary-color;
   line-height: $line-height-relaxed;
 
   .projects--dark & {
@@ -356,13 +355,13 @@
   align-items: center;
   gap: 6px;
   padding: 10px 20px;
-  background-color: rgba(245, 237, 220, 0.6);
-  color: #654321;
+  background-color: rgba($primary-color, 0.05);
+  color: $primary-color;
   text-decoration: none;
   border-radius: $border-radius;
   font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
-  border: 1px solid rgba(139, 115, 85, 0.25);
+  border: 1px solid rgba($primary-color, 0.2);
   transition: all $transition-speed cubic-bezier(0.16, 1, 0.3, 1);
   font-family: $font-family-display;
 
@@ -371,11 +370,11 @@
   }
 
   &:hover {
-    background-color: #654321;
+    background-color: $primary-color;
     color: $light-color;
-    border-color: #654321;
+    border-color: $primary-color;
     transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(139, 115, 85, 0.1), 0 2px 4px rgba(139, 115, 85, 0.08);
+    box-shadow: $box-shadow-md;
   }
 
   .projects--dark & {
