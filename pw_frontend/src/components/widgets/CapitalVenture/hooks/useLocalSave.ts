@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import { GameState } from '../types/capitalVentureTypes';
 import { saveGameState } from '../utils/storage';
 
@@ -13,6 +13,23 @@ export function useLocalSave(gameState: GameState) {
   useEffect(() => {
     gameStateRef.current = gameState;
   }, [gameState]);
+
+  const venturesKey = useMemo(() => 
+    JSON.stringify(gameState.ventures.map(v => ({ 
+      id: v.id, 
+      level: v.level, 
+      managerLevel: v.managerLevel 
+    }))),
+    [gameState.ventures]
+  );
+
+  const upgradesKey = useMemo(() => 
+    JSON.stringify(gameState.upgrades.map(u => ({ 
+      id: u.id, 
+      unlocked: u.unlocked 
+    }))),
+    [gameState.upgrades]
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -47,15 +64,8 @@ export function useLocalSave(gameState: GameState) {
     gameState.capital.exponent,
     gameState.totalEarned.mantissa,
     gameState.totalEarned.exponent,
-    JSON.stringify(gameState.ventures.map(v => ({ 
-      id: v.id, 
-      level: v.level, 
-      managerLevel: v.managerLevel 
-    }))),
-    JSON.stringify(gameState.upgrades.map(u => ({ 
-      id: u.id, 
-      unlocked: u.unlocked 
-    }))),
+    venturesKey,
+    upgradesKey,
     gameState.clickSpeedLevel,
     gameState.clickValueLevel,
     gameState.autoClickEnabled,
