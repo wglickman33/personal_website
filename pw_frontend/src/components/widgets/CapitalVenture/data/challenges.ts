@@ -1,5 +1,4 @@
-import { Challenge, BigNumber } from '../types/capitalVentureTypes';
-import * as BN from '../utils/bigNumber';
+import { Challenge, BigNumber, Venture } from '../types/capitalVentureTypes';
 
 export function createInitialChallenges(): Challenge[] {
   return [
@@ -111,7 +110,7 @@ export function updateChallengeProgress(
   gameState: {
     capital: BigNumber;
     totalEarned: BigNumber;
-    ventures: Array<{ level: number }>;
+    ventures: Venture[];
     upgrades: Array<{ unlocked: boolean }>;
     autoClickEnabled: boolean;
   },
@@ -171,8 +170,8 @@ export function updateChallengeProgress(
       }
       case 'milestone_hunter': {
         const totalMilestones = gameState.ventures.reduce((sum, v) => {
-          const milestones = (v as any).milestoneBoosts || [];
-          return sum + milestones.filter((b: any) => v.level >= b.threshold).length;
+          const milestones = v.milestoneBoosts || [];
+          return sum + milestones.filter(b => v.level >= b.threshold).length;
         }, 0);
         progress = Math.min(totalMilestones, challenge.target);
         break;
