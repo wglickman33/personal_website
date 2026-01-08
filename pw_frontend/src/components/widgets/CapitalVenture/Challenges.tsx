@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import useTheme from '../../../hooks/useTheme';
 import { Challenge } from './types/capitalVentureTypes';
 import './Challenges.scss';
@@ -22,19 +22,22 @@ const Challenges = ({ challenges, onClose }: ChallengesProps) => {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [onClose]);
 
-  if (!challenges || challenges.length === 0) return null;
-
   const completedCount = useMemo(() => 
-    challenges.filter(c => c.completed).length,
+    challenges?.filter(c => c.completed).length ?? 0,
     [challenges]
   );
 
   const challengesByType = useMemo(() => {
+    if (!challenges || challenges.length === 0) {
+      return { scaling: [], saving: [], progress: [] };
+    }
     const scaling = challenges.filter(c => c.type === 'scaling');
     const saving = challenges.filter(c => c.type === 'saving');
     const progress = challenges.filter(c => c.type === 'progress');
     return { scaling, saving, progress };
   }, [challenges]);
+
+  if (!challenges || challenges.length === 0) return null;
 
   const formatProgress = (challenge: Challenge): string => {
     if (challenge.completed) return '100%';
