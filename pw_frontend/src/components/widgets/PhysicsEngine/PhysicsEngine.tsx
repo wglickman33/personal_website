@@ -16,6 +16,9 @@ type BodyCollideEvent = {
   contact?: CANNON.ContactEquation;
 };
 
+type ArenaBounds = { left: number; right: number; bottom: number; top: number };
+type ArenaWallName = 'left' | 'right' | 'floor' | 'ceiling';
+
 const PhysicsEngine = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -23,8 +26,6 @@ const PhysicsEngine = () => {
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const meshesRef = useRef<Map<CANNON.Body, THREE.Mesh>>(new Map());
   const bodyIdCounterRef = useRef(0);
-  const groundMeshRef = useRef<THREE.Mesh | null>(null);
-  const groundBodyRef = useRef<CANNON.Body | null>(null);
   const didInitWorldRef = useRef(false);
   const lastFrameTimeRef = useRef<number>(performance.now());
   const [showDebug, setShowDebug] = useState(false);
@@ -35,12 +36,28 @@ const PhysicsEngine = () => {
   const lastScoreAtRef = useRef<number>(0);
   const recentHitsRef = useRef<Map<string, number>>(new Map());
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const arenaBodiesRef = useRef<{
-    left?: CANNON.Body;
-    right?: CANNON.Body;
-    ceiling?: CANNON.Body;
-  }>({});
+  const arenaBoundsRef = useRef<ArenaBounds>({ left: -7, right: 7, bottom: -7, top: 7 });
+  const arenaBodiesRef = useRef<Record<ArenaWallName, CANNON.Body | undefined>>({
+    left: undefined,
+    right: undefined,
+    floor: undefined,
+    ceiling: undefined,
+  });
+  const arenaWallMeshesRef = useRef<Record<ArenaWallName, THREE.Mesh | undefined>>({
+    left: undefined,
+    right: undefined,
+    floor: undefined,
+    ceiling: undefined,
+  });
+  const arenaWallMaterialRef = useRef<THREE.MeshStandardMaterial | null>(null);
+  const gridRef = useRef<THREE.GridHelper | null>(null);
   const arenaOutlineRef = useRef<THREE.LineSegments | null>(null);
+  const physicsMaterialsRef = useRef<{
+    dynamic: CANNON.Material;
+    wall: CANNON.Material;
+    contactDynDyn?: CANNON.ContactMaterial;
+    contactDynWall?: CANNON.ContactMaterial;
+  } | null>(null);
 
   // Initialize physics world
   const {
@@ -108,6 +125,7 @@ const PhysicsEngine = () => {
     container.appendChild(renderer.domElement);
     rendererRef.current = renderer;
     const meshes = meshesRef.current;
+    const wallMeshes = arenaWallMeshesRef.current;
 
     // Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
@@ -120,23 +138,21 @@ const PhysicsEngine = () => {
 
     // Subtle grid so it's not "just a white screen"
     const grid = new THREE.GridHelper(60, 30, 0x94a3b8, 0xcbd5e1);
-    grid.position.y = -5;
+    grid.position.y = arenaBoundsRef.current.bottom;
     (grid.material as THREE.Material).transparent = true;
     (grid.material as THREE.Material).opacity = 0.35;
     scene.add(grid);
+    gridRef.current = grid;
 
-    // Ground mesh (physics body is created once world is ready)
-    const groundGeometry = new THREE.PlaneGeometry(100, 100);
-    const groundMaterial = new THREE.MeshStandardMaterial({
-      color: 0x888888,
-      metalness: 0.3,
+    // Wall material (meshes are created/updated by updateArena)
+    const wallMat = new THREE.MeshStandardMaterial({
+      color: 0x0f172a,
+      transparent: true,
+      opacity: 0.18,
+      metalness: 0.1,
       roughness: 0.4,
     });
-    const groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
-    groundMesh.rotation.x = -Math.PI / 2;
-    groundMesh.position.y = -5;
-    scene.add(groundMesh);
-    groundMeshRef.current = groundMesh;
+    arenaWallMaterialRef.current = wallMat;
 
     // Arena outline (created once, updated on resize)
     const outlineGeom = new THREE.BufferGeometry();
@@ -193,9 +209,26 @@ const PhysicsEngine = () => {
       }
       meshes.forEach((mesh) => disposeMesh(scene, mesh));
       meshes.clear();
-      if (groundMeshRef.current) {
-        disposeMesh(scene, groundMeshRef.current);
-        groundMeshRef.current = null;
+      (Object.keys(wallMeshes) as ArenaWallName[]).forEach((k) => {
+        const m = wallMeshes[k];
+        if (m) disposeMesh(scene, m);
+        wallMeshes[k] = undefined;
+      });
+      if (arenaOutlineRef.current) {
+        scene.remove(arenaOutlineRef.current);
+        arenaOutlineRef.current.geometry.dispose();
+        (arenaOutlineRef.current.material as THREE.Material).dispose();
+        arenaOutlineRef.current = null;
+      }
+      if (gridRef.current) {
+        scene.remove(gridRef.current);
+        (gridRef.current.material as THREE.Material).dispose();
+        gridRef.current.geometry.dispose();
+        gridRef.current = null;
+      }
+      if (arenaWallMaterialRef.current) {
+        arenaWallMaterialRef.current.dispose();
+        arenaWallMaterialRef.current = null;
       }
       renderer.dispose();
       sceneRef.current = null;
@@ -260,54 +293,119 @@ const PhysicsEngine = () => {
     body.addEventListener('collide', onCollide as unknown as (evt: unknown) => void);
   }, [awardPoints]);
 
+  // Create (and reuse) physics materials/contact materials for bouncy collisions
+  useEffect(() => {
+    if (!world) return;
+    if (physicsMaterialsRef.current) return;
+
+    const dynamic = new CANNON.Material('pw_dynamic');
+    const wall = new CANNON.Material('pw_wall');
+
+    const contactDynWall = new CANNON.ContactMaterial(dynamic, wall, {
+      friction: 0.08,
+      restitution: 0.92,
+    });
+    const contactDynDyn = new CANNON.ContactMaterial(dynamic, dynamic, {
+      friction: 0.12,
+      restitution: 0.72,
+    });
+
+    world.addContactMaterial(contactDynWall);
+    world.addContactMaterial(contactDynDyn);
+
+    physicsMaterialsRef.current = { dynamic, wall, contactDynDyn, contactDynWall };
+  }, [world]);
+
   const updateArena = useCallback(() => {
     if (!cameraRef.current || !sceneRef.current || !arenaOutlineRef.current) return;
 
     const camera = cameraRef.current;
+    const scene = sceneRef.current;
 
-    const floorY = -5;
-    const padding = 0.9;
+    const padding = 1.3;
     const leftX = camera.left + padding;
     const rightX = camera.right - padding;
+    const bottomY = camera.bottom + padding;
     const topY = camera.top - padding;
+
+    arenaBoundsRef.current = { left: leftX, right: rightX, bottom: bottomY, top: topY };
 
     // Outline geometry (rectangle)
     const pts = [
-      new THREE.Vector3(leftX, floorY, 0),
-      new THREE.Vector3(rightX, floorY, 0),
+      new THREE.Vector3(leftX, bottomY, 0),
+      new THREE.Vector3(rightX, bottomY, 0),
 
-      new THREE.Vector3(rightX, floorY, 0),
+      new THREE.Vector3(rightX, bottomY, 0),
       new THREE.Vector3(rightX, topY, 0),
 
       new THREE.Vector3(rightX, topY, 0),
       new THREE.Vector3(leftX, topY, 0),
 
       new THREE.Vector3(leftX, topY, 0),
-      new THREE.Vector3(leftX, floorY, 0),
+      new THREE.Vector3(leftX, bottomY, 0),
     ];
     arenaOutlineRef.current.geometry.dispose();
     arenaOutlineRef.current.geometry = new THREE.BufferGeometry().setFromPoints(pts);
 
-    // Physics bounds are added once world exists (planes are infinite but give a clear "arena")
-    if (!world) return;
+    // Update visuals
+    if (gridRef.current) {
+      gridRef.current.position.y = bottomY;
+    }
 
-    const ensurePlane = (name: 'left' | 'right' | 'ceiling', normal: CANNON.Vec3, pos: CANNON.Vec3) => {
-      const existing = arenaBodiesRef.current[name];
-      if (existing) {
-        existing.position.copy(pos);
-        existing.quaternion.setFromVectors(new CANNON.Vec3(0, 0, 1), normal);
-        return;
-      }
-      const plane = new CANNON.Body({ mass: 0, shape: new CANNON.Plane() });
-      plane.position.copy(pos);
-      plane.quaternion.setFromVectors(new CANNON.Vec3(0, 0, 1), normal);
-      world.addBody(plane);
-      arenaBodiesRef.current[name] = plane;
+    const wallMat = arenaWallMaterialRef.current;
+    const thickness = 0.45;
+    const height = topY - bottomY;
+    const width = rightX - leftX;
+    const depth = 1.0;
+
+    const ensureWallMesh = (name: ArenaWallName) => {
+      const existing = arenaWallMeshesRef.current[name];
+      if (existing) return existing;
+      const geom = new THREE.BoxGeometry(1, 1, 1);
+      const mesh = new THREE.Mesh(geom, wallMat ?? new THREE.MeshStandardMaterial({ color: 0x0f172a }));
+      mesh.renderOrder = 1;
+      scene.add(mesh);
+      arenaWallMeshesRef.current[name] = mesh;
+      return mesh;
     };
 
-    ensurePlane('left', new CANNON.Vec3(1, 0, 0), new CANNON.Vec3(leftX, 0, 0));
-    ensurePlane('right', new CANNON.Vec3(-1, 0, 0), new CANNON.Vec3(rightX, 0, 0));
-    ensurePlane('ceiling', new CANNON.Vec3(0, -1, 0), new CANNON.Vec3(0, topY, 0));
+    // Left/right are vertical bars. Floor/ceiling are horizontal bars.
+    const leftMesh = ensureWallMesh('left');
+    leftMesh.scale.set(thickness, height + thickness * 2, depth);
+    leftMesh.position.set(leftX - thickness / 2, (topY + bottomY) / 2, 0);
+
+    const rightMesh = ensureWallMesh('right');
+    rightMesh.scale.set(thickness, height + thickness * 2, depth);
+    rightMesh.position.set(rightX + thickness / 2, (topY + bottomY) / 2, 0);
+
+    const floorMesh = ensureWallMesh('floor');
+    floorMesh.scale.set(width + thickness * 2, thickness, depth);
+    floorMesh.position.set((leftX + rightX) / 2, bottomY - thickness / 2, 0);
+
+    const ceilingMesh = ensureWallMesh('ceiling');
+    ceilingMesh.scale.set(width + thickness * 2, thickness, depth);
+    ceilingMesh.position.set((leftX + rightX) / 2, topY + thickness / 2, 0);
+
+    // Physics bounds (actual box you bounce around in)
+    if (!world) return;
+    const pm = physicsMaterialsRef.current;
+    const wallMaterial = pm?.wall ?? undefined;
+
+    const recreateWallBody = (name: ArenaWallName, halfExtents: CANNON.Vec3, pos: CANNON.Vec3) => {
+      const existing = arenaBodiesRef.current[name];
+      if (existing) world.removeBody(existing);
+
+      const shape = new CANNON.Box(halfExtents);
+      const body = new CANNON.Body({ mass: 0, shape, material: wallMaterial });
+      body.position.copy(pos);
+      world.addBody(body);
+      arenaBodiesRef.current[name] = body;
+    };
+
+    recreateWallBody('left', new CANNON.Vec3(thickness / 2, (height + thickness * 2) / 2, depth / 2), new CANNON.Vec3(leftX - thickness / 2, (topY + bottomY) / 2, 0));
+    recreateWallBody('right', new CANNON.Vec3(thickness / 2, (height + thickness * 2) / 2, depth / 2), new CANNON.Vec3(rightX + thickness / 2, (topY + bottomY) / 2, 0));
+    recreateWallBody('floor', new CANNON.Vec3((width + thickness * 2) / 2, thickness / 2, depth / 2), new CANNON.Vec3((leftX + rightX) / 2, bottomY - thickness / 2, 0));
+    recreateWallBody('ceiling', new CANNON.Vec3((width + thickness * 2) / 2, thickness / 2, depth / 2), new CANNON.Vec3((leftX + rightX) / 2, topY + thickness / 2, 0));
   }, [world]);
 
   useEffect(() => {
@@ -321,19 +419,15 @@ const PhysicsEngine = () => {
   const seedWorld = useCallback(() => {
     if (!world || !sceneRef.current) return;
 
-    // Ground body aligned with the ground mesh at y=-5
-    if (!groundBodyRef.current) {
-      const groundBody = new CANNON.Body({ mass: 0, shape: new CANNON.Plane() });
-      groundBody.position.set(0, -5, 0);
-      groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
-      world.addBody(groundBody);
-      groundBodyRef.current = groundBody;
-    }
+    // Ensure arena exists before spawning
+    updateArenaRef.current();
+    const { left, right, top } = arenaBoundsRef.current;
+    const margin = 1.2;
 
     const initialObjects = [
-      { shape: 'box' as PhysicsShape, position: [0, 5, 0], size: [1, 1, 1] as [number, number, number], color: 0x3b82f6 },
-      { shape: 'box' as PhysicsShape, position: [-2, 8, 0], size: [1, 1, 1] as [number, number, number], color: 0xff6b6b },
-      { shape: 'sphere' as PhysicsShape, position: [2, 8, 0], radius: 0.5, color: 0x4ecdc4 },
+      { shape: 'box' as PhysicsShape, position: [left + margin + 1, top - margin - 2, 0], size: [1, 1, 1] as [number, number, number], color: 0x3b82f6 },
+      { shape: 'box' as PhysicsShape, position: [right - margin - 1, top - margin - 1, 0], size: [1, 1, 1] as [number, number, number], color: 0xff6b6b },
+      { shape: 'sphere' as PhysicsShape, position: [(left + right) / 2, top - margin - 1.5, 0], radius: 0.6, color: 0x4ecdc4 },
     ];
 
     initialObjects.forEach((obj) => {
@@ -345,6 +439,7 @@ const PhysicsEngine = () => {
         size: obj.size,
         radius: obj.radius,
         color: obj.color,
+        material: physicsMaterialsRef.current?.dynamic,
       });
 
       if (body && sceneRef.current) {
@@ -353,6 +448,10 @@ const PhysicsEngine = () => {
         sceneRef.current.add(mesh);
         meshesRef.current.set(body, mesh);
         attachScoring(body);
+        body.velocity.set((Math.random() - 0.5) * 6, (Math.random() - 0.5) * 3, 0);
+        body.angularVelocity.set(0, 0, (Math.random() - 0.5) * 6);
+        body.linearDamping = 0.01;
+        body.angularDamping = 0.02;
       }
     });
   }, [world, addBody, attachScoring, withPwId]);
@@ -364,18 +463,8 @@ const PhysicsEngine = () => {
     seedWorld();
   }, [world, seedWorld]);
 
-  // Cleanup ground body on unmount (or if world instance changes)
-  useEffect(() => {
-    return () => {
-      if (world && groundBodyRef.current) {
-        world.removeBody(groundBodyRef.current);
-        groundBodyRef.current = null;
-      }
-    };
-  }, [world]);
-
   const addBodyAndMesh = useCallback(
-    (config: PhysicsBodyConfig) => {
+    (config: PhysicsBodyConfig, initialVelocity?: { vx: number; vy: number; w?: number }) => {
       if (!sceneRef.current) return;
       const bodyId = `body_${bodyIdCounterRef.current++}`;
       const body = addBody(bodyId, config);
@@ -385,6 +474,12 @@ const PhysicsEngine = () => {
       sceneRef.current.add(mesh);
       meshesRef.current.set(body, mesh);
       attachScoring(body);
+      body.linearDamping = 0.01;
+      body.angularDamping = 0.02;
+      if (initialVelocity) {
+        body.velocity.set(initialVelocity.vx, initialVelocity.vy, 0);
+        body.angularVelocity.set(0, 0, initialVelocity.w ?? 0);
+      }
     },
     [addBody, attachScoring, withPwId]
   );
@@ -395,15 +490,11 @@ const PhysicsEngine = () => {
       const colors = [0x3b82f6, 0xff6b6b, 0x4ecdc4, 0xffe66d, 0x95e1d3];
       const color = colors[Math.floor(Math.random() * colors.length)];
 
-      // Keep spawns inside the arena
-      const camera = cameraRef.current;
-      const leftX = camera ? camera.left + 1.2 : point.x;
-      const rightX = camera ? camera.right - 1.2 : point.x;
-      const topY = camera ? camera.top - 1.2 : point.y;
-      const floorY = -4.2;
-
-      const x = Math.min(rightX, Math.max(leftX, point.x));
-      const y = Math.min(topY, Math.max(floorY + 1, point.y));
+      // Keep spawns inside the box
+      const { left, right, bottom, top } = arenaBoundsRef.current;
+      const margin = 0.9;
+      const x = Math.min(right - margin, Math.max(left + margin, point.x));
+      const y = Math.min(top - margin, Math.max(bottom + margin, point.y));
 
       addBodyAndMesh({
         shape: 'box',
@@ -411,7 +502,8 @@ const PhysicsEngine = () => {
         position: [x, y, 0],
         size: [0.5, 0.5, 0.5],
         color,
-      });
+        material: physicsMaterialsRef.current?.dynamic,
+      }, { vx: (Math.random() - 0.5) * 8, vy: (Math.random() - 0.5) * 3, w: (Math.random() - 0.5) * 8 });
     },
     [addBodyAndMesh]
   );
@@ -430,20 +522,19 @@ const PhysicsEngine = () => {
       const colors = [0x3d7aed, 0xff6b6b, 0x4ecdc4, 0xffe66d, 0x95e1d3];
       const color = colors[Math.floor(Math.random() * colors.length)];
 
-      const camera = cameraRef.current;
-      const leftX = camera ? camera.left + 1.2 : -4;
-      const rightX = camera ? camera.right - 1.2 : 4;
-      const topY = camera ? camera.top - 1.2 : 9;
+      const { left, right, top } = arenaBoundsRef.current;
+      const margin = 0.9;
 
       const config: PhysicsBodyConfig = {
         shape,
         mass: 1,
         position: [
-          leftX + Math.random() * (rightX - leftX),
-          topY - 1 - Math.random() * 1.2,
+          (left + margin) + Math.random() * ((right - margin) - (left + margin)),
+          top - margin - 0.6,
           0,
         ] as [number, number, number],
         color,
+        material: physicsMaterialsRef.current?.dynamic,
       };
 
       if (shape === 'box') {
@@ -452,7 +543,8 @@ const PhysicsEngine = () => {
         config.radius = 0.3 + Math.random() * 0.3;
       }
 
-      addBodyAndMesh(config);
+      // Drop from the top with a little sideways randomness so it bounces around.
+      addBodyAndMesh(config, { vx: (Math.random() - 0.5) * 6, vy: -2 - Math.random() * 4, w: (Math.random() - 0.5) * 6 });
     },
     [addBodyAndMesh]
   );
