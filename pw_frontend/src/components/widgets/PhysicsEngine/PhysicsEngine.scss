@@ -1,4 +1,5 @@
 @use "../../../assets/styles/partials/variables" as *;
+@use "../../../assets/styles/partials/fonts" as *;
 @use "../../../assets/styles/partials/mixins" as *;
 @use "../../../assets/styles/partials/breakpoints" as *;
 @use "sass:color";
@@ -9,11 +10,15 @@
   height: 600px;
   border-radius: 8px;
   overflow: hidden;
-  background: $light-color;
+  background: radial-gradient(1200px 600px at 20% 10%, rgba($accent-color-3, 0.25), rgba(255, 255, 255, 0) 60%),
+    radial-gradient(900px 500px at 80% 0%, rgba($accent-color-1, 0.18), rgba(255, 255, 255, 0) 55%),
+    linear-gradient(180deg, rgba($gray-color-light, 1), rgba($gray-color, 1));
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   .dark & {
-    background: color.adjust($dark-color, $lightness: -5%);
+    background: radial-gradient(1200px 600px at 20% 10%, rgba($accent-color-3, 0.16), rgba(0, 0, 0, 0) 60%),
+      radial-gradient(900px 500px at 80% 0%, rgba($accent-color-1, 0.12), rgba(0, 0, 0, 0) 55%),
+      linear-gradient(180deg, rgba($dark-gray-color, 1), rgba($dark-color, 1));
   }
 
   @include md {
@@ -34,5 +39,100 @@
     display: block;
     width: 100%;
     height: 100%;
+  }
+}
+
+.physics-engine__hud {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: min(420px, calc(100% - 36px));
+}
+
+.physics-engine__scorebar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  color: $dark-color;
+
+  .dark & {
+    background: rgba(20, 20, 20, 0.72);
+    color: $light-color;
+  }
+}
+
+.physics-engine__scoreIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.physics-engine__scoreGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.physics-engine__scoreLabel {
+  font-size: $font-size-xs;
+  color: $secondary-color;
+  .dark & {
+    color: color.adjust($secondary-color, $lightness: 20%);
+  }
+}
+
+.physics-engine__scoreValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  letter-spacing: -0.02em;
+}
+
+.physics-engine__meta {
+  margin-left: auto;
+  display: flex;
+  gap: 14px;
+  font-size: $font-size-xs;
+  color: $secondary-color;
+  .dark & {
+    color: color.adjust($secondary-color, $lightness: 20%);
+  }
+}
+
+.physics-engine__help {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  color: $dark-color;
+
+  .dark & {
+    background: rgba(20, 20, 20, 0.72);
+    color: $light-color;
+  }
+}
+
+.physics-engine__helpTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  margin: 0 0 6px 0;
+}
+
+.physics-engine__helpList {
+  margin: 0;
+  padding-left: 16px;
+  font-size: $font-size-sm;
+  color: $secondary-color;
+  .dark & {
+    color: color.adjust($secondary-color, $lightness: 20%);
   }
 }

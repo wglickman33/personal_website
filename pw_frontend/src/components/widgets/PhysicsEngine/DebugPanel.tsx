@@ -161,7 +161,10 @@ const DebugPanel = ({ world, bodies, bodiesVersion, scene, showDebug, selectedBo
   return (
     <div className="debug-panel">
       <div className="debug-panel__info">
-        <h4 className="debug-panel__title">Debug Info</h4>
+        <h4 className="debug-panel__title">Inspector</h4>
+        <div className="debug-panel__hint">
+          Click an object to inspect it. Velocity shows how fast it’s moving; angular velocity shows how fast it’s spinning.
+        </div>
         <div className="debug-panel__legend">
           <div className="debug-panel__legend-item">
             <span className="debug-panel__legend-color" style={{ background: '#00ff00' }}></span>

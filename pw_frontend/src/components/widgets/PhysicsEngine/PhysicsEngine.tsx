@@ -7,7 +7,14 @@ import { createPhysicsMesh, syncMeshWithBody } from './PhysicsObject';
 import { useInteractionHandler } from './InteractionHandler';
 import PhysicsControls from './PhysicsControls';
 import DebugPanel from './DebugPanel';
+import { IconTrophy } from './Icons';
 import './PhysicsEngine.scss';
+
+type PwBody = CANNON.Body & { pwId: string };
+type BodyCollideEvent = {
+  body: CANNON.Body;
+  contact?: CANNON.ContactEquation;
+};
 
 const PhysicsEngine = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -21,6 +28,19 @@ const PhysicsEngine = () => {
   const didInitWorldRef = useRef(false);
   const lastFrameTimeRef = useRef<number>(performance.now());
   const [showDebug, setShowDebug] = useState(false);
+  const [showHelp, setShowHelp] = useState(true);
+  const [score, setScore] = useState(0);
+  const [combo, setCombo] = useState(1);
+  const comboRef = useRef(1);
+  const lastScoreAtRef = useRef<number>(0);
+  const recentHitsRef = useRef<Map<string, number>>(new Map());
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const arenaBodiesRef = useRef<{
+    left?: CANNON.Body;
+    right?: CANNON.Body;
+    ceiling?: CANNON.Body;
+  }>({});
+  const arenaOutlineRef = useRef<THREE.LineSegments | null>(null);
 
   // Initialize physics world
   const {
@@ -40,6 +60,8 @@ const PhysicsEngine = () => {
   useEffect(() => {
     stepRef.current = step;
   }, [step]);
+
+  const updateArenaRef = useRef<() => void>(() => {});
 
   const disposeMesh = (scene: THREE.Scene, mesh: THREE.Mesh) => {
     scene.remove(mesh);
@@ -75,8 +97,9 @@ const PhysicsEngine = () => {
     camera.lookAt(0, 0, 0);
     cameraRef.current = camera;
 
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    // Renderer (transparent so CSS background shows through)
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setClearColor(0x000000, 0);
     renderer.setSize(
       container.clientWidth,
       container.clientHeight
@@ -87,11 +110,20 @@ const PhysicsEngine = () => {
     const meshes = meshesRef.current;
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
     scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(10, 10, 10);
+    const hemi = new THREE.HemisphereLight(0xffffff, 0x0f172a, 0.55);
+    scene.add(hemi);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.85);
+    directionalLight.position.set(10, 14, 12);
     scene.add(directionalLight);
+
+    // Subtle grid so it's not "just a white screen"
+    const grid = new THREE.GridHelper(60, 30, 0x94a3b8, 0xcbd5e1);
+    grid.position.y = -5;
+    (grid.material as THREE.Material).transparent = true;
+    (grid.material as THREE.Material).opacity = 0.35;
+    scene.add(grid);
 
     // Ground mesh (physics body is created once world is ready)
     const groundGeometry = new THREE.PlaneGeometry(100, 100);
@@ -105,6 +137,14 @@ const PhysicsEngine = () => {
     groundMesh.position.y = -5;
     scene.add(groundMesh);
     groundMeshRef.current = groundMesh;
+
+    // Arena outline (created once, updated on resize)
+    const outlineGeom = new THREE.BufferGeometry();
+    const outlineMat = new THREE.LineBasicMaterial({ color: 0x0f172a, transparent: true, opacity: 0.35 });
+    const outline = new THREE.LineSegments(outlineGeom, outlineMat);
+    outline.position.z = 0;
+    scene.add(outline);
+    arenaOutlineRef.current = outline;
 
     lastFrameTimeRef.current = performance.now();
 
@@ -141,6 +181,7 @@ const PhysicsEngine = () => {
       camera.updateProjectionMatrix();
 
       renderer.setSize(width, height);
+      updateArenaRef.current();
     };
 
     window.addEventListener('resize', handleResize);
@@ -162,6 +203,120 @@ const PhysicsEngine = () => {
       rendererRef.current = null;
     };
   }, []);
+
+  // HUD timer
+  useEffect(() => {
+    if (isPaused) return;
+    const id = window.setInterval(() => {
+      setElapsedSeconds((s) => s + 1);
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [isPaused]);
+
+  useEffect(() => {
+    comboRef.current = combo;
+  }, [combo]);
+
+  const awardPoints = useCallback((points: number) => {
+    const now = performance.now();
+    const comboWindowMs = 1800;
+    const nextCombo = now - lastScoreAtRef.current < comboWindowMs ? Math.min(comboRef.current + 1, 10) : 1;
+    comboRef.current = nextCombo;
+    setCombo(nextCombo);
+    setScore((prev) => prev + points * nextCombo);
+    lastScoreAtRef.current = now;
+  }, []);
+
+  const withPwId = useCallback((body: CANNON.Body, id: string): PwBody => {
+    return Object.assign(body, { pwId: id }) as PwBody;
+  }, []);
+
+  const attachScoring = useCallback((body: CANNON.Body) => {
+    const b = body as PwBody;
+    if (!b.pwId) return;
+
+    const onCollide = (e: BodyCollideEvent) => {
+      const other = e.body as Partial<PwBody>;
+      const contact = e.contact;
+      const otherId = other.pwId;
+      if (!otherId) return;
+
+      const idA = b.pwId!;
+      const idB = otherId;
+      const key = idA < idB ? `${idA}|${idB}` : `${idB}|${idA}`;
+
+      const now = performance.now();
+      const last = recentHitsRef.current.get(key) ?? 0;
+      if (now - last < 220) return;
+      recentHitsRef.current.set(key, now);
+
+      const impact = Math.abs(contact?.getImpactVelocityAlongNormal?.() ?? 0);
+      if (impact < 1.2) return;
+
+      const points = Math.min(12, Math.max(1, Math.floor(impact)));
+      awardPoints(points);
+    };
+
+    body.addEventListener('collide', onCollide as unknown as (evt: unknown) => void);
+  }, [awardPoints]);
+
+  const updateArena = useCallback(() => {
+    if (!cameraRef.current || !sceneRef.current || !arenaOutlineRef.current) return;
+
+    const camera = cameraRef.current;
+
+    const floorY = -5;
+    const padding = 0.9;
+    const leftX = camera.left + padding;
+    const rightX = camera.right - padding;
+    const topY = camera.top - padding;
+
+    // Outline geometry (rectangle)
+    const pts = [
+      new THREE.Vector3(leftX, floorY, 0),
+      new THREE.Vector3(rightX, floorY, 0),
+
+      new THREE.Vector3(rightX, floorY, 0),
+      new THREE.Vector3(rightX, topY, 0),
+
+      new THREE.Vector3(rightX, topY, 0),
+      new THREE.Vector3(leftX, topY, 0),
+
+      new THREE.Vector3(leftX, topY, 0),
+      new THREE.Vector3(leftX, floorY, 0),
+    ];
+    arenaOutlineRef.current.geometry.dispose();
+    arenaOutlineRef.current.geometry = new THREE.BufferGeometry().setFromPoints(pts);
+
+    // Physics bounds are added once world exists (planes are infinite but give a clear "arena")
+    if (!world) return;
+
+    const ensurePlane = (name: 'left' | 'right' | 'ceiling', normal: CANNON.Vec3, pos: CANNON.Vec3) => {
+      const existing = arenaBodiesRef.current[name];
+      if (existing) {
+        existing.position.copy(pos);
+        existing.quaternion.setFromVectors(new CANNON.Vec3(0, 0, 1), normal);
+        return;
+      }
+      const plane = new CANNON.Body({ mass: 0, shape: new CANNON.Plane() });
+      plane.position.copy(pos);
+      plane.quaternion.setFromVectors(new CANNON.Vec3(0, 0, 1), normal);
+      world.addBody(plane);
+      arenaBodiesRef.current[name] = plane;
+    };
+
+    ensurePlane('left', new CANNON.Vec3(1, 0, 0), new CANNON.Vec3(leftX, 0, 0));
+    ensurePlane('right', new CANNON.Vec3(-1, 0, 0), new CANNON.Vec3(rightX, 0, 0));
+    ensurePlane('ceiling', new CANNON.Vec3(0, -1, 0), new CANNON.Vec3(0, topY, 0));
+  }, [world]);
+
+  useEffect(() => {
+    updateArena();
+  }, [updateArena]);
+
+  useEffect(() => {
+    updateArenaRef.current = updateArena;
+  }, [updateArena]);
 
   const seedWorld = useCallback(() => {
     if (!world || !sceneRef.current) return;
@@ -193,12 +348,14 @@ const PhysicsEngine = () => {
       });
 
       if (body && sceneRef.current) {
+        withPwId(body, bodyId);
         const mesh = createPhysicsMesh(body, obj.shape, obj.size, obj.radius, obj.color);
         sceneRef.current.add(mesh);
         meshesRef.current.set(body, mesh);
+        attachScoring(body);
       }
     });
-  }, [world, addBody]);
+  }, [world, addBody, attachScoring, withPwId]);
 
   useEffect(() => {
     if (!world || !sceneRef.current) return;
@@ -223,11 +380,13 @@ const PhysicsEngine = () => {
       const bodyId = `body_${bodyIdCounterRef.current++}`;
       const body = addBody(bodyId, config);
       if (!body) return;
+      withPwId(body, bodyId);
       const mesh = createPhysicsMesh(body, config.shape, config.size, config.radius, config.color);
       sceneRef.current.add(mesh);
       meshesRef.current.set(body, mesh);
+      attachScoring(body);
     },
-    [addBody]
+    [addBody, attachScoring, withPwId]
   );
 
   // Add objects on double click (world point is on z=0 plane)
@@ -236,10 +395,20 @@ const PhysicsEngine = () => {
       const colors = [0x3b82f6, 0xff6b6b, 0x4ecdc4, 0xffe66d, 0x95e1d3];
       const color = colors[Math.floor(Math.random() * colors.length)];
 
+      // Keep spawns inside the arena
+      const camera = cameraRef.current;
+      const leftX = camera ? camera.left + 1.2 : point.x;
+      const rightX = camera ? camera.right - 1.2 : point.x;
+      const topY = camera ? camera.top - 1.2 : point.y;
+      const floorY = -4.2;
+
+      const x = Math.min(rightX, Math.max(leftX, point.x));
+      const y = Math.min(topY, Math.max(floorY + 1, point.y));
+
       addBodyAndMesh({
         shape: 'box',
         mass: 1,
-        position: [point.x, point.y, 0],
+        position: [x, y, 0],
         size: [0.5, 0.5, 0.5],
         color,
       });
@@ -261,12 +430,17 @@ const PhysicsEngine = () => {
       const colors = [0x3d7aed, 0xff6b6b, 0x4ecdc4, 0xffe66d, 0x95e1d3];
       const color = colors[Math.floor(Math.random() * colors.length)];
 
+      const camera = cameraRef.current;
+      const leftX = camera ? camera.left + 1.2 : -4;
+      const rightX = camera ? camera.right - 1.2 : 4;
+      const topY = camera ? camera.top - 1.2 : 9;
+
       const config: PhysicsBodyConfig = {
         shape,
         mass: 1,
         position: [
-          (Math.random() - 0.5) * 4,
-          8 + Math.random() * 2,
+          leftX + Math.random() * (rightX - leftX),
+          topY - 1 - Math.random() * 1.2,
           0,
         ] as [number, number, number],
         color,
@@ -299,6 +473,33 @@ const PhysicsEngine = () => {
 
   return (
     <div className="physics-engine">
+      <div className="physics-engine__hud">
+        <div className="physics-engine__scorebar">
+          <span className="physics-engine__scoreIcon" aria-hidden="true">
+            <IconTrophy />
+          </span>
+          <div className="physics-engine__scoreGroup">
+            <div className="physics-engine__scoreLabel">Score</div>
+            <div className="physics-engine__scoreValue">{score.toLocaleString()}</div>
+          </div>
+          <div className="physics-engine__meta">
+            <span>Combo x{combo}</span>
+            <span>{Math.floor(elapsedSeconds / 60)}:{String(elapsedSeconds % 60).padStart(2, '0')}</span>
+          </div>
+        </div>
+
+        {showHelp && (
+          <div className="physics-engine__help">
+            <div className="physics-engine__helpTitle">How to play</div>
+            <ul className="physics-engine__helpList">
+              <li>Double-click to spawn a box where your cursor is.</li>
+              <li>Click + drag objects to move them (they stay physical).</li>
+              <li>Make strong collisions to earn points and build a combo.</li>
+              <li>Use gravity sliders to try new “physics puzzles”.</li>
+            </ul>
+          </div>
+        )}
+      </div>
       <div ref={containerRef} className="physics-engine__canvas" />
       <PhysicsControls
         isPaused={isPaused}
@@ -307,8 +508,10 @@ const PhysicsEngine = () => {
         onReset={handleReset}
         onAddObject={handleAddObject}
         onGravityChange={setGravity}
-        showDebug={showDebug}
-        onToggleDebug={() => setShowDebug(!showDebug)}
+        showInspector={showDebug}
+        onToggleInspector={() => setShowDebug(!showDebug)}
+        showHelp={showHelp}
+        onToggleHelp={() => setShowHelp(!showHelp)}
       />
       <DebugPanel
         world={world}

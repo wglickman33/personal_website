@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { PhysicsShape } from '../../../utils/physics';
+import { IconBox, IconCircle, IconEye, IconInfo, IconPause, IconPlay, IconReset } from './Icons';
 import './PhysicsControls.scss';
 
 export interface PhysicsControlsProps {
@@ -9,8 +10,10 @@ export interface PhysicsControlsProps {
   onReset: () => void;
   onAddObject: (shape: PhysicsShape) => void;
   onGravityChange: (x: number, y: number, z: number) => void;
-  showDebug: boolean;
-  onToggleDebug: () => void;
+  showInspector: boolean;
+  onToggleInspector: () => void;
+  showHelp: boolean;
+  onToggleHelp: () => void;
 }
 
 const PhysicsControls = ({
@@ -20,8 +23,10 @@ const PhysicsControls = ({
   onReset,
   onAddObject,
   onGravityChange,
-  showDebug,
-  onToggleDebug,
+  showInspector,
+  onToggleInspector,
+  showHelp,
+  onToggleHelp,
 }: PhysicsControlsProps) => {
   const [gravityX, setGravityX] = useState(0);
   const [gravityY, setGravityY] = useState(-9.82);
@@ -49,39 +54,70 @@ const PhysicsControls = ({
             className="physics-controls__button"
             onClick={isPaused ? onResume : onPause}
           >
-            {isPaused ? '▶ Resume' : '⏸ Pause'}
+            <span className="physics-controls__button-icon" aria-hidden="true">
+              {isPaused ? <IconPlay /> : <IconPause />}
+            </span>
+            <span className="physics-controls__button-label">
+              {isPaused ? 'Resume' : 'Pause'}
+            </span>
           </button>
           <button className="physics-controls__button" onClick={onReset}>
-            🔄 Reset
+            <span className="physics-controls__button-icon" aria-hidden="true">
+              <IconReset />
+            </span>
+            <span className="physics-controls__button-label">Reset</span>
           </button>
           <button
             className="physics-controls__button"
-            onClick={onToggleDebug}
-            data-active={showDebug}
+            onClick={onToggleInspector}
+            data-active={showInspector}
           >
-            {showDebug ? '🔍 Hide Debug' : '🔍 Show Debug'}
+            <span className="physics-controls__button-icon" aria-hidden="true">
+              <IconEye />
+            </span>
+            <span className="physics-controls__button-label">
+              {showInspector ? 'Hide Inspector' : 'Show Inspector'}
+            </span>
+          </button>
+          <button
+            className="physics-controls__button"
+            onClick={onToggleHelp}
+            data-active={showHelp}
+          >
+            <span className="physics-controls__button-icon" aria-hidden="true">
+              <IconInfo />
+            </span>
+            <span className="physics-controls__button-label">
+              {showHelp ? 'Hide Help' : 'Show Help'}
+            </span>
           </button>
         </div>
       </div>
 
       <div className="physics-controls__section">
-        <h3 className="physics-controls__title">Add Objects</h3>
+        <h3 className="physics-controls__title">Spawn</h3>
         <div className="physics-controls__buttons">
           <button
             className="physics-controls__button"
             onClick={() => onAddObject('box')}
           >
-            📦 Box
+            <span className="physics-controls__button-icon" aria-hidden="true">
+              <IconBox />
+            </span>
+            <span className="physics-controls__button-label">Box</span>
           </button>
           <button
             className="physics-controls__button"
             onClick={() => onAddObject('sphere')}
           >
-            ⚪ Sphere
+            <span className="physics-controls__button-icon" aria-hidden="true">
+              <IconCircle />
+            </span>
+            <span className="physics-controls__button-label">Sphere</span>
           </button>
         </div>
         <p className="physics-controls__hint">
-          Double-click on canvas to add objects
+          Tip: double-click to spawn at your cursor. Drag objects to reposition.
         </p>
       </div>
 
