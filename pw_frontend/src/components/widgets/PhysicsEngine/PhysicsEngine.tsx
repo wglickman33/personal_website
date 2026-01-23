@@ -2,12 +2,13 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
 import { usePhysicsWorld } from '../../../hooks/usePhysicsWorld';
-import { PhysicsShape, PhysicsBodyConfig } from '../../../utils/physics';
+import { PhysicsBodyConfig } from '../../../utils/physics';
 import { createPhysicsMesh, syncMeshWithBody } from './PhysicsObject';
 import { useInteractionHandler } from './InteractionHandler';
 import PhysicsControls from './PhysicsControls';
 import DebugPanel from './DebugPanel';
 import { IconTrophy } from './Icons';
+import { DEFAULT_UNLOCKED, DROPPABLES, DroppableDef, DroppableId } from './catalog';
 import './PhysicsEngine.scss';
 
 type PwBody = CANNON.Body & { pwId: string };
@@ -30,12 +31,17 @@ const PhysicsEngine = () => {
   const lastFrameTimeRef = useRef<number>(performance.now());
   const [showDebug, setShowDebug] = useState(false);
   const [showHelp, setShowHelp] = useState(true);
-  const [score, setScore] = useState(0);
+  const [coins, setCoins] = useState(0);
+  const [sessionScore, setSessionScore] = useState(0);
   const [combo, setCombo] = useState(1);
   const comboRef = useRef(1);
   const lastScoreAtRef = useRef<number>(0);
   const recentHitsRef = useRef<Map<string, number>>(new Map());
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [unlocked, setUnlocked] = useState<Record<DroppableId, boolean>>(DEFAULT_UNLOCKED);
+  const [selectedId, setSelectedId] = useState<DroppableId>('basic_box');
+  const [sizeScale, setSizeScale] = useState(1);
+  const [massScale, setMassScale] = useState(1);
   const arenaBoundsRef = useRef<ArenaBounds>({ left: -7, right: 7, bottom: -7, top: 7 });
   const arenaBodiesRef = useRef<Record<ArenaWallName, CANNON.Body | undefined>>({
     left: undefined,
@@ -54,9 +60,13 @@ const PhysicsEngine = () => {
   const arenaOutlineRef = useRef<THREE.LineSegments | null>(null);
   const physicsMaterialsRef = useRef<{
     dynamic: CANNON.Material;
+    dynamicBouncy: CANNON.Material;
     wall: CANNON.Material;
     contactDynDyn?: CANNON.ContactMaterial;
     contactDynWall?: CANNON.ContactMaterial;
+    contactBouncyWall?: CANNON.ContactMaterial;
+    contactBouncyBouncy?: CANNON.ContactMaterial;
+    contactDynBouncy?: CANNON.ContactMaterial;
   } | null>(null);
 
   // Initialize physics world
@@ -246,6 +256,31 @@ const PhysicsEngine = () => {
     return () => window.clearInterval(id);
   }, [isPaused]);
 
+  // Persist wallet/unlocks
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem('pw_physics_game_v1');
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as { coins?: number; unlocked?: Record<DroppableId, boolean>; selectedId?: DroppableId };
+      if (typeof parsed.coins === 'number') setCoins(parsed.coins);
+      if (parsed.unlocked) setUnlocked({ ...DEFAULT_UNLOCKED, ...parsed.unlocked });
+      if (parsed.selectedId) setSelectedId(parsed.selectedId);
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        'pw_physics_game_v1',
+        JSON.stringify({ coins, unlocked, selectedId })
+      );
+    } catch {
+      // ignore
+    }
+  }, [coins, unlocked, selectedId]);
+
   useEffect(() => {
     comboRef.current = combo;
   }, [combo]);
@@ -256,7 +291,8 @@ const PhysicsEngine = () => {
     const nextCombo = now - lastScoreAtRef.current < comboWindowMs ? Math.min(comboRef.current + 1, 10) : 1;
     comboRef.current = nextCombo;
     setCombo(nextCombo);
-    setScore((prev) => prev + points * nextCombo);
+    setSessionScore((prev) => prev + points * nextCombo);
+    setCoins((prev) => prev + points * nextCombo);
     lastScoreAtRef.current = now;
   }, []);
 
@@ -299,21 +335,46 @@ const PhysicsEngine = () => {
     if (physicsMaterialsRef.current) return;
 
     const dynamic = new CANNON.Material('pw_dynamic');
+    const dynamicBouncy = new CANNON.Material('pw_dynamic_bouncy');
     const wall = new CANNON.Material('pw_wall');
 
     const contactDynWall = new CANNON.ContactMaterial(dynamic, wall, {
       friction: 0.08,
       restitution: 0.92,
     });
+    const contactBouncyWall = new CANNON.ContactMaterial(dynamicBouncy, wall, {
+      friction: 0.06,
+      restitution: 0.97,
+    });
     const contactDynDyn = new CANNON.ContactMaterial(dynamic, dynamic, {
       friction: 0.12,
       restitution: 0.72,
     });
+    const contactBouncyBouncy = new CANNON.ContactMaterial(dynamicBouncy, dynamicBouncy, {
+      friction: 0.08,
+      restitution: 0.88,
+    });
+    const contactDynBouncy = new CANNON.ContactMaterial(dynamic, dynamicBouncy, {
+      friction: 0.1,
+      restitution: 0.8,
+    });
 
     world.addContactMaterial(contactDynWall);
+    world.addContactMaterial(contactBouncyWall);
     world.addContactMaterial(contactDynDyn);
+    world.addContactMaterial(contactBouncyBouncy);
+    world.addContactMaterial(contactDynBouncy);
 
-    physicsMaterialsRef.current = { dynamic, wall, contactDynDyn, contactDynWall };
+    physicsMaterialsRef.current = {
+      dynamic,
+      dynamicBouncy,
+      wall,
+      contactDynDyn,
+      contactDynWall,
+      contactBouncyWall,
+      contactBouncyBouncy,
+      contactDynBouncy,
+    };
   }, [world]);
 
   const updateArena = useCallback(() => {
@@ -421,40 +482,8 @@ const PhysicsEngine = () => {
 
     // Ensure arena exists before spawning
     updateArenaRef.current();
-    const { left, right, top } = arenaBoundsRef.current;
-    const margin = 1.2;
-
-    const initialObjects = [
-      { shape: 'box' as PhysicsShape, position: [left + margin + 1, top - margin - 2, 0], size: [1, 1, 1] as [number, number, number], color: 0x3b82f6 },
-      { shape: 'box' as PhysicsShape, position: [right - margin - 1, top - margin - 1, 0], size: [1, 1, 1] as [number, number, number], color: 0xff6b6b },
-      { shape: 'sphere' as PhysicsShape, position: [(left + right) / 2, top - margin - 1.5, 0], radius: 0.6, color: 0x4ecdc4 },
-    ];
-
-    initialObjects.forEach((obj) => {
-      const bodyId = `body_${bodyIdCounterRef.current++}`;
-      const body = addBody(bodyId, {
-        shape: obj.shape,
-        mass: 1,
-        position: obj.position as [number, number, number],
-        size: obj.size,
-        radius: obj.radius,
-        color: obj.color,
-        material: physicsMaterialsRef.current?.dynamic,
-      });
-
-      if (body && sceneRef.current) {
-        withPwId(body, bodyId);
-        const mesh = createPhysicsMesh(body, obj.shape, obj.size, obj.radius, obj.color);
-        sceneRef.current.add(mesh);
-        meshesRef.current.set(body, mesh);
-        attachScoring(body);
-        body.velocity.set((Math.random() - 0.5) * 6, (Math.random() - 0.5) * 3, 0);
-        body.angularVelocity.set(0, 0, (Math.random() - 0.5) * 6);
-        body.linearDamping = 0.01;
-        body.angularDamping = 0.02;
-      }
-    });
-  }, [world, addBody, attachScoring, withPwId]);
+    // Start empty: no initial objects
+  }, [world]);
 
   useEffect(() => {
     if (!world || !sceneRef.current) return;
@@ -484,9 +513,16 @@ const PhysicsEngine = () => {
     [addBody, attachScoring, withPwId]
   );
 
+  const getSelectedDef = useCallback((): DroppableDef => {
+    return DROPPABLES.find((d) => d.id === selectedId) ?? DROPPABLES[0];
+  }, [selectedId]);
+
   // Add objects on double click (world point is on z=0 plane)
   const handleAddAtPoint = useCallback(
     (point: THREE.Vector3) => {
+      const def = getSelectedDef();
+      if (!unlocked[def.id]) return;
+
       const colors = [0x3b82f6, 0xff6b6b, 0x4ecdc4, 0xffe66d, 0x95e1d3];
       const color = colors[Math.floor(Math.random() * colors.length)];
 
@@ -496,16 +532,25 @@ const PhysicsEngine = () => {
       const x = Math.min(right - margin, Math.max(left + margin, point.x));
       const y = Math.min(top - margin, Math.max(bottom + margin, point.y));
 
+      const baseSize = def.defaultSize ?? [0.7, 0.7, 0.7];
+      const baseRadius = def.defaultRadius ?? 0.45;
+      const s = sizeScale;
+      const m = def.defaultMass * massScale;
+      const material = def.material === 'bouncy'
+        ? physicsMaterialsRef.current?.dynamicBouncy
+        : physicsMaterialsRef.current?.dynamic;
+
       addBodyAndMesh({
-        shape: 'box',
-        mass: 1,
+        shape: def.shape,
+        mass: m,
         position: [x, y, 0],
-        size: [0.5, 0.5, 0.5],
+        size: def.shape === 'box' ? ([baseSize[0] * s, baseSize[1] * s, baseSize[2] * s] as [number, number, number]) : undefined,
+        radius: def.shape === 'sphere' ? baseRadius * s : undefined,
         color,
-        material: physicsMaterialsRef.current?.dynamic,
+        material,
       }, { vx: (Math.random() - 0.5) * 8, vy: (Math.random() - 0.5) * 3, w: (Math.random() - 0.5) * 8 });
     },
-    [addBodyAndMesh]
+    [addBodyAndMesh, getSelectedDef, sizeScale, massScale, unlocked]
   );
 
   const { interactionState } = useInteractionHandler({
@@ -516,52 +561,68 @@ const PhysicsEngine = () => {
     onAddAtPoint: handleAddAtPoint,
   });
 
-  // Handle adding objects from controls
-  const handleAddObject = useCallback(
-    (shape: PhysicsShape) => {
-      const colors = [0x3d7aed, 0xff6b6b, 0x4ecdc4, 0xffe66d, 0x95e1d3];
-      const color = colors[Math.floor(Math.random() * colors.length)];
+  const dropSelectedFromTop = useCallback(() => {
+    const def = getSelectedDef();
+    if (!unlocked[def.id]) return;
 
-      const { left, right, top } = arenaBoundsRef.current;
-      const margin = 0.9;
+    const colors = [0x3d7aed, 0xff6b6b, 0x4ecdc4, 0xffe66d, 0x95e1d3];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const { left, right, top } = arenaBoundsRef.current;
+    const margin = 0.9;
 
-      const config: PhysicsBodyConfig = {
-        shape,
-        mass: 1,
-        position: [
-          (left + margin) + Math.random() * ((right - margin) - (left + margin)),
-          top - margin - 0.6,
-          0,
-        ] as [number, number, number],
-        color,
-        material: physicsMaterialsRef.current?.dynamic,
-      };
+    const baseSize = def.defaultSize ?? [0.7, 0.7, 0.7];
+    const baseRadius = def.defaultRadius ?? 0.45;
+    const s = sizeScale;
+    const m = def.defaultMass * massScale;
+    const material = def.material === 'bouncy'
+      ? physicsMaterialsRef.current?.dynamicBouncy
+      : physicsMaterialsRef.current?.dynamic;
 
-      if (shape === 'box') {
-        config.size = [0.5 + Math.random() * 0.5, 0.5 + Math.random() * 0.5, 0.5 + Math.random() * 0.5];
-      } else if (shape === 'sphere') {
-        config.radius = 0.3 + Math.random() * 0.3;
-      }
+    const config: PhysicsBodyConfig = {
+      shape: def.shape,
+      mass: m,
+      position: [
+        (left + margin) + Math.random() * ((right - margin) - (left + margin)),
+        top - margin - 0.6,
+        0,
+      ] as [number, number, number],
+      color,
+      material,
+      size: def.shape === 'box' ? ([baseSize[0] * s, baseSize[1] * s, baseSize[2] * s] as [number, number, number]) : undefined,
+      radius: def.shape === 'sphere' ? baseRadius * s : undefined,
+    };
 
-      // Drop from the top with a little sideways randomness so it bounces around.
-      addBodyAndMesh(config, { vx: (Math.random() - 0.5) * 6, vy: -2 - Math.random() * 4, w: (Math.random() - 0.5) * 6 });
-    },
-    [addBodyAndMesh]
-  );
+    addBodyAndMesh(config, { vx: (Math.random() - 0.5) * 6, vy: -2 - Math.random() * 4, w: (Math.random() - 0.5) * 6 });
+  }, [addBodyAndMesh, getSelectedDef, unlocked, sizeScale, massScale]);
+
+  const buy = useCallback((id: string) => {
+    const def = DROPPABLES.find((d) => d.id === id);
+    if (!def) return;
+    if (unlocked[def.id]) return;
+    if (def.price > coins) return;
+    setCoins((c) => c - def.price);
+    setUnlocked((prev) => ({ ...prev, [def.id]: true }));
+  }, [coins, unlocked]);
 
   // Handle reset
-  const handleReset = useCallback(() => {
+  const handleClearBin = useCallback(() => {
     if (!sceneRef.current) return;
 
-    // Remove all meshes except ground
+    // Remove all meshes (spawned objects)
     meshesRef.current.forEach((mesh) => {
       disposeMesh(sceneRef.current!, mesh);
     });
     meshesRef.current.clear();
 
     reset();
-    seedWorld();
-  }, [reset, seedWorld]);
+    recentHitsRef.current.clear();
+    setCombo(1);
+    comboRef.current = 1;
+    setElapsedSeconds(0);
+    setSessionScore(0);
+    // Keep coins + unlocks (game progression)
+    updateArenaRef.current();
+  }, [reset]);
 
   return (
     <div className="physics-engine">
@@ -571,11 +632,12 @@ const PhysicsEngine = () => {
             <IconTrophy />
           </span>
           <div className="physics-engine__scoreGroup">
-            <div className="physics-engine__scoreLabel">Score</div>
-            <div className="physics-engine__scoreValue">{score.toLocaleString()}</div>
+            <div className="physics-engine__scoreLabel">Coins</div>
+            <div className="physics-engine__scoreValue">{coins.toLocaleString()}</div>
           </div>
           <div className="physics-engine__meta">
             <span>Combo x{combo}</span>
+            <span>Session {sessionScore}</span>
             <span>{Math.floor(elapsedSeconds / 60)}:{String(elapsedSeconds % 60).padStart(2, '0')}</span>
           </div>
         </div>
@@ -597,13 +659,23 @@ const PhysicsEngine = () => {
         isPaused={isPaused}
         onPause={pause}
         onResume={resume}
-        onReset={handleReset}
-        onAddObject={handleAddObject}
+        onClearBin={handleClearBin}
         onGravityChange={setGravity}
         showInspector={showDebug}
         onToggleInspector={() => setShowDebug(!showDebug)}
         showHelp={showHelp}
         onToggleHelp={() => setShowHelp(!showHelp)}
+        coins={coins}
+        catalog={DROPPABLES}
+        unlocked={unlocked}
+        selectedId={selectedId}
+        onSelectId={(id) => setSelectedId(id as DroppableId)}
+        sizeScale={sizeScale}
+        onSizeScale={setSizeScale}
+        massScale={massScale}
+        onMassScale={setMassScale}
+        onDropSelected={dropSelectedFromTop}
+        onBuy={buy}
       />
       <DebugPanel
         world={world}

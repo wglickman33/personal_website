@@ -29,6 +29,144 @@
   }
 }
 
+.physics-controls__tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.physics-controls__tab {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: $font-size-xs;
+  font-weight: 600;
+
+  &[data-active="true"] {
+    background: rgba(59, 130, 246, 0.12);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: $dark-color;
+  }
+
+  .dark & {
+    background: rgba(0, 0, 0, 0.25);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: $light-color;
+  }
+}
+
+.physics-controls__coins {
+  margin-left: auto;
+  font-size: $font-size-xs;
+  color: $secondary-color;
+  font-weight: 600;
+  .dark & {
+    color: color.adjust($secondary-color, $lightness: 20%);
+  }
+}
+
+.physics-controls__row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.physics-controls__select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.85);
+  font-size: $font-size-sm;
+
+  .dark & {
+    background: rgba(0, 0, 0, 0.25);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: $light-color;
+  }
+}
+
+.physics-controls__shop {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.physics-controls__shopItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.75);
+
+  .dark & {
+    background: rgba(0, 0, 0, 0.25);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.physics-controls__shopItemName {
+  font-size: $font-size-sm;
+  font-weight: 700;
+}
+
+.physics-controls__shopItemMeta {
+  font-size: $font-size-xs;
+  color: $secondary-color;
+  .dark & {
+    color: color.adjust($secondary-color, $lightness: 20%);
+  }
+}
+
+.physics-controls__shopItemRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.physics-controls__shopItemPrice {
+  font-size: $font-size-xs;
+  font-weight: 700;
+  color: $dark-color;
+  .dark & {
+    color: $light-color;
+  }
+}
+
+.physics-controls__shopBuy {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  background: rgba(59, 130, 246, 0.12);
+  cursor: pointer;
+  font-size: $font-size-xs;
+  font-weight: 700;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .dark & {
+    border-color: rgba(59, 130, 246, 0.4);
+    background: rgba(59, 130, 246, 0.18);
+    color: $light-color;
+  }
+}
+
+.physics-controls__button--primary {
+  background: $accent-color-1;
+  &:hover {
+    background: color.adjust($accent-color-1, $lightness: -10%);
+  }
+}
+
 .physics-controls__section {
   margin-bottom: 20px;
 
