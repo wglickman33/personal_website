@@ -6,6 +6,14 @@ interface CalculatorProps {
   isPreview?: boolean;
 }
 
+type CalculatorActions = {
+  inputNumber: (num: string) => void;
+  inputDecimal: () => void;
+  clear: () => void;
+  handleOperatorClick: (op: string) => void;
+  handleEquals: () => void;
+};
+
 const Calculator = ({ isPreview = false }: CalculatorProps) => {
   const { theme } = useTheme();
   const [display, setDisplay] = useState('0');
@@ -15,6 +23,13 @@ const Calculator = ({ isPreview = false }: CalculatorProps) => {
   const calculatorRef = useRef<HTMLDivElement>(null);
   const displayRef = useRef(display);
   const waitingForNewValueRef = useRef(waitingForNewValue);
+  const actionsRef = useRef<CalculatorActions>({
+    inputNumber: (num: string) => void num,
+    inputDecimal: () => {},
+    clear: () => {},
+    handleOperatorClick: (op: string) => void op,
+    handleEquals: () => {},
+  });
 
   useEffect(() => {
     displayRef.current = display;
@@ -135,6 +150,14 @@ const Calculator = ({ isPreview = false }: CalculatorProps) => {
       setWaitingForNewValue(true);
     }
   };
+  
+  actionsRef.current = {
+    inputNumber,
+    inputDecimal,
+    clear,
+    handleOperatorClick,
+    handleEquals,
+  };
 
   const toggleSign = () => {
     if (display === 'Error') {
@@ -187,28 +210,28 @@ const Calculator = ({ isPreview = false }: CalculatorProps) => {
 
       if (key >= '0' && key <= '9') {
         e.preventDefault();
-        inputNumber(key);
+        actionsRef.current.inputNumber(key);
       } else if (key === '.') {
         e.preventDefault();
-        inputDecimal();
+        actionsRef.current.inputDecimal();
       } else if (key === '+' || (key === '=' && e.shiftKey)) {
         e.preventDefault();
-        handleOperatorClick('+');
+        actionsRef.current.handleOperatorClick('+');
       } else if (key === '-') {
         e.preventDefault();
-        handleOperatorClick('−');
+        actionsRef.current.handleOperatorClick('−');
       } else if (key === '*' || key === '×') {
         e.preventDefault();
-        handleOperatorClick('×');
+        actionsRef.current.handleOperatorClick('×');
       } else if (key === '/') {
         e.preventDefault();
-        handleOperatorClick('÷');
+        actionsRef.current.handleOperatorClick('÷');
       } else if (key === '=' || key === 'Enter') {
         e.preventDefault();
-        handleEquals();
+        actionsRef.current.handleEquals();
       } else if (key === 'Escape' || key === 'Delete' || key === 'Backspace') {
         e.preventDefault();
-        clear();
+        actionsRef.current.clear();
       }
     };
 

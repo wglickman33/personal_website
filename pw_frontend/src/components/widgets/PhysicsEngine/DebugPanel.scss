@@ -1,0 +1,100 @@
+@use "../../../assets/styles/partials/variables" as *;
+@use "../../../assets/styles/partials/fonts" as *;
+@use "../../../assets/styles/partials/mixins" as *;
+@use "../../../assets/styles/partials/breakpoints" as *;
+@use "sass:color";
+
+.debug-panel {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  min-width: 200px;
+
+  .dark & {
+    background: rgba(30, 30, 30, 0.95);
+    color: $light-color;
+  }
+
+  @include sm {
+    bottom: 10px;
+    left: 10px;
+    padding: 12px;
+    min-width: 160px;
+  }
+}
+
+.debug-panel__title {
+  font-size: $font-size-sm;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: $dark-color;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  .dark & {
+    color: $light-color;
+  }
+}
+
+.debug-panel__legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.debug-panel__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: $font-size-xs;
+  color: $secondary-color;
+
+  .dark & {
+    color: color.adjust($secondary-color, $lightness: 20%);
+  }
+}
+
+.debug-panel__legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.debug-panel__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.debug-panel__stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: $font-size-xs;
+}
+
+.debug-panel__stat-label {
+  color: $secondary-color;
+  font-weight: 500;
+
+  .dark & {
+    color: color.adjust($secondary-color, $lightness: 20%);
+  }
+}
+
+.debug-panel__stat-value {
+  color: $dark-color;
+  font-weight: 600;
+
+  .dark & {
+    color: $light-color;
+  }
+}

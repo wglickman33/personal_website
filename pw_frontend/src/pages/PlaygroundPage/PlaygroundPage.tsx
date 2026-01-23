@@ -1,4 +1,4 @@
-import CapitalVenture from '../../components/widgets/CapitalVenture/CapitalVenture';
+import PhysicsEngine from '../../components/widgets/PhysicsEngine/PhysicsEngine';
 import './PlaygroundPage.scss';
 
 const PlaygroundPage = () => {
@@ -6,7 +6,7 @@ const PlaygroundPage = () => {
     <div className="page-name-page">
       <div className="container">
         <h1>Playground</h1>
-        <CapitalVenture />
+        <PhysicsEngine />
       </div>
     </div>
   );

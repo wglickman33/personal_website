@@ -35,9 +35,9 @@ const AFKClock = ({ isPreview = false }: AFKClockProps) => {
       const date = new Date(currentDate);
 
       let hours = date.getHours();
-      let minutes = date.getMinutes();
-      let seconds = date.getSeconds();
-      let meridiem = hours < 12 ? 'AM' : 'PM';
+      const minutes = date.getMinutes();
+      const seconds = date.getSeconds();
+      const meridiem = hours < 12 ? 'AM' : 'PM';
 
       hours = hours % 12;
       hours = hours === 0 ? 12 : hours;

@@ -1,0 +1,38 @@
+@use "../../../assets/styles/partials/variables" as *;
+@use "../../../assets/styles/partials/mixins" as *;
+@use "../../../assets/styles/partials/breakpoints" as *;
+@use "sass:color";
+
+.physics-engine {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: $light-color;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  .dark & {
+    background: color.adjust($dark-color, $lightness: -5%);
+  }
+
+  @include md {
+    height: 500px;
+  }
+
+  @include sm {
+    height: 400px;
+  }
+}
+
+.physics-engine__canvas {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
