@@ -3,24 +3,15 @@
 @use "../../assets/styles/partials/mixins" as *;
 @use "../../assets/styles/partials/breakpoints" as *;
 @use "../../assets/styles/partials/animations" as *;
+@use "sass:color";
 
-.page-name-page {
+.playground-page {
   min-height: 100vh;
   padding: $header-height 0 50px;
   
   .container {
     @include container;
     padding-top: 50px;
-  }
-  
-  h1 {
-    font-size: $font-size-4xl;
-    margin-bottom: 30px;
-    color: $dark-color;
-    
-    .dark & {
-      color: $light-color;
-    }
   }
   
   @include md {
@@ -48,4 +39,347 @@
       margin-bottom: 15px;
     }
   }
+}
+
+.playground-landing {
+  position: relative;
+  padding: 6px 0 10px;
+}
+
+.playground-landing__bg {
+  position: absolute;
+  inset: -40px -40px -60px -40px;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 420px at 10% 10%, rgba($accent-color-3, 0.18), rgba(0, 0, 0, 0) 65%),
+    radial-gradient(700px 380px at 70% 0%, rgba($accent-color-1, 0.14), rgba(0, 0, 0, 0) 60%),
+    radial-gradient(800px 520px at 80% 70%, rgba($accent-color-4, 0.10), rgba(0, 0, 0, 0) 60%);
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0));
+    opacity: 0.7;
+  }
+
+  .dark & {
+    background:
+      radial-gradient(900px 420px at 10% 10%, rgba($accent-color-3, 0.14), rgba(0, 0, 0, 0) 65%),
+      radial-gradient(700px 380px at 70% 0%, rgba($accent-color-1, 0.12), rgba(0, 0, 0, 0) 60%),
+      radial-gradient(800px 520px at 80% 70%, rgba($accent-color-4, 0.10), rgba(0, 0, 0, 0) 60%);
+
+    &::after {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0));
+      opacity: 1;
+    }
+  }
+}
+
+.playground-landing__content {
+  position: relative;
+  z-index: 1;
+}
+
+.playground-landing__header {
+  margin-bottom: 24px;
+}
+
+.playground-landing__badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.playground-landing__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  box-shadow: $box-shadow;
+  color: $dark-color;
+
+  .dark & {
+    background: rgba(0, 0, 0, 0.22);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: $light-color;
+  }
+}
+
+.playground-landing__badge--hint {
+  font-size: $font-size-xs;
+  color: $secondary-color;
+  .dark & {
+    color: color.adjust($secondary-color, $lightness: 25%);
+  }
+}
+
+.playground-landing__badgeIcon {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.playground-landing__badgeLabel {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  opacity: 0.9;
+}
+
+.playground-landing__badgeValue {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  letter-spacing: -0.01em;
+}
+
+.playground-landing__title {
+  font-size: $font-size-4xl;
+  margin-bottom: 10px;
+  letter-spacing: -0.02em;
+  background: linear-gradient(90deg, $dark-color, $accent-color-1, $accent-color-3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  .dark & {
+    background: linear-gradient(90deg, $light-color, $accent-color-3, $accent-color-1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+.playground-landing__subtitle {
+  font-size: $font-size-md;
+  color: $secondary-color;
+  max-width: 60ch;
+  .dark & {
+    color: color-mix(in srgb, $secondary-color 70%, white 30%);
+  }
+}
+
+.playground-landing__grid,
+.playground-casino__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+
+  @include sm {
+    grid-template-columns: 1fr;
+  }
+}
+
+.playground-landing__card {
+  display: block;
+  text-decoration: none;
+  padding: 18px 18px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px);
+  box-shadow: $box-shadow-md;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  color: $dark-color;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(600px 240px at 10% 0%, rgba($accent-color-3, 0.20), rgba(0, 0, 0, 0) 60%);
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    border: 1px solid rgba($accent-color-1, 0.0);
+    pointer-events: none;
+    transition: border-color 0.18s ease;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba($accent-color-1, 0.22), $box-shadow-lg;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $box-shadow-lg;
+    border-color: rgba($accent-color-1, 0.35);
+    &::after {
+      border-color: rgba($accent-color-1, 0.35);
+    }
+  }
+
+  .dark & {
+    background: rgba(0, 0, 0, 0.25);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: $light-color;
+
+    &::before {
+      background: radial-gradient(600px 240px at 10% 0%, rgba($accent-color-3, 0.14), rgba(0, 0, 0, 0) 60%);
+      opacity: 1;
+    }
+  }
+}
+
+.playground-landing__card--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+
+  &:hover {
+    transform: none;
+    box-shadow: $box-shadow-md;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+}
+
+.playground-landing__card--physics::before {
+  background: radial-gradient(600px 240px at 10% 0%, rgba($accent-color-3, 0.22), rgba(0, 0, 0, 0) 60%),
+    radial-gradient(520px 240px at 90% 30%, rgba($accent-color-1, 0.14), rgba(0, 0, 0, 0) 60%);
+}
+
+.playground-landing__card--casino::before {
+  background: radial-gradient(600px 240px at 10% 0%, rgba($accent-color-4, 0.18), rgba(0, 0, 0, 0) 60%),
+    radial-gradient(520px 240px at 90% 30%, rgba($accent-color-2, 0.12), rgba(0, 0, 0, 0) 60%);
+}
+
+.playground-landing__cardTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 10px;
+}
+
+.playground-landing__cardIcon {
+  font-size: 22px;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba($accent-color-1, 0.10);
+  border: 1px solid rgba($accent-color-1, 0.18);
+
+  .dark & {
+    background: rgba($accent-color-3, 0.12);
+    border-color: rgba($accent-color-3, 0.18);
+  }
+}
+
+.playground-landing__cardTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  margin-bottom: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.playground-landing__cardBody {
+  color: $secondary-color;
+  font-size: $font-size-sm;
+  line-height: 1.4;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+  .dark & {
+    color: color-mix(in srgb, $secondary-color 70%, white 30%);
+  }
+}
+
+.playground-landing__cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.playground-landing__pill {
+  font-size: $font-size-xs;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  color: $dark-color;
+  .dark & {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: $light-color;
+  }
+}
+
+.playground-landing__cardCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $accent-color-1;
+  position: relative;
+  z-index: 1;
+  .dark & {
+    color: $accent-color-3;
+  }
+}
+
+.playground-landing__cardCtaIcon {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .playground-landing__card {
+    transition: none;
+  }
+}
+
+.playground-section__topbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.playground-section__title {
+  font-size: $font-size-3xl;
+  margin: 0;
+  color: $dark-color;
+  .dark & {
+    color: $light-color;
+  }
+}
+
+.playground-section__breadcrumb {
+  margin-top: 6px;
+  font-size: $font-size-xs;
+  color: $secondary-color;
+  .dark & {
+    color: color-mix(in srgb, $secondary-color 70%, white 30%);
+  }
+}
+
+.playground-section__link {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.playground-section__sep {
+  margin: 0 6px;
+  opacity: 0.8;
 }

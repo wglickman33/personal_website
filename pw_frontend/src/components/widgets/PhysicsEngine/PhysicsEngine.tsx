@@ -9,6 +9,7 @@ import PhysicsControls from './PhysicsControls';
 import DebugPanel from './DebugPanel';
 import { IconTrophy } from './Icons';
 import { DEFAULT_UNLOCKED, DROPPABLES, DroppableDef, DroppableId } from './catalog';
+import { usePlaygroundWallet } from '../../../context/usePlaygroundWallet';
 import './PhysicsEngine.scss';
 
 type PwBody = CANNON.Body & { pwId: string };
@@ -21,6 +22,7 @@ type ArenaBounds = { left: number; right: number; bottom: number; top: number };
 type ArenaWallName = 'left' | 'right' | 'floor' | 'ceiling';
 
 const PhysicsEngine = () => {
+  const wallet = usePlaygroundWallet();
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.OrthographicCamera | null>(null);
@@ -31,7 +33,7 @@ const PhysicsEngine = () => {
   const lastFrameTimeRef = useRef<number>(performance.now());
   const [showDebug, setShowDebug] = useState(false);
   const [showHelp, setShowHelp] = useState(true);
-  const [coins, setCoins] = useState(0);
+  const coins = wallet.balance;
   const [sessionScore, setSessionScore] = useState(0);
   const [combo, setCombo] = useState(1);
   const comboRef = useRef(1);
@@ -261,8 +263,7 @@ const PhysicsEngine = () => {
     try {
       const raw = window.localStorage.getItem('pw_physics_game_v1');
       if (!raw) return;
-      const parsed = JSON.parse(raw) as { coins?: number; unlocked?: Record<DroppableId, boolean>; selectedId?: DroppableId };
-      if (typeof parsed.coins === 'number') setCoins(parsed.coins);
+      const parsed = JSON.parse(raw) as { unlocked?: Record<DroppableId, boolean>; selectedId?: DroppableId };
       if (parsed.unlocked) setUnlocked({ ...DEFAULT_UNLOCKED, ...parsed.unlocked });
       if (parsed.selectedId) setSelectedId(parsed.selectedId);
     } catch {
@@ -274,7 +275,7 @@ const PhysicsEngine = () => {
     try {
       window.localStorage.setItem(
         'pw_physics_game_v1',
-        JSON.stringify({ coins, unlocked, selectedId })
+        JSON.stringify({ unlocked, selectedId })
       );
     } catch {
       // ignore
@@ -292,9 +293,9 @@ const PhysicsEngine = () => {
     comboRef.current = nextCombo;
     setCombo(nextCombo);
     setSessionScore((prev) => prev + points * nextCombo);
-    setCoins((prev) => prev + points * nextCombo);
+    wallet.add(points * nextCombo);
     lastScoreAtRef.current = now;
-  }, []);
+  }, [wallet]);
 
   const withPwId = useCallback((body: CANNON.Body, id: string): PwBody => {
     return Object.assign(body, { pwId: id }) as PwBody;
@@ -599,10 +600,11 @@ const PhysicsEngine = () => {
     const def = DROPPABLES.find((d) => d.id === id);
     if (!def) return;
     if (unlocked[def.id]) return;
-    if (def.price > coins) return;
-    setCoins((c) => c - def.price);
+    if (def.price > wallet.balance) return;
+    const ok = wallet.spend(def.price);
+    if (!ok) return;
     setUnlocked((prev) => ({ ...prev, [def.id]: true }));
-  }, [coins, unlocked]);
+  }, [wallet, unlocked]);
 
   // Handle reset
   const handleClearBin = useCallback(() => {

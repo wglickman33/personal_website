@@ -1,12 +1,14 @@
-import PhysicsEngine from '../../components/widgets/PhysicsEngine/PhysicsEngine';
 import './PlaygroundPage.scss';
+import { Outlet } from 'react-router-dom';
+import { PlaygroundWalletProvider } from '../../context/PlaygroundWalletProvider';
 
 const PlaygroundPage = () => {
   return (
-    <div className="page-name-page">
+    <div className="playground-page">
       <div className="container">
-        <h1>Playground</h1>
-        <PhysicsEngine />
+        <PlaygroundWalletProvider>
+          <Outlet />
+        </PlaygroundWalletProvider>
       </div>
     </div>
   );
