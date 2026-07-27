@@ -169,10 +169,6 @@
       &:hover {
         color: color-mix(in srgb, $primary-color 90%, black 10%);
         background-color: rgba($primary-color, 0.1);
-        
-        .arrow-icon {
-          transform: translateX(5px);
-        }
       }
     }
   }

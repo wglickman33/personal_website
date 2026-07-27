@@ -33,8 +33,8 @@
   }
 
   &__header {
-    margin-bottom: 80px;
-    padding: 60px 0;
+    margin-bottom: 32px;
+    padding: 60px 0 0;
     position: relative;
   }
 
@@ -237,8 +237,9 @@
 
   &__experience-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
     gap: 24px;
+    align-items: stretch;
 
     @include md {
       grid-template-columns: 1fr;
@@ -256,6 +257,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    gap: 16px;
 
     .resume-page--dark & {
       background: rgba($dark-gray-color, 0.8);
@@ -271,36 +273,29 @@
         box-shadow: 0 8px 24px rgba($accent-color-1, 0.25);
         border-color: rgba($accent-color-1, 0.4);
       }
+
     }
   }
 
-  &__experience-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 16px;
-    flex: 1;
-    min-height: 0;
-  }
-
-  &__experience-card-main {
+  &__experience-card-body {
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
+    gap: 12px;
   }
 
   &__experience-title {
-    font-size: $font-size-lg;
+    font-size: $font-size-md;
     font-weight: $font-weight-bold;
     color: $primary-color;
-    margin-bottom: 8px;
-    line-height: $line-height-tight;
+    line-height: $line-height-snug;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    min-height: calc($line-height-snug * $font-size-md * 2);
 
     .resume-page--dark & {
       color: $light-color;
@@ -308,75 +303,82 @@
   }
 
   &__experience-company {
-    font-size: $font-size-base;
+    font-size: $font-size-sm;
     font-weight: $font-weight-semibold;
     color: $accent-color-1;
-    margin-bottom: 8px;
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
+    line-height: 1;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
   }
 
   &__experience-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
-    font-size: $font-size-sm;
-    color: $secondary-color;
-    margin-top: auto;
-
-    .resume-page--dark & {
-      color: rgba($light-color, 0.7);
-    }
+    gap: 8px;
   }
 
   &__experience-location,
   &__experience-period {
     display: flex;
     align-items: center;
-    gap: 4px;
-  }
-
-  &__expand-icon {
-    font-size: 24px;
-    color: $accent-color-1;
-    transition: transform 0.4s ease;
-    flex-shrink: 0;
-  }
-
-  &__skill-tag {
-    display: inline-block;
-    padding: 4px 12px;
-    background: rgba($accent-color-1, 0.1);
-    color: $accent-color-1;
-    border-radius: $border-radius;
+    gap: 5px;
     font-size: $font-size-xs;
     font-weight: $font-weight-medium;
+    color: $secondary-color;
+    background: rgba($primary-color, 0.05);
+    border-radius: 999px;
+    padding: 5px 10px 5px 8px;
+
+    .material-symbols-outlined {
+      font-size: 14px;
+      color: $accent-color-1;
+    }
 
     .resume-page--dark & {
-      background: rgba($accent-color-1, 0.2);
-      color: $accent-color-3;
+      color: rgba($light-color, 0.75);
+      background: rgba($light-color, 0.08);
     }
   }
 
-  &__skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 32px;
+  &__experience-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid rgba($primary-color, 0.08);
 
-    @include md {
-      grid-template-columns: 1fr;
+    .resume-page--dark & {
+      border-top-color: rgba($light-color, 0.12);
+    }
+
+    .button--outline {
+      background: transparent !important;
+      box-shadow: none !important;
+      border: 1.5px solid rgba($accent-color-1, 0.6) !important;
+      color: $accent-color-1 !important;
+      transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease !important;
+
+      &::before {
+        display: none !important;
+      }
+
+      &:hover, &:focus {
+        background: $accent-color-1 !important;
+        border-color: $accent-color-1 !important;
+        color: $light-color !important;
+        box-shadow: none !important;
+      }
     }
   }
 
-  &__skills-category {
+  &__skills-carousel {
     background: rgba($light-color, 0.9);
     border: 1px solid rgba($primary-color, 0.1);
     border-radius: $border-radius-lg;
-    padding: 24px;
+    padding: 28px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
     .resume-page--dark & {
@@ -386,58 +388,149 @@
     }
   }
 
-  &__skills-category-title {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-bold;
-    color: $primary-color;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid rgba($accent-color-1, 0.2);
-
-    .resume-page--dark & {
-      color: $light-color;
-      border-bottom-color: rgba($accent-color-1, 0.3);
-    }
-  }
-
-  &__skills-list {
+  &__skills-tabs {
     display: flex;
-    flex-direction: column;
-    gap: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
   }
 
-  &__skill-item {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  &__skill-name {
+  &__skills-tab {
+    font-family: inherit;
     font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
-    color: $primary-color;
+    font-weight: $font-weight-semibold;
+    color: $secondary-color;
+    background: rgba($primary-color, 0.05);
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 
     .resume-page--dark & {
+      color: rgba($light-color, 0.7);
+      background: rgba($light-color, 0.06);
+    }
+
+    &:hover {
+      color: $accent-color-1;
+      border-color: rgba($accent-color-1, 0.3);
+    }
+
+    &--active {
+      background: $accent-color-1;
+      color: $light-color;
+      border-color: $accent-color-1;
+
+      &:hover {
+        color: $light-color;
+      }
+    }
+  }
+
+  &__skills-panel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__skills-nav {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba($primary-color, 0.12);
+    background: rgba($primary-color, 0.04);
+    color: $primary-color;
+    cursor: pointer;
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+
+    .material-symbols-outlined {
+      font-size: 22px;
+    }
+
+    .resume-page--dark & {
+      border-color: rgba($light-color, 0.15);
+      background: rgba($light-color, 0.06);
       color: $light-color;
     }
-  }
 
-  &__skill-bar {
-    height: 6px;
-    background: rgba($primary-color, 0.1);
-    border-radius: 3px;
-    overflow: hidden;
+    &:hover {
+      background: $accent-color-1;
+      border-color: $accent-color-1;
+      color: $light-color;
+    }
 
-    .resume-page--dark & {
-      background: rgba($light-color, 0.1);
+    @include sm {
+      display: none;
     }
   }
 
-  &__skill-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, $accent-color-1, $accent-color-3);
-    border-radius: 3px;
-    transition: width 0.8s ease-out;
+  &__skills-empty {
+    flex: 1;
+    font-size: $font-size-sm;
+    color: $secondary-color;
+    font-style: italic;
+    text-align: center;
+    padding: 40px 0;
+
+    .resume-page--dark & {
+      color: rgba($light-color, 0.6);
+    }
+  }
+
+  &__skills-chart {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    animation: resumeSkillsChartFade 0.4s ease;
+
+    .recharts-cartesian-axis-tick-value {
+      font-family: $font-family-primary;
+    }
+
+    .recharts-wrapper,
+    .recharts-surface,
+    svg,
+    svg:focus,
+    .recharts-wrapper:focus,
+    .recharts-wrapper *:focus {
+      outline: none !important;
+    }
+  }
+
+  &__skills-dots {
+    display: none;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+
+    @include sm {
+      display: flex;
+    }
+  }
+
+  &__skills-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background: rgba($primary-color, 0.15);
+    cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.25s ease;
+
+    .resume-page--dark & {
+      background: rgba($light-color, 0.2);
+    }
+
+    &--active {
+      background: $accent-color-1;
+      transform: scale(1.3);
+    }
   }
 
   &__education-grid {
@@ -510,13 +603,19 @@
 
   &__achievements {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 24px;
+
+    @include md {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__achievement-item {
     display: flex;
+    align-items: flex-start;
     gap: 16px;
+    height: 100%;
     background: rgba($light-color, 0.9);
     border: 1px solid rgba($primary-color, 0.1);
     border-radius: $border-radius-lg;
@@ -589,7 +688,7 @@
     padding: calc(#{$header-height} + 16px) 0 0;
 
     &__header {
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
 
     &__content {
@@ -598,11 +697,17 @@
     }
 
     &__experience-grid,
-    &__skills-grid,
-    &__education-grid,
-    &__achievements {
+    &__education-grid {
       grid-template-columns: 1fr;
       gap: 16px;
+    }
+
+    &__achievements {
+      gap: 16px;
+    }
+
+    &__skills-carousel {
+      padding: 20px;
     }
   }
 }
@@ -645,6 +750,7 @@
   transition: opacity 0.4s ease;
   display: flex;
   flex-direction: column;
+  outline: none;
 }
 
 .resume-modal--dark .resume-modal__panel {
@@ -653,10 +759,20 @@
   box-shadow: 0 24px 90px rgba(0, 0, 0, 0.5);
 }
 
-.resume-modal__close {
+.resume-modal__close-anchor {
   position: sticky;
+  top: 0;
+  width: 100%;
+  height: 0;
+  z-index: 51;
+  pointer-events: none;
+}
+
+.resume-modal__close {
+  position: absolute;
   top: 16px;
-  align-self: flex-end;
+  right: 16px;
+  pointer-events: auto;
   width: 44px;
   height: 44px;
   border-radius: 12px;
@@ -670,7 +786,6 @@
   justify-content: center;
   transition: all $transition-speed ease;
   z-index: 50;
-  margin: 16px 16px 0 0;
   flex-shrink: 0;
   outline: none;
 
@@ -744,24 +859,36 @@
 .resume-modal__meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  font-size: $font-size-sm;
-  color: $secondary-color;
-}
-
-.resume-modal--dark .resume-modal__meta {
-  color: rgba($light-color, 0.7);
+  gap: 8px;
 }
 
 .resume-modal__location,
 .resume-modal__period {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: $secondary-color;
+  background: rgba($primary-color, 0.05);
+  border-radius: 999px;
+  padding: 5px 10px 5px 8px;
+
+  .material-symbols-outlined {
+    font-size: 14px;
+    color: $accent-color-1;
+  }
+}
+
+.resume-modal--dark .resume-modal__location,
+.resume-modal--dark .resume-modal__period {
+  color: rgba($light-color, 0.75);
+  background: rgba($light-color, 0.08);
 }
 
 .resume-modal__body {
   padding: 24px;
+  padding-bottom: 32px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -824,6 +951,68 @@
   }
 }
 
+.resume-modal__links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 18px;
+  margin-bottom: 4px;
+  border-top: 1px solid rgba($primary-color, 0.08);
+}
+
+.resume-modal--dark .resume-modal__links {
+  border-top-color: rgba($light-color, 0.12);
+}
+
+.resume-modal__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: $border-radius;
+  background: rgba($accent-color-1, 0.12);
+  border: 1px solid rgba($accent-color-1, 0.3);
+  color: $accent-color-1;
+  text-decoration: none;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  transition: all $transition-speed ease;
+  min-height: 44px;
+
+  .material-symbols-outlined {
+    font-size: 20px;
+  }
+
+  &:hover {
+    background: rgba($accent-color-1, 0.18);
+    border-color: $accent-color-1;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($accent-color-1, 0.3);
+    border-color: $accent-color-1;
+    background: rgba($accent-color-1, 0.18);
+  }
+}
+
+.resume-modal--dark .resume-modal__link {
+  background: rgba($accent-color-1, 0.18);
+  border-color: rgba($accent-color-1, 0.4);
+  color: $light-color;
+
+  &:hover {
+    background: rgba($accent-color-1, 0.25);
+    border-color: $accent-color-1;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba($accent-color-1, 0.4);
+    border-color: $accent-color-1;
+    background: rgba($accent-color-1, 0.25);
+  }
+}
+
 @include sm {
   .resume-modal {
     padding: 16px;
@@ -840,6 +1029,15 @@
   .resume-modal__body {
     padding: 20px;
     gap: 20px;
+  }
+}
+
+@keyframes resumeSkillsChartFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 

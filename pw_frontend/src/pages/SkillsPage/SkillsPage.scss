@@ -224,26 +224,18 @@
 
     .material-symbols-outlined {
       font-size: 20px;
-      transition: transform 0.4s ease, color 0.4s ease;
+      transition: color 0.4s ease;
     }
 
     &:hover:not(:disabled) {
       border-color: rgba($accent-color-1, 0.4);
       background: rgba($accent-color-1, 0.05);
       color: $accent-color-1;
-
-      .material-symbols-outlined {
-        transform: scale(1.1);
-      }
     }
 
     &:focus-visible {
       border-color: $accent-color-1;
       box-shadow: 0 0 0 3px rgba($accent-color-1, 0.2);
-    }
-
-    &:active:not(:disabled) {
-      transform: scale(0.98);
     }
 
     &:disabled {
@@ -259,17 +251,12 @@
 
       .material-symbols-outlined {
         color: $light-color;
-        animation: pulse 2s ease-in-out infinite;
-
-        @media (prefers-reduced-motion: reduce) {
-          animation: none;
-        }
       }
 
       &:hover:not(:disabled) {
-        background: rgba($accent-color-1, 0.9);
-        border-color: rgba($accent-color-1, 0.9);
-        box-shadow: 0 4px 12px rgba($accent-color-1, 0.4);
+        background: $accent-color-2;
+        border-color: $accent-color-2;
+        box-shadow: 0 2px 8px rgba($accent-color-2, 0.4);
       }
     }
 
@@ -291,7 +278,9 @@
         box-shadow: 0 2px 8px rgba($accent-color-1, 0.4);
 
         &:hover:not(:disabled) {
-          background: rgba($accent-color-1, 0.9);
+          background: $accent-color-2;
+          border-color: $accent-color-2;
+          box-shadow: 0 2px 8px rgba($accent-color-2, 0.5);
         }
       }
     }
@@ -303,14 +292,6 @@
 
     @media (prefers-reduced-motion: reduce) {
       transition: none;
-
-      &:hover .material-symbols-outlined {
-        transform: none;
-      }
-
-      &:active {
-        transform: none;
-      }
     }
   }
 
@@ -464,7 +445,6 @@
     &:hover {
       background: rgba($accent-color-1, 0.1);
       color: $accent-color-1;
-      transform: scale(1.1);
       opacity: 1;
     }
 
@@ -482,6 +462,10 @@
     &--active {
       color: $accent-color-1;
       opacity: 1;
+
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 1;
+      }
     }
 
     .skills-page--dark & {
@@ -564,6 +548,7 @@
 
     .material-symbols-outlined {
       font-size: 20px;
+      font-variation-settings: 'FILL' 1, 'wght' 400;
     }
   }
 
@@ -592,7 +577,7 @@
     font-weight: $font-weight-semibold;
     text-transform: uppercase;
     letter-spacing: $letter-spacing-wide;
-    transition: background 0.4s ease, transform 0.4s ease;
+    transition: background 0.4s ease;
     position: relative;
     z-index: 1;
   }
@@ -632,17 +617,23 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background-color 0.4s ease;
+    transition: all 0.4s ease;
     z-index: 10;
     color: $primary-color;
 
     &:hover {
-      background: rgba($accent-color-1, 0.15);
+      background: rgba($accent-color-1, 0.1);
+      color: $accent-color-1;
     }
 
     &:focus-visible {
       outline: 2px solid $accent-color-1;
       outline-offset: 2px;
+      background: rgba($accent-color-1, 0.1);
+    }
+
+    &:active {
+      transform: scale(0.95);
     }
 
     .skills-page--dark & {
@@ -650,12 +641,21 @@
       color: $light-color;
 
       &:hover {
-        background: rgba($accent-color-1, 0.2);
+        background: rgba($accent-color-1, 0.15);
+        color: $accent-color-3;
       }
     }
 
     .material-symbols-outlined {
       font-size: 20px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+
+      &:active {
+        transform: none;
+      }
     }
   }
 
@@ -765,7 +765,6 @@
 
 .skills-page__grid--animated .skills-page__card {
   &:hover:not(.skills-page__card--flipped) {
-    transform: translateY(-4px) scale(1.02);
     box-shadow: 0 8px 24px rgba($accent-color-1, 0.25);
     border-color: rgba($accent-color-1, 0.3);
 
@@ -798,7 +797,6 @@
 
     .skills-page__category-badge {
       background: rgba($accent-color-1, 0.2);
-      transform: scale(1.05);
     }
 
     .skills-page__card-hint {
@@ -815,8 +813,6 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      transform: none;
-
       .skills-page__category-badge {
         transform: none;
       }
@@ -827,24 +823,6 @@
     }
   }
 
-  &:active:not(.skills-page__card--flipped) {
-    transform: translateY(-2px) scale(1.01);
-
-    @media (prefers-reduced-motion: reduce) {
-      transform: none;
-    }
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.7;
-    transform: scale(1.1);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

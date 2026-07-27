@@ -93,10 +93,20 @@
   color: $light-color;
 }
 
+.project-modal__close-anchor {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 0;
+  z-index: 51;
+  pointer-events: none;
+}
+
 .project-modal__close {
   position: absolute;
   top: clamp(12px, 2vw, 16px);
   right: clamp(12px, 2vw, 16px);
+  pointer-events: auto;
   width: clamp(40px, 4vw, 44px);
   height: clamp(40px, 4vw, 44px);
   min-width: 40px;
@@ -159,6 +169,7 @@
   flex-direction: column;
   gap: clamp(16px, 3vw, 24px);
   padding: clamp(16px, 3vw, 24px);
+  padding-bottom: clamp(28px, 5vw, 40px);
   flex: 1;
   min-height: 0;
 }
@@ -178,6 +189,7 @@
 @include md {
   .project-modal__body {
     padding: 16px;
+    padding-bottom: 32px;
     gap: 20px;
   }
   
@@ -460,6 +472,7 @@
   gap: 12px;
   flex-wrap: wrap;
   padding-top: 18px;
+  margin-bottom: clamp(12px, 3vw, 24px);
   border-top: 1px solid rgba($primary-color, 0.08);
 }
 
@@ -569,11 +582,13 @@
     border-radius: $border-radius;
   }
 
+  .project-modal__close-anchor {
+    top: 0;
+  }
+
   .project-modal__close {
-    position: fixed;
     top: 12px;
     right: 12px;
-    z-index: 4001;
   }
 
   .project-modal__carousel-main {
@@ -607,6 +622,7 @@
 
   .project-modal__body {
     padding: 12px;
+    padding-bottom: 28px;
     gap: 12px;
   }
 

@@ -489,12 +489,7 @@
   &:hover {
     background-color: rgba($accent-color-1, 0.12);
     border-color: rgba($accent-color-1, 0.25);
-    transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba($accent-color-1, 0.15);
-  }
-
-  &:active {
-    transform: translateY(0);
   }
 
   .sidebar--dark & {

@@ -3,6 +3,8 @@ import useTheme from '../../hooks/useTheme';
 import Footer from '../../components/Footer/Footer';
 import './ContactPage.scss';
 
+type SubmitStatus = 'idle' | 'sending' | 'success' | 'error';
+
 const ContactPage = () => {
   const { theme } = useTheme();
   const [formData, setFormData] = useState({
@@ -13,7 +15,11 @@ const ContactPage = () => {
     projectType: '',
     message: '',
   });
+  // Honeypot field: real users never see or fill this in. If it has a value
+  // on submit, the request is silently dropped (bot filled every field).
+  const [honeypot, setHoneypot] = useState('');
   const [isAnimating, setIsAnimating] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle');
 
   const projectTypes = [
     'Web Development',
@@ -31,63 +37,66 @@ const ContactPage = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const encodeFormData = (data: Record<string, string>) =>
+    Object.keys(data)
+      .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+      .join('&');
+
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      email: '',
+      subject: '',
+      company: '',
+      projectType: '',
+      message: '',
+    });
+    setHoneypot('');
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    // Bots that auto-fill every field trip the honeypot. Pretend it worked
+    // so we don't tip them off, but never actually deliver the message.
+    if (honeypot) {
+      setIsAnimating(true);
+      setSubmitStatus('success');
+      setTimeout(() => {
+        setIsAnimating(false);
+        resetForm();
+      }, 2000);
+      return;
+    }
+
+    setSubmitStatus('sending');
     setIsAnimating(true);
 
-    const lineBreak = '%0D%0A';
-    const doubleLineBreak = '%0D%0A%0D%0A';
-    
-    let emailBody = `Hi William,%0D%0A%0D%0A`;
-    
-    emailBody += `I'd like to get in touch regarding:${lineBreak}`;
-    if (formData.subject) {
-      emailBody += `${formData.subject}${doubleLineBreak}`;
-    } else {
-      emailBody += doubleLineBreak;
-    }
-    
-    emailBody += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${doubleLineBreak}`;
-    emailBody += `CONTACT INFORMATION${doubleLineBreak}`;
-    emailBody += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${doubleLineBreak}`;
-    emailBody += `Name: ${formData.name}${lineBreak}`;
-    emailBody += `Email: ${formData.email}${lineBreak}`;
-    
-    if (formData.company) {
-      emailBody += `Company: ${formData.company}${lineBreak}`;
-    }
-    
-    if (formData.projectType) {
-      emailBody += `Project Type: ${formData.projectType}${lineBreak}`;
-    }
-    
-    emailBody += doubleLineBreak;
-    emailBody += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${doubleLineBreak}`;
-    emailBody += `MESSAGE${doubleLineBreak}`;
-    emailBody += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${doubleLineBreak}`;
-    emailBody += formData.message.replace(/\n/g, lineBreak);
-    emailBody += doubleLineBreak;
-    emailBody += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${doubleLineBreak}`;
-    emailBody += `Best regards,${lineBreak}`;
-    emailBody += formData.name;
-    
-    const subject = formData.subject || 'Contact from Personal Website';
-    const mailtoLink = `mailto:willglickman@gmail.com?subject=${encodeURIComponent(subject)}&body=${emailBody}`;
-
-    window.location.href = mailtoLink;
-
-    setTimeout(() => {
-      setIsAnimating(false);
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        company: '',
-        projectType: '',
-        message: '',
+    try {
+      // Submits to Netlify's built-in form handling: no third-party API
+      // keys, no client-exposed secrets, and no reliance on the visitor
+      // having a configured email client. Netlify stores the submission
+      // and emails a notification, so nothing gets missed.
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encodeFormData({ 'form-name': 'contact', ...formData }),
       });
-    }, 2000);
+
+      if (!response.ok) {
+        throw new Error(`Form submission failed with status ${response.status}`);
+      }
+
+      setSubmitStatus('success');
+      setTimeout(() => {
+        setIsAnimating(false);
+        resetForm();
+      }, 2000);
+    } catch (error) {
+      console.error('Contact form submission failed:', error);
+      setIsAnimating(false);
+      setSubmitStatus('error');
+    }
   };
 
   return (
@@ -106,6 +115,34 @@ const ContactPage = () => {
               I'm always open to new opportunities and conversations.
             </p>
 
+            <div className="contact-hero__social-links">
+              <a
+                href="https://linkedin.com/in/william-glickman"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-hero__social-link"
+              >
+                <span className="material-symbols-outlined">work</span>
+                <span>LinkedIn</span>
+              </a>
+              <a
+                href="https://github.com/wglickman33"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-hero__social-link"
+              >
+                <span className="material-symbols-outlined">code</span>
+                <span>GitHub</span>
+              </a>
+              <a
+                href="mailto:willglickman@gmail.com"
+                className="contact-hero__social-link"
+              >
+                <span className="material-symbols-outlined">email</span>
+                <span>Email</span>
+              </a>
+            </div>
+
             <div className="contact-hero__decorative">
               <div className="contact-hero__circle contact-hero__circle--1"></div>
               <div className="contact-hero__circle contact-hero__circle--2"></div>
@@ -117,7 +154,28 @@ const ContactPage = () => {
 
       <section className="contact-form-section">
         <div className="contact-form-section__container">
-          <form className="contact-form" onSubmit={handleSubmit}>
+          <h2 className="contact-form-section__title">Or send a message</h2>
+          <form
+            className="contact-form"
+            name="contact"
+            method="POST"
+            data-netlify="true"
+            onSubmit={handleSubmit}
+          >
+            <input type="hidden" name="form-name" value="contact" />
+            <div className="contact-form__honeypot" aria-hidden="true">
+              <label htmlFor="bot-field">Leave this field empty</label>
+              <input
+                type="text"
+                id="bot-field"
+                name="bot-field"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
+
             <div className="contact-form__row">
               <div className="contact-form__field">
                 <label htmlFor="name" className="contact-form__label">
@@ -223,47 +281,32 @@ const ContactPage = () => {
             <button
               type="submit"
               className={`contact-form__submit ${isAnimating ? 'contact-form__submit--animating' : ''}`}
+              disabled={submitStatus === 'sending'}
             >
-              <span className="contact-form__submit-text">Send Message</span>
+              <span className="contact-form__submit-text">
+                {submitStatus === 'sending' ? 'Sending...' : 'Send Message'}
+              </span>
               <div className="contact-form__email-animation">
                 <span className="material-symbols-outlined contact-form__email-icon">mail</span>
                 <span className="contact-form__email-trail"></span>
               </div>
             </button>
-          </form>
-        </div>
-      </section>
 
-      <section className="contact-social">
-        <div className="contact-social__container">
-          <h2 className="contact-social__title">Or reach out directly</h2>
-          <div className="contact-social__links">
-            <a
-              href="https://linkedin.com/in/william-glickman"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="contact-social__link"
-            >
-              <span className="material-symbols-outlined">work</span>
-              <span>LinkedIn</span>
-            </a>
-            <a
-              href="https://github.com/wglickman33"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="contact-social__link"
-            >
-              <span className="material-symbols-outlined">code</span>
-              <span>GitHub</span>
-            </a>
-            <a
-              href="mailto:willglickman@gmail.com"
-              className="contact-social__link"
-            >
-              <span className="material-symbols-outlined">email</span>
-              <span>Email</span>
-            </a>
-          </div>
+            {submitStatus === 'success' && (
+              <p className="contact-form__status contact-form__status--success" role="status">
+                <span className="material-symbols-outlined">check_circle</span>
+                Message sent! I'll get back to you soon.
+              </p>
+            )}
+
+            {submitStatus === 'error' && (
+              <p className="contact-form__status contact-form__status--error" role="alert">
+                <span className="material-symbols-outlined">error</span>
+                Something went wrong sending your message. Please try again, or email me directly at{' '}
+                <a href="mailto:willglickman@gmail.com">willglickman@gmail.com</a>.
+              </p>
+            )}
+          </form>
         </div>
       </section>
 

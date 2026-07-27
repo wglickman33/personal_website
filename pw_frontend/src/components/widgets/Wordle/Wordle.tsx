@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import useTheme from '../../../hooks/useTheme';
 import { WORDS } from './wordleWords';
 import './Wordle.scss';
@@ -352,7 +353,7 @@ const Wordle = () => {
         ))}
       </div>
 
-      {showStats && (
+      {showStats && createPortal(
         <div className="wordle__overlay" onClick={() => setShowStats(false)}>
           <div className="wordle__stats-modal" onClick={(e) => e.stopPropagation()}>
             <div className="wordle__stats-header">
@@ -402,7 +403,8 @@ const Wordle = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {gameState === 'won' && !showStats && (

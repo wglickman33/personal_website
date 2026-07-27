@@ -1,14 +1,24 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  LabelList,
+} from 'recharts';
 import useTheme from '../../hooks/useTheme';
 import experiences from '../../data/experiences';
-import { skills } from '../../data/skills';
-import resumePDF from '../../assets/styles/resume/william_glickman_resume.pdf';
+import { skills, skillCategories, Skill } from '../../data/skills';
+import resumePDF from '../../assets/styles/resume/William_Glickman_Resume.pdf';
 import Footer from '../../components/Footer/Footer';
+import Button from '../../components/Button/Button';
 import './ResumePage.scss';
 
 const ResumePage = () => {
   const { theme } = useTheme();
   const [selectedExperience, setSelectedExperience] = useState<number | null>(null);
+  const [activeSkillTab, setActiveSkillTab] = useState(0);
 
   const parseDateFromPeriod = (period: string): Date => {
     const startDateStr = period.split(' - ')[0].trim();
@@ -34,15 +44,21 @@ const ResumePage = () => {
     return dateA.getTime() - dateB.getTime();
   });
 
-  const getSkillsByCategory = (categoryId: string) => {
-    return skills.filter((skill) => skill.category === categoryId);
-  };
+  const skillCategoryData = useMemo(
+    () =>
+      skillCategories.map((category) => ({
+        ...category,
+        items: skills.filter((skill) => skill.category === category.id),
+      })),
+    []
+  );
 
-  const frontendSkills = getSkillsByCategory('frontend');
-  const backendSkills = getSkillsByCategory('backend');
-  const aiSkills = getSkillsByCategory('ai');
-  const designSkills = getSkillsByCategory('design');
-  const productSkills = getSkillsByCategory('product');
+  const activeCategory = skillCategoryData[activeSkillTab];
+
+  const goToSkillTab = (index: number) => {
+    const total = skillCategoryData.length;
+    setActiveSkillTab(((index % total) + total) % total);
+  };
 
   return (
     <div className={`resume-page resume-page--${theme}`}>
@@ -88,7 +104,7 @@ const ResumePage = () => {
               
               <a 
                 href={resumePDF} 
-                download 
+                download="William_Glickman_Resume.pdf" 
                 className="resume-page__download-btn"
               >
                 <span className="material-symbols-outlined">download</span>
@@ -113,18 +129,29 @@ const ResumePage = () => {
                   className="resume-page__experience-card"
                   onClick={() => setSelectedExperience(originalIndex)}
                 >
-                  <div className="resume-page__experience-card-header">
-                    <div className="resume-page__experience-card-main">
-                      <h3 className="resume-page__experience-title">{exp.title}</h3>
-                      <div className="resume-page__experience-company">{exp.company}</div>
-                      <div className="resume-page__experience-meta">
-                        <span className="resume-page__experience-location">{exp.location}</span>
-                        <span className="resume-page__experience-period">{exp.period}</span>
-                      </div>
+                  <div className="resume-page__experience-card-body">
+                    <h3 className="resume-page__experience-title">{exp.title}</h3>
+                    <div className="resume-page__experience-meta">
+                      <span className="resume-page__experience-location">
+                        <span className="material-symbols-outlined">location_on</span>
+                        {exp.location}
+                      </span>
+                      <span className="resume-page__experience-period">
+                        <span className="material-symbols-outlined">calendar_today</span>
+                        {exp.period}
+                      </span>
                     </div>
-                    <span className="material-symbols-outlined resume-page__expand-icon">
-                      open_in_new
-                    </span>
+                  </div>
+
+                  <div className="resume-page__experience-card-footer">
+                    <div className="resume-page__experience-company">{exp.company}</div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      icon={<span className="material-symbols-outlined">open_in_new</span>}
+                    >
+                      View
+                    </Button>
                   </div>
                 </div>
               );
@@ -137,90 +164,49 @@ const ResumePage = () => {
               <span className="material-symbols-outlined">psychology</span>
               Skills
             </h2>
-            <div className="resume-page__skills-grid">
-              <div className="resume-page__skills-category">
-                <h3 className="resume-page__skills-category-title">Frontend</h3>
-                <div className="resume-page__skills-list">
-                  {frontendSkills.map((skill) => (
-                    <div key={skill.id} className="resume-page__skill-item">
-                      <span className="resume-page__skill-name">{skill.name}</span>
-                      <div className="resume-page__skill-bar">
-                        <div 
-                          className="resume-page__skill-bar-fill"
-                          style={{ width: `${(skill.rating / 5) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+
+            <div className="resume-page__skills-carousel">
+              <div className="resume-page__skills-tabs">
+                {skillCategoryData.map((category, index) => (
+                  <button
+                    key={category.id}
+                    className={`resume-page__skills-tab${index === activeSkillTab ? ' resume-page__skills-tab--active' : ''}`}
+                    onClick={() => goToSkillTab(index)}
+                  >
+                    {category.label}
+                  </button>
+                ))}
               </div>
 
-              <div className="resume-page__skills-category">
-                <h3 className="resume-page__skills-category-title">Backend</h3>
-                <div className="resume-page__skills-list">
-                  {backendSkills.map((skill) => (
-                    <div key={skill.id} className="resume-page__skill-item">
-                      <span className="resume-page__skill-name">{skill.name}</span>
-                      <div className="resume-page__skill-bar">
-                        <div 
-                          className="resume-page__skill-bar-fill"
-                          style={{ width: `${(skill.rating / 5) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+              <div className="resume-page__skills-panel">
+                <button
+                  className="resume-page__skills-nav resume-page__skills-nav--prev"
+                  onClick={() => goToSkillTab(activeSkillTab - 1)}
+                  aria-label="Previous category"
+                >
+                  <span className="material-symbols-outlined">chevron_left</span>
+                </button>
+
+                <SkillsChart key={activeCategory.id} skills={activeCategory.items} theme={theme} />
+
+                <button
+                  className="resume-page__skills-nav resume-page__skills-nav--next"
+                  onClick={() => goToSkillTab(activeSkillTab + 1)}
+                  aria-label="Next category"
+                >
+                  <span className="material-symbols-outlined">chevron_right</span>
+                </button>
               </div>
 
-              <div className="resume-page__skills-category">
-                <h3 className="resume-page__skills-category-title">AI/ML</h3>
-                <div className="resume-page__skills-list">
-                  {aiSkills.map((skill) => (
-                    <div key={skill.id} className="resume-page__skill-item">
-                      <span className="resume-page__skill-name">{skill.name}</span>
-                      <div className="resume-page__skill-bar">
-                        <div 
-                          className="resume-page__skill-bar-fill"
-                          style={{ width: `${(skill.rating / 5) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="resume-page__skills-category">
-                <h3 className="resume-page__skills-category-title">Design</h3>
-                <div className="resume-page__skills-list">
-                  {designSkills.map((skill) => (
-                    <div key={skill.id} className="resume-page__skill-item">
-                      <span className="resume-page__skill-name">{skill.name}</span>
-                      <div className="resume-page__skill-bar">
-                        <div 
-                          className="resume-page__skill-bar-fill"
-                          style={{ width: `${(skill.rating / 5) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="resume-page__skills-category">
-                <h3 className="resume-page__skills-category-title">Product</h3>
-                <div className="resume-page__skills-list">
-                  {productSkills.map((skill) => (
-                    <div key={skill.id} className="resume-page__skill-item">
-                      <span className="resume-page__skill-name">{skill.name}</span>
-                      <div className="resume-page__skill-bar">
-                        <div 
-                          className="resume-page__skill-bar-fill"
-                          style={{ width: `${(skill.rating / 5) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+              <div className="resume-page__skills-dots">
+                {skillCategoryData.map((category, index) => (
+                  <button
+                    key={category.id}
+                    className={`resume-page__skills-dot${index === activeSkillTab ? ' resume-page__skills-dot--active' : ''}`}
+                    onClick={() => goToSkillTab(index)}
+                    aria-label={`Show ${category.label} skills`}
+                  />
+                ))}
               </div>
             </div>
           </section>
@@ -232,22 +218,28 @@ const ResumePage = () => {
             </h2>
             <div className="resume-page__education-grid">
               <div className="resume-page__education-card">
-                <h3 className="resume-page__education-title">BrainStation Bootcamp</h3>
-                <div className="resume-page__education-details">Full-Stack Web Development</div>
-                <div className="resume-page__education-period">July 2024 - October 2024</div>
-                <div className="resume-page__education-note">Full Scholarship • Top of Class</div>
-              </div>
-              <div className="resume-page__education-card">
                 <h3 className="resume-page__education-title">Binghamton University</h3>
-                <div className="resume-page__education-details">Neuroscience Major</div>
+                <div className="resume-page__education-details">BS Integrative Neuroscience</div>
                 <div className="resume-page__education-period">August 2020 - August 2023</div>
                 <div className="resume-page__education-note">Research: Non-pharmacological heroin addiction treatment</div>
               </div>
               <div className="resume-page__education-card">
                 <h3 className="resume-page__education-title">Self-Taught Journey</h3>
                 <div className="resume-page__education-details">Started Coding June 9, 2024</div>
-                <div className="resume-page__education-period">Present</div>
+                <div className="resume-page__education-period">June 2024 - Present</div>
                 <div className="resume-page__education-note">From neuroscience to software engineering</div>
+              </div>
+              <div className="resume-page__education-card">
+                <h3 className="resume-page__education-title">BrainStation Bootcamp</h3>
+                <div className="resume-page__education-details">Full-Stack Web Development</div>
+                <div className="resume-page__education-period">July 2024 - October 2024</div>
+                <div className="resume-page__education-note">Full Scholarship • Top of Class</div>
+              </div>
+              <div className="resume-page__education-card">
+                <h3 className="resume-page__education-title">BrainStation Certificate</h3>
+                <div className="resume-page__education-details">UI Design</div>
+                <div className="resume-page__education-period">December 2024 - February 2025</div>
+                <div className="resume-page__education-note">Rewarded free certificate course for first place in Hackathon</div>
               </div>
             </div>
           </section>
@@ -275,15 +267,15 @@ const ResumePage = () => {
               <div className="resume-page__achievement-item">
                 <span className="material-symbols-outlined">code</span>
                 <div>
-                  <strong>850+ Hours of Development</strong>
-                  <p>Built My Kosher Delivery with 74,000+ lines of code</p>
+                  <strong>Biggest App: 1500+ Hours of Development</strong>
+                  <p>Built My Kosher Delivery with 120,000+ lines of code</p>
                 </div>
               </div>
               <div className="resume-page__achievement-item">
                 <span className="material-symbols-outlined">groups</span>
                 <div>
                   <strong>8+ Industries Served</strong>
-                  <p>Built AI agents for utility, retail, banking, government, and more</p>
+                  <p>Built AI agents for utility, retail, banking, behavioral health, and more</p>
                 </div>
               </div>
             </div>
@@ -307,6 +299,76 @@ const ResumePage = () => {
   );
 };
 
+interface SkillsChartProps {
+  skills: Skill[];
+  theme: string;
+}
+
+const SKILL_CHART_ROW_HEIGHT = 42;
+
+const SkillsChart = ({ skills: categorySkills, theme }: SkillsChartProps) => {
+  if (categorySkills.length === 0) {
+    return <p className="resume-page__skills-empty">No skills in this category yet.</p>;
+  }
+
+  const isDark = theme === 'dark';
+  const trackColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.06)';
+  const textColor = isDark ? 'rgba(255, 255, 255, 0.9)' : '#1e293b';
+  const valueColor = isDark ? '#93c5fd' : '#1e40af';
+
+  const sorted = [...categorySkills].sort((a, b) => b.rating - a.rating);
+  const longestName = sorted.reduce((max, s) => Math.max(max, s.name.length), 0);
+  const yAxisWidth = Math.min(220, Math.max(110, longestName * 7.4 + 20));
+  const chartHeight = sorted.length * SKILL_CHART_ROW_HEIGHT + 24;
+
+  return (
+    <div className="resume-page__skills-chart" style={{ height: chartHeight }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          data={sorted}
+          layout="vertical"
+          margin={{ top: 8, right: 44, left: 8, bottom: 8 }}
+          barCategoryGap="28%"
+        >
+          <defs>
+            <linearGradient id="resumeSkillBarGradient" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#60a5fa" />
+              <stop offset="100%" stopColor="#2563eb" />
+            </linearGradient>
+          </defs>
+          <XAxis type="number" domain={[0, 5]} hide />
+          <YAxis
+            type="category"
+            dataKey="name"
+            width={yAxisWidth}
+            tick={{ fill: textColor, fontSize: 13, fontWeight: 600 }}
+            axisLine={false}
+            tickLine={false}
+          />
+          <Bar
+            dataKey="rating"
+            fill="url(#resumeSkillBarGradient)"
+            background={{ fill: trackColor, radius: 8 }}
+            radius={8}
+            maxBarSize={22}
+            isAnimationActive
+            animationDuration={600}
+          >
+            <LabelList
+              dataKey="rating"
+              position="right"
+              formatter={(value) => Number(value).toFixed(1)}
+              fill={valueColor}
+              fontSize={13}
+              fontWeight={700}
+            />
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};
+
 interface ExperienceModalProps {
   experience: typeof experiences[0];
   isOpen: boolean;
@@ -315,7 +377,7 @@ interface ExperienceModalProps {
 }
 
 const ExperienceModal = ({ experience, isOpen, onClose, theme }: ExperienceModalProps) => {
-  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -328,7 +390,7 @@ const ExperienceModal = ({ experience, isOpen, onClose, theme }: ExperienceModal
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    closeBtnRef.current?.focus();
+    panelRef.current?.focus({ preventScroll: true });
 
     return () => {
       document.removeEventListener('keydown', onKeyDown);
@@ -338,26 +400,35 @@ const ExperienceModal = ({ experience, isOpen, onClose, theme }: ExperienceModal
 
   if (!isOpen) return null;
 
+  const hasLinks = Boolean(experience.liveLink || experience.githubLink);
+
   return (
     <div className={`resume-modal resume-modal--${theme}`} role="dialog" aria-modal="true">
       <button className="resume-modal__backdrop" onClick={onClose} aria-label="Close dialog" />
 
-      <div className="resume-modal__panel" role="document">
-        <button
-          ref={closeBtnRef}
-          className="resume-modal__close"
-          onClick={onClose}
-          aria-label="Close"
-        >
-          <span className="material-symbols-outlined">close</span>
-        </button>
+      <div className="resume-modal__panel" role="document" ref={panelRef} tabIndex={-1}>
+        <div className="resume-modal__close-anchor">
+          <button
+            className="resume-modal__close"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            <span className="material-symbols-outlined">close</span>
+          </button>
+        </div>
 
         <div className="resume-modal__header">
           <h2 className="resume-modal__title">{experience.title}</h2>
           <div className="resume-modal__company">{experience.company}</div>
           <div className="resume-modal__meta">
-            <span className="resume-modal__location">{experience.location}</span>
-            <span className="resume-modal__period">{experience.period}</span>
+            <span className="resume-modal__location">
+              <span className="material-symbols-outlined">location_on</span>
+              {experience.location}
+            </span>
+            <span className="resume-modal__period">
+              <span className="material-symbols-outlined">calendar_today</span>
+              {experience.period}
+            </span>
           </div>
         </div>
 
@@ -377,6 +448,35 @@ const ExperienceModal = ({ experience, isOpen, onClose, theme }: ExperienceModal
               ))}
             </div>
           </div>
+
+          {hasLinks && (
+            <div className="resume-modal__links">
+              {experience.liveLink && (
+                <a
+                  href={experience.liveLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="resume-modal__link"
+                  data-tooltip="Website"
+                >
+                  <span className="material-symbols-outlined">open_in_new</span>
+                  Website
+                </a>
+              )}
+              {experience.githubLink && (
+                <a
+                  href={experience.githubLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="resume-modal__link"
+                  data-tooltip="GitHub"
+                >
+                  <span className="material-symbols-outlined">code</span>
+                  GitHub
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

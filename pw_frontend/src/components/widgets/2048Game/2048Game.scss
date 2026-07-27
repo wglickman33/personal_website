@@ -143,12 +143,7 @@
   transition: transform $transition-speed-fast ease, background $transition-speed-fast ease;
 
   &:hover {
-    transform: translateY(-1px);
     background: linear-gradient(135deg, rgba($accent-color-1, 0.30), rgba($accent-color-3, 0.20));
-  }
-
-  &:active {
-    transform: translateY(0);
   }
 }
 

@@ -220,16 +220,10 @@
     }
 
     &:hover:not(&--selected):not(&--invalid) {
-      transform: translateY(-3px);
-
       &::before {
         border-color: rgba($accent-color-1, 0.4);
         box-shadow: 0 4px 12px rgba($accent-color-1, 0.2);
       }
-    }
-
-    &:active:not(&--selected) {
-      transform: translateY(-1px);
     }
   }
 
@@ -303,16 +297,11 @@
     &:hover:not(:disabled) {
       background: rgba($primary-color, 0.2);
       border-color: rgba($primary-color, 0.5);
-      transform: translateY(-2px);
 
       .color-sort-puzzle--dark & {
         background: rgba($light-color, 0.2);
         border-color: rgba($light-color, 0.5);
       }
-    }
-
-    &:active:not(:disabled) {
-      transform: translateY(0);
     }
 
     &:disabled {
@@ -336,12 +325,7 @@
     &:hover {
       background: $accent-color-1;
       color: $light-color;
-      transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba($accent-color-1, 0.3);
-    }
-
-    &:active {
-      transform: translateY(0);
     }
   }
 

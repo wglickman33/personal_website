@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import useTheme from '../../../hooks/useTheme';
 import { Challenge } from './types/capitalVentureTypes';
 import './Challenges.scss';
@@ -56,7 +57,7 @@ const Challenges = ({ challenges, onClose }: ChallengesProps) => {
     return challenge.target.toString();
   };
 
-  return (
+  return createPortal(
     <div className={`challenges challenges--${theme}`}>
       <div className="challenges__overlay" onClick={onClose} />
       <div className="challenges__content">
@@ -210,7 +211,8 @@ const Challenges = ({ challenges, onClose }: ChallengesProps) => {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

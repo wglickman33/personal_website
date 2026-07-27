@@ -106,12 +106,7 @@
       &:hover {
         background: color-mix(in srgb, $accent-color-1 90%, black 10%);
         border-color: color-mix(in srgb, $accent-color-1 90%, black 10%);
-        transform: translateY(-1px);
         box-shadow: 0 4px 8px rgba($accent-color-1, 0.3);
-      }
-
-      &:active {
-        transform: translateY(0);
       }
     }
 

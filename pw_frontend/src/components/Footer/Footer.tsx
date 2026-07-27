@@ -14,7 +14,7 @@ const Footer = () => {
             <Link to="/" className="footer__logo-link">
               <span className="footer__logo-text">WG</span>
             </Link>
-            <p className="footer__tagline">Full Stack Engineer & AI Engineer</p>
+            <p className="footer__tagline">Building at the intersection of code, AI, and design</p>
           </div>
           
           <div className="footer__navigation">

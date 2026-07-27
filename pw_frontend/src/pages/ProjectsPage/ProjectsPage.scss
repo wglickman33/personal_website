@@ -842,7 +842,6 @@
 .projects-portfolio__card:hover .projects-portfolio__card-icon-item {
   background: rgba($accent-color-1, 0.2);
   border-color: rgba($accent-color-1, 0.4);
-  transform: translateY(-2px);
 
   .projects-page--dark & {
     background: rgba($accent-color-1, 0.25);
@@ -969,7 +968,33 @@
   }
 }
 
+.projects-portfolio__card-bgworkspace-icon-backdrop {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .projects-page--dark & {
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      background: $light-color;
+      opacity: 0.4;
+      transition: all $transition-speed ease;
+      z-index: 0;
+    }
+  }
+}
+
+.projects-portfolio__card:hover .projects-portfolio__card-bgworkspace-icon-backdrop::before {
+  opacity: 1;
+}
+
 .projects-portfolio__card-bgworkspace-icon {
+  position: relative;
+  z-index: 1;
   width: 120px;
   height: auto;
   opacity: 0.6;

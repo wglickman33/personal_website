@@ -55,14 +55,16 @@ const ProjectCaseStudyModal = ({
       <button className="project-modal__backdrop" onClick={onClose} aria-label="Close dialog" />
 
       <div className="project-modal__panel" role="document">
-        <button
-          ref={closeBtnRef}
-          className="project-modal__close"
-          onClick={onClose}
-          aria-label="Close"
-        >
-          <span className="material-symbols-outlined">close</span>
-        </button>
+        <div className="project-modal__close-anchor">
+          <button
+            ref={closeBtnRef}
+            className="project-modal__close"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            <span className="material-symbols-outlined">close</span>
+          </button>
+        </div>
 
         <div className="project-modal__header">
           <div className="project-modal__header-left">

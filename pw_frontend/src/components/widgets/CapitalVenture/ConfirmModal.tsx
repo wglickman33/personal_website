@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import useTheme from '../../../hooks/useTheme';
 import './ConfirmModal.scss';
 
@@ -46,7 +47,7 @@ const ConfirmModal = ({
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className={`confirm-modal confirm-modal--${theme}`}>
       <div className="confirm-modal__overlay" onClick={onCancel} />
       <div className="confirm-modal__content">
@@ -69,7 +70,8 @@ const ConfirmModal = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import useTheme from '../../../hooks/useTheme';
 import './IconsShowcase.scss';
 
@@ -1359,7 +1360,7 @@ const IconsShowcase = () => {
         </div>
       </div>
 
-      {selectedIcon && (
+      {selectedIcon && createPortal(
         <div className="icons-showcase__modal" onClick={() => setSelectedIcon(null)}>
           <div className="icons-showcase__modal-content" ref={modalContentRef} onClick={(e) => e.stopPropagation()}>
             <div className="icons-showcase__modal-header">
@@ -1399,7 +1400,8 @@ const IconsShowcase = () => {
               </pre>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

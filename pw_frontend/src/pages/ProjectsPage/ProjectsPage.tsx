@@ -9,6 +9,7 @@ import DrawingCanvas from '../../components/widgets/DrawingCanvas/DrawingCanvas'
 import ColorSortPuzzle from '../../components/widgets/ColorSortPuzzle/ColorSortPuzzle';
 import CapitalVenture from '../../components/widgets/CapitalVenture/CapitalVenture';
 import whiteMKDIcon from '../../assets/styles/logos/whiteMKDIcon.png';
+import navyMKDIcon from '../../assets/styles/logos/navyMKDIcon.png';
 import bgworkspaceLogo from '../../assets/styles/logos/bgworkspaceLogo.png';
 import toriLogo from '../../assets/styles/logos/toriLogo.png';
 import './ProjectsPage.scss';
@@ -195,6 +196,7 @@ const ProjectsPage = () => {
 
   const renderProject = (project: Project, isWidget: boolean = false) => {
     const isFeatured = project.id === 'my-kosher-delivery';
+    const mkdIcon = theme === 'light' ? navyMKDIcon : whiteMKDIcon;
     const hasImages = project.images && project.images.length > 0;
     const isGame = project.category === 'game';
     const isInteractive = isWidget || isGame;
@@ -338,13 +340,15 @@ const ProjectsPage = () => {
           
           {project.id === 'my-kosher-delivery' && (
             <div className="projects-portfolio__card-mkd-preview">
-              <img src={whiteMKDIcon} alt="My Kosher Delivery" className="projects-portfolio__card-mkd-icon" />
+              <img src={mkdIcon} alt="My Kosher Delivery" className="projects-portfolio__card-mkd-icon" />
             </div>
           )}
           
           {project.id === 'bg-workspace' && (
             <div className="projects-portfolio__card-bgworkspace-preview">
-              <img src={bgworkspaceLogo} alt="BG Workspace" className="projects-portfolio__card-bgworkspace-icon" />
+              <div className="projects-portfolio__card-bgworkspace-icon-backdrop">
+                <img src={bgworkspaceLogo} alt="BG Workspace" className="projects-portfolio__card-bgworkspace-icon" />
+              </div>
             </div>
           )}
           
@@ -357,7 +361,7 @@ const ProjectsPage = () => {
           {!hasImages && !(isInteractive && project.id === 'afk-clock-screen') && project.id !== '2048-game' && project.id !== 'wordle' && project.id !== 'wavelength' && project.id !== 'my-kosher-delivery' && project.id !== 'bg-workspace' && project.id !== 'tori' && (
             <div className={`projects-portfolio__card-placeholder projects-portfolio__card-placeholder--${project.category} ${project.id === 'my-kosher-delivery' ? 'projects-portfolio__card-placeholder--mkd' : ''}`}>
               {project.id === 'my-kosher-delivery' ? (
-                <img src={whiteMKDIcon} alt="My Kosher Delivery" className="projects-portfolio__card-placeholder-mkd-icon" />
+                <img src={mkdIcon} alt="My Kosher Delivery" className="projects-portfolio__card-placeholder-mkd-icon" />
               ) : (
               <span className="material-symbols-outlined">
                 {project.category === 'web' ? 'web' : 

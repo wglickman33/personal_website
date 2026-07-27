@@ -13,5 +13,22 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!--
+      Static form definition so Netlify's build-time bot can detect and
+      register this form for Netlify Forms (server-side form handling,
+      no API keys, no client secrets, no third-party service).
+      This form is never rendered/used at runtime - see ContactPage.tsx,
+      which submits to this same form name via fetch().
+    -->
+    <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="subject" />
+      <input type="text" name="company" />
+      <input type="text" name="projectType" />
+      <textarea name="message"></textarea>
+      <input type="text" name="bot-field" />
+    </form>
   </body>
 </html>

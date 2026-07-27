@@ -385,12 +385,7 @@
     box-shadow: 0 4px 20px rgba($accent-color-1, 0.25);
 
     &:hover {
-      transform: translateY(-2px);
       box-shadow: 0 8px 30px rgba($accent-color-1, 0.35);
-    }
-
-    &:active {
-      transform: translateY(0);
     }
   }
 
@@ -401,7 +396,6 @@
 
     &:hover {
       background-color: rgba($primary-color, 0.12);
-      transform: translateY(-2px);
     }
 
     .hero--dark & {
@@ -453,7 +447,6 @@
   transition: all $transition-speed ease;
 
   &:hover {
-    transform: translateY(-4px);
     box-shadow: $box-shadow-lg;
     border-color: rgba($accent-color-1, 0.3);
   }

@@ -79,9 +79,9 @@ const Hero = () => {
           </div>
 
           <p className="hero__tagline">
-            From neuroscience to code, I build products that make a difference.
+            Neuroscience grad turned full-stack and AI engineer.
             <br />
-            Specializing in full-stack development, AI agents, and intuitive design.
+            I build the backend, design the interface, and ship the whole thing myself.
           </p>
 
           <div className="hero__cta">
@@ -97,15 +97,15 @@ const Hero = () => {
 
           <div className="hero__stats">
             <div className="hero__stat">
-              <div className="hero__stat-value">150K+</div>
+              <div className="hero__stat-value">275K+</div>
               <div className="hero__stat-label">Lines of Code</div>
             </div>
             <div className="hero__stat">
-              <div className="hero__stat-value">1500+</div>
+              <div className="hero__stat-value">5700+</div>
               <div className="hero__stat-label">Hours Delivered</div>
             </div>
             <div className="hero__stat">
-              <div className="hero__stat-value">15+</div>
+              <div className="hero__stat-value">30+</div>
               <div className="hero__stat-label">AI Agents Built</div>
             </div>
           </div>

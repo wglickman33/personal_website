@@ -85,9 +85,8 @@ const AboutPage = () => {
             </h1>
 
             <p className="about-hero__subtitle">
-              I didn't want to spend the next 7-8 years in school. Plus I always loved coding 
-              and my creative art side, and knew I'd love the field. So in May 2024, I made 
-              the decision to switch paths.
+              I didn't want to spend the next 7-8 years in school. I'd always loved coding and 
+              the creative side of building things, so in May 2024, I made the decision to switch paths.
             </p>
 
             <div className="about-hero__fun-facts">
