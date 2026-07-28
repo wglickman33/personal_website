@@ -176,13 +176,14 @@
   }
 
   &__color-btn {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 2px solid transparent;
     cursor: pointer;
     transition: all $transition-speed-fast ease;
     position: relative;
+    touch-action: manipulation;
 
     &:hover {
       transform: scale(1.1);

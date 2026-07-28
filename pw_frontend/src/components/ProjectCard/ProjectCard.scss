@@ -64,9 +64,11 @@
       color: $light-color;
     }
     
+    // Was $primary-color (near-black) on a near-black chip - unreadable
+    // in dark mode. Match the rest of the app: accent text on tinted chip.
     .project-type {
-      background-color: rgba($primary-color, 0.2);
-      color: $primary-color;
+      background-color: rgba($accent-color-1, 0.2);
+      color: $accent-color-1;
     }
     
     .tech-tag {
@@ -79,6 +81,14 @@
     height: 200px;
     position: relative;
     overflow: hidden;
+
+    @include md {
+      height: 180px;
+    }
+
+    @include sm {
+      height: 160px;
+    }
     
     img {
       width: 100%;
@@ -101,6 +111,18 @@
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: 3;
+  }
+
+  // Touch devices never get :hover, so "View Project" would stay hidden.
+  // Always show the overlay (and gradient border) when hover isn't available.
+  @media (hover: none) {
+    &::after {
+      opacity: 1;
+    }
+
+    .project-overlay {
+      opacity: 1;
+    }
   }
   
   .view-project {
@@ -138,6 +160,14 @@
   .project-content {
     padding: 1.8rem;
     background-color: $light-color;
+
+    @include md {
+      padding: 1.5rem;
+    }
+
+    @include sm {
+      padding: 1.25rem;
+    }
   }
   
   .project-type {
@@ -156,13 +186,18 @@
     margin-bottom: 0.8rem;
     font-size: $font-size-lg;
     color: $dark-color;
+    line-height: $line-height-snug;
+
+    @include sm {
+      font-size: $font-size-md;
+    }
   }
   
   .project-description {
     color: $secondary-color;
     margin-bottom: 1.2rem;
     font-size: $font-size-sm;
-    line-height: 1.6;
+    line-height: $line-height-relaxed;
   }
   
   .project-technologies {

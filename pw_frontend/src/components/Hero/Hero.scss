@@ -5,6 +5,7 @@
 
 .hero {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -124,6 +125,27 @@
     animation-delay: 4s;
   }
 
+  @include md {
+    &--1 {
+      width: 400px;
+      height: 400px;
+      top: -200px;
+      left: -200px;
+    }
+
+    &--2 {
+      width: 320px;
+      height: 320px;
+      bottom: -160px;
+      right: -160px;
+    }
+
+    &--3 {
+      width: 240px;
+      height: 240px;
+    }
+  }
+
   @include sm {
     &--1 {
       width: 300px;
@@ -138,6 +160,30 @@
     &--3 {
       width: 200px;
       height: 200px;
+    }
+  }
+
+  // Ultra-wide: scale the atmospheric glow up so corner blobs still have
+  // presence against a much larger canvas, instead of looking like tiny
+  // stickers in the corners.
+  @include min(1920px) {
+    &--1 {
+      width: 640px;
+      height: 640px;
+      top: -300px;
+      left: -300px;
+    }
+
+    &--2 {
+      width: 520px;
+      height: 520px;
+      bottom: -240px;
+      right: -240px;
+    }
+
+    &--3 {
+      width: 380px;
+      height: 380px;
     }
   }
 }
@@ -479,6 +525,10 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+
+  @include md {
+    font-size: $font-size-2xl;
+  }
 
   @include sm {
     font-size: $font-size-2xl;

@@ -7,7 +7,10 @@
   position: fixed;
   left: 0;
   top: 0;
+  // 100vh falls short on iOS Safari when the URL bar is collapsed/expanded;
+  // dvh tracks the dynamic viewport. Keep 100vh as the fallback for older browsers.
   height: 100vh;
+  height: 100dvh;
   width: 240px;
   background-color: rgba($light-color, 0.85);
   backdrop-filter: blur(20px);
@@ -51,10 +54,18 @@
   }
 
   &.sidebar--mobile {
-    transform: translateX(-100%);
+    // Drawer mode: off-canvas unless open. Transform-only so width never
+    // animates during show/hide (that was the expand-then-slide glitch).
     width: 280px;
+    transform: translateX(-100%);
+    transition: transform $transition-speed-slow cubic-bezier(0.16, 1, 0.3, 1);
+
+    &.sidebar--collapsed:not(.sidebar--open) {
+      width: 72px;
+    }
 
     &.sidebar--open {
+      width: 280px;
       transform: translateX(0);
       box-shadow: 4px 0 40px rgba($primary-color, 0.15);
 
@@ -92,8 +103,22 @@
     }
   }
 
-  @include md {
+  // Viewport CSS is the source of truth during resize. JS classes lag by at
+  // least a frame (and used to lag 150ms from debounce), so these queries
+  // must not trust stale `--open` / `--mobile` the way they used to:
+  // - below 768 + stale `--open` (still true from tablet) expanded the rail
+  //   into a full drawer before JS closed it → "icon → full → hamburger"
+  // - above 768 + stale `--mobile` kept translateX(-100%) after the
+  //   hamburger hid → "hamburger → nothing → icon"
+  @include between(768px, 991px) {
     width: 72px;
+    transform: translateX(0);
+
+    // Beat a stale `.sidebar--mobile` left over from the phone range.
+    &.sidebar--mobile {
+      width: 72px;
+      transform: translateX(0);
+    }
 
     .sidebar__label,
     .sidebar__theme-label {
@@ -114,14 +139,49 @@
     .sidebar__footer {
       padding: 16px 12px;
     }
+
+    .sidebar__link {
+      justify-content: center;
+      padding: 14px 12px;
+      gap: 0;
+    }
+
+    .sidebar__theme-toggle {
+      justify-content: center;
+      padding: 12px;
+      gap: 0;
+    }
   }
 
-  @include sm {
-    transform: translateX(-100%);
-    width: 280px;
+  @include min(992px) {
+    transform: translateX(0);
 
-    &.sidebar--open {
+    &.sidebar--mobile {
       transform: translateX(0);
+      width: 240px;
+
+      &.sidebar--collapsed {
+        width: 72px;
+      }
+    }
+  }
+
+  @include max(767px) {
+    // Always off-canvas at phone width. Do NOT honor bare `--open` here —
+    // tablet leaves `--open` on, and that used to flash a full-width drawer
+    // before JS caught up. Showing the drawer requires `.sidebar--mobile`
+    // (set by JS once we're actually in phone mode).
+    transform: translateX(-100%);
+    transition: transform $transition-speed-slow cubic-bezier(0.16, 1, 0.3, 1);
+
+    &.sidebar--collapsed {
+      width: 72px;
+    }
+
+    &.sidebar--mobile.sidebar--open {
+      width: 280px;
+      transform: translateX(0);
+      box-shadow: 4px 0 40px rgba($primary-color, 0.15);
 
       .sidebar__label,
       .sidebar__theme-label {
@@ -279,8 +339,8 @@
   right: 20px;
   background-color: transparent;
   border: none;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: $border-radius;
   display: flex;
   align-items: center;
@@ -289,6 +349,7 @@
   transition: all $transition-speed ease;
   padding: 0;
   color: $light-color;
+  touch-action: manipulation;
 
   .material-symbols-outlined {
     font-size: 24px;
@@ -442,7 +503,7 @@
     gap: 0;
   }
 
-  @include md {
+  @include between(768px, 991px) {
     justify-content: center;
     padding: 14px 12px;
     gap: 0;
@@ -509,7 +570,7 @@
     gap: 0;
   }
 
-  @include md {
+  @include between(768px, 991px) {
     justify-content: center;
     padding: 12px;
     gap: 0;

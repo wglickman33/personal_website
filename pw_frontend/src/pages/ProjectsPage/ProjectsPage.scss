@@ -5,6 +5,7 @@
 
 .projects-page {
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: $gray-color-light;
 
   &.projects-page--dark {
@@ -14,6 +15,7 @@
 
 .projects-hero {
   min-height: 70vh;
+  min-height: 70dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,6 +31,7 @@
   @include md {
     padding: 100px 32px 60px;
     min-height: 60vh;
+    min-height: 60dvh;
   }
 
   @include sm {
@@ -238,6 +241,10 @@
   @include sm {
     padding: 60px 20px;
   }
+
+  @include min(1680px) {
+    padding: 120px 48px;
+  }
 }
 
 .projects-portfolio-section__container {
@@ -350,6 +357,13 @@
     gap: 24px;
     grid-auto-rows: 1fr;
   }
+
+  // Tall project cards (650px+) read as one composed wall of 3 columns
+  // on wide monitors - auto-fill at 320px would otherwise open a 4th
+  // column inside the 1400px container and look sparse.
+  @include min(1680px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .projects-portfolio__card {
@@ -363,7 +377,10 @@
   border: 1px solid rgba($primary-color, 0.08);
   display: flex;
   flex-direction: column;
-  height: 650px;
+  // min-height (not a hard height) so the rare project with more/longer
+  // tech tags than fit in &__meta-tech's reserved space can grow instead
+  // of having its content clipped by this card's own overflow:hidden.
+  min-height: 650px;
   box-shadow: $box-shadow;
 
   &:hover {
@@ -385,11 +402,11 @@
   }
 
   @include md {
-    height: 610px;
+    min-height: 610px;
   }
 
   @include sm {
-    height: 590px;
+    min-height: 590px;
   }
 }
 
@@ -952,6 +969,12 @@
   opacity: 1;
 }
 
+@media (hover: none) {
+  .projects-portfolio__card-mkd-icon {
+    opacity: 1;
+  }
+}
+
 .projects-portfolio__card-bgworkspace-preview {
   width: 100%;
   height: 100%;
@@ -992,6 +1015,12 @@
   opacity: 1;
 }
 
+@media (hover: none) {
+  .projects-portfolio__card-bgworkspace-icon-backdrop::before {
+    opacity: 1;
+  }
+}
+
 .projects-portfolio__card-bgworkspace-icon {
   position: relative;
   z-index: 1;
@@ -1003,6 +1032,12 @@
 
 .projects-portfolio__card:hover .projects-portfolio__card-bgworkspace-preview .projects-portfolio__card-bgworkspace-icon {
   opacity: 1;
+}
+
+@media (hover: none) {
+  .projects-portfolio__card-bgworkspace-icon {
+    opacity: 1;
+  }
 }
 
 .projects-portfolio__card-tori-preview {
@@ -1032,6 +1067,12 @@
   opacity: 1;
 }
 
+@media (hover: none) {
+  .projects-portfolio__card-tori-icon {
+    opacity: 1;
+  }
+}
+
 .projects-portfolio__card-placeholder-mkd-icon {
   width: 120px;
   height: auto;
@@ -1043,6 +1084,13 @@
   .projects-portfolio__card:hover & .projects-portfolio__card-placeholder-mkd-icon {
     opacity: 1;
     filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(200deg);
+  }
+
+  @media (hover: none) {
+    .projects-portfolio__card-placeholder-mkd-icon {
+      opacity: 1;
+      filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(200deg);
+    }
   }
 }
 
@@ -1399,13 +1447,15 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  height: 92px;
+  // min-height (not a hard max-height + overflow:hidden) reserves room for
+  // the common case (~2 rows of pills) but lets the container grow instead
+  // of silently deleting pills if a project ever has more/longer tags than
+  // fit in 2 rows - the previous fixed 92px + overflow:hidden meant any
+  // overflow was invisible with no indication anything was missing.
   min-height: 92px;
-  max-height: 92px;
   align-content: flex-start;
   margin-bottom: 20px;
   flex-shrink: 0;
-  overflow: hidden;
 }
 
 .projects-portfolio__tech-pill {

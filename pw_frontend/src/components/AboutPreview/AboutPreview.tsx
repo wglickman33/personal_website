@@ -11,7 +11,8 @@ const AboutPreview = () => {
       <SectionDivider 
         position="top" 
         variant="angle" 
-        color={theme === 'dark' ? '#0d1117' : '#f8f9fa'} 
+        // Match Projects section bg ($gray-color-light / $dark-color)
+        color={theme === 'dark' ? '#0f172a' : '#f8fafc'} 
         flip={true}
       />
       
@@ -57,7 +58,8 @@ const AboutPreview = () => {
       <SectionDivider 
         position="bottom" 
         variant="triangle" 
-        color={theme === 'dark' ? '#191c20' : '#f4f6f8'} 
+        // Match Skills section bg ($gray-color / $dark-gray-color)
+        color={theme === 'dark' ? '#1e293b' : '#f1f5f9'} 
       />
     </section>
   );

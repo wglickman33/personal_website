@@ -5,6 +5,7 @@
 
 .about-page {
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: $gray-color-light;
 
   &.about-page--dark {
@@ -14,6 +15,7 @@
 
 .about-hero {
   min-height: 70vh;
+  min-height: 70dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,6 +31,7 @@
   @include md {
     padding: 100px 32px 60px;
     min-height: 60vh;
+    min-height: 60dvh;
   }
 
   @include sm {
@@ -103,6 +106,22 @@
     &--2 {
       width: 300px;
       height: 300px;
+    }
+  }
+
+  @include min(1920px) {
+    &--1 {
+      width: 760px;
+      height: 760px;
+      top: -360px;
+      left: -360px;
+    }
+
+    &--2 {
+      width: 640px;
+      height: 640px;
+      bottom: -300px;
+      right: -300px;
     }
   }
 }
@@ -521,6 +540,16 @@
       margin-right: 0 !important;
     }
   }
+
+  // Narrow phones: the 70px rail + 500px max-width content was eating
+  // too much of a 375px viewport. Tighten the rail and let content fill.
+  @include xs {
+    padding-left: 48px !important;
+
+    &::before {
+      left: 16px !important;
+    }
+  }
 }
 
 .about-timeline__item-content {
@@ -530,7 +559,9 @@
   border-radius: $border-radius-lg;
   padding: 24px;
   max-width: 500px;
+  width: 100%;
   transition: all $transition-speed ease;
+  box-sizing: border-box;
 
   &:hover {
     box-shadow: $box-shadow-lg;
@@ -690,9 +721,22 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 32px;
 
+  // Tablet band: slightly smaller min so 2 cards still sit side-by-side
+  // instead of jumping straight to a single column at sm.
+  @include md {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+
   @include sm {
     grid-template-columns: 1fr;
     gap: 24px;
+  }
+
+  // Wide monitors: three even value cards as one composition, not four
+  // skinny ones inside the 1280px container.
+  @include min(1600px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -889,9 +933,18 @@
   max-width: 1200px;
   margin: 0 auto;
 
+  @include md {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+
   @include sm {
     grid-template-columns: 1fr;
     gap: 24px;
+  }
+
+  @include min(1600px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 

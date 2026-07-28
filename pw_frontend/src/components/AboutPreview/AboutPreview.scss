@@ -10,6 +10,16 @@
   position: relative;
   overflow: hidden;
   background-color: $light-color;
+
+  @include md {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  @include sm {
+    padding-top: 3.75rem;
+    padding-bottom: 3.75rem;
+  }
   
   &::before {
     content: '';

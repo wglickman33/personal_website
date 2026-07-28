@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import {
   BarChart,
   Bar,
@@ -8,6 +8,7 @@ import {
   LabelList,
 } from 'recharts';
 import useTheme from '../../hooks/useTheme';
+import useModalA11y from '../../hooks/useModalA11y';
 import experiences from '../../data/experiences';
 import { skills, skillCategories, Skill } from '../../data/skills';
 import resumePDF from '../../assets/styles/resume/William_Glickman_Resume.pdf';
@@ -377,38 +378,35 @@ interface ExperienceModalProps {
 }
 
 const ExperienceModal = ({ experience, isOpen, onClose, theme }: ExperienceModalProps) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-
-    document.addEventListener('keydown', onKeyDown);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    panelRef.current?.focus({ preventScroll: true });
-
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [isOpen, onClose]);
+  useModalA11y({
+    isOpen,
+    onClose,
+    containerRef: dialogRef,
+    initialFocusRef: closeBtnRef,
+  });
 
   if (!isOpen) return null;
 
   const hasLinks = Boolean(experience.liveLink || experience.githubLink);
 
   return (
-    <div className={`resume-modal resume-modal--${theme}`} role="dialog" aria-modal="true">
+    <div
+      ref={dialogRef}
+      className={`resume-modal resume-modal--${theme}`}
+      role="dialog"
+      aria-modal="true"
+      aria-label={experience.title}
+    >
       <button className="resume-modal__backdrop" onClick={onClose} aria-label="Close dialog" />
 
       <div className="resume-modal__panel" role="document" ref={panelRef} tabIndex={-1}>
         <div className="resume-modal__close-anchor">
           <button
+            ref={closeBtnRef}
             className="resume-modal__close"
             onClick={onClose}
             aria-label="Close"

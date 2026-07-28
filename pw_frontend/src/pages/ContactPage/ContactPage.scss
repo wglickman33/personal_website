@@ -5,6 +5,7 @@
 
 .contact-page {
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: $light-color;
 
   &.contact-page--dark {
@@ -14,6 +15,7 @@
 
 .contact-hero {
   min-height: 60vh;
+  min-height: 60dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,6 +31,7 @@
   @include md {
     padding: 100px 32px 60px;
     min-height: 50vh;
+    min-height: 50dvh;
   }
 
   @include sm {

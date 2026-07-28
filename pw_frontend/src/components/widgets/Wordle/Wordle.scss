@@ -23,7 +23,7 @@
 
 .wordle__title {
   font-family: $font-family-display;
-  font-size: 36px;
+  font-size: clamp(24px, 7vw, 36px);
   font-weight: $font-weight-extrabold;
   letter-spacing: 0.2em;
   color: $light-color;
@@ -44,8 +44,8 @@
 }
 
 .wordle__btn {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border: none;
   border-radius: $border-radius;
   background: rgba($light-color, 0.1);
@@ -57,6 +57,7 @@
   justify-content: center;
   transition: all 0.2s ease;
   padding: 0;
+  touch-action: manipulation;
 
   .material-symbols-outlined {
     font-size: 20px;
@@ -97,19 +98,27 @@
 
 .wordle__row {
   display: flex;
-  gap: 8px;
+  gap: clamp(4px, 2vw, 8px);
   justify-content: center;
+  width: 100%;
 }
 
+// Cells are flex-fluid (share of the row's actual rendered width) with an
+// aspect-ratio to stay square, instead of a fixed 62px box. This scales
+// continuously down to any phone width - including inside a narrower
+// modal - rather than jumping between two fixed breakpoint sizes.
 .wordle__cell {
-  width: 62px;
-  height: 62px;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 62px;
+  aspect-ratio: 1;
+  height: auto;
   border: 2px solid rgba($light-color, 0.2);
   background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
+  font-size: clamp(20px, 7vw, 32px);
   font-weight: $font-weight-bold;
   color: $light-color;
   text-transform: uppercase;
@@ -163,19 +172,27 @@
 
 .wordle__keyboard-row {
   display: flex;
-  gap: 6px;
+  gap: clamp(3px, 1.3vw, 6px);
   justify-content: center;
+  width: 100%;
 }
 
+// Keys are flex-fluid rather than a fixed min-width, so a 10-key row can
+// never overflow its container regardless of viewport/modal width - each
+// key simply shrinks to share the row's actual available width. A hard
+// floor (min-width) would be unsafe here since it's exactly what caused
+// the keyboard to overflow narrow phones before this fix.
 .wordle__key {
-  min-width: 40px;
-  height: 58px;
-  padding: 0 12px;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 46px;
+  height: clamp(40px, 12vw, 58px);
+  padding: 0 clamp(2px, 1.5vw, 12px);
   border: none;
   border-radius: 4px;
   background: #818384;
   color: $light-color;
-  font-size: 13px;
+  font-size: clamp(10px, 3vw, 13px);
   font-weight: $font-weight-bold;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -194,8 +211,9 @@
 }
 
 .wordle__key--special {
-  min-width: 65px;
-  font-size: 12px;
+  flex: 1.6 1 0;
+  max-width: 74px;
+  font-size: clamp(9px, 2.6vw, 12px);
 }
 
 .wordle__key--empty {
@@ -276,6 +294,7 @@
   max-width: min(400px, 90vw);
   width: 90%;
   max-height: calc(100vh - clamp(24px, 4vw, 40px));
+  max-height: calc(100dvh - clamp(24px, 4vw, 40px));
   overflow-y: auto;
   overflow-x: hidden;
   animation: wordle-scale-in 0.2s ease;
@@ -314,10 +333,10 @@
 }
 
 .wordle__stats-close {
-  width: clamp(28px, 4vw, 32px);
-  height: clamp(28px, 4vw, 32px);
-  min-width: 28px;
-  min-height: 28px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
   border: none;
   background: transparent;
   color: $light-color;
@@ -574,23 +593,9 @@
 
 
 @include sm {
-  .wordle__cell {
-    width: 50px;
-    height: 50px;
-    font-size: 28px;
-  }
-
-  .wordle__key {
-    min-width: 32px;
-    height: 48px;
-    padding: 0 8px;
-    font-size: 11px;
-  }
-
-  .wordle__key--special {
-    min-width: 50px;
-    font-size: 10px;
-  }
+  // Cell/key sizing is now handled fluidly above (flex + clamp()), so no
+  // fixed-px overrides are needed here anymore - and re-adding them would
+  // reintroduce the exact keyboard-overflow bug this pass fixed.
 
   .wordle__overlay {
     padding: 12px;
@@ -598,6 +603,7 @@
 
   .wordle__stats-modal {
     max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - 24px);
     padding: 16px;
     width: 95%;
     border-radius: $border-radius-lg;
@@ -611,6 +617,7 @@
 
   .wordle__stats-modal {
     max-height: calc(100vh - 16px);
+    max-height: calc(100dvh - 16px);
     padding: 12px;
     width: 98%;
     border-radius: $border-radius;

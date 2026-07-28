@@ -7,11 +7,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
-  padding: 32px;
+  gap: clamp(16px, 4vw, 24px);
+  padding: clamp(16px, 5vw, 32px);
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
+  box-sizing: border-box;
 
   &--preview {
     padding: 0;
@@ -97,15 +98,17 @@
 
   &__mode-btn {
     flex: 1;
-    padding: 10px 16px;
+    padding: 10px clamp(6px, 3vw, 16px);
     border: none;
     border-radius: $border-radius;
     background: transparent;
     color: $secondary-color;
-    font-size: $font-size-sm;
+    font-size: clamp(11px, 3vw, #{$font-size-sm});
     font-weight: $font-weight-medium;
     cursor: pointer;
     transition: all 0.3s ease;
+    text-align: center;
+    line-height: 1.2;
 
     &:hover:not(:disabled) {
       background: rgba($primary-color, 0.1);
@@ -124,10 +127,15 @@
     }
   }
 
+  // Fluid instead of fixed 280x280px - the SVG inside uses a 0-200
+  // viewBox (see PomodoroTimer.tsx) and percentage width/height, so it
+  // (and its stroke widths, which are unitless viewBox units) scale
+  // automatically with this container. No JS/markup changes needed.
   &__display {
     position: relative;
-    width: 280px;
-    height: 280px;
+    width: clamp(180px, 55vw, 280px);
+    aspect-ratio: 1;
+    height: auto;
   }
 
   &__circle {
@@ -160,7 +168,7 @@
   }
 
   &__time {
-    font-size: 48px;
+    font-size: clamp(28px, 9vw, 48px);
     font-weight: $font-weight-bold;
     color: $primary-color;
     font-variant-numeric: tabular-nums;
@@ -185,7 +193,7 @@
 
   &__btn {
     flex: 1;
-    padding: 14px 24px;
+    padding: 14px clamp(12px, 5vw, 24px);
     border: none;
     border-radius: $border-radius;
     font-size: $font-size-base;

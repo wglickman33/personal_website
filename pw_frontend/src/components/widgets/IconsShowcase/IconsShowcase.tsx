@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import useTheme from '../../../hooks/useTheme';
+import useModalA11y from '../../../hooks/useModalA11y';
 import './IconsShowcase.scss';
 
 interface Icon {
@@ -276,6 +277,8 @@ const IconsShowcase = () => {
   const [selectedIcon, setSelectedIcon] = useState<Icon | null>(null);
   const [copied, setCopied] = useState(false);
   const modalContentRef = useRef<HTMLDivElement>(null);
+  const modalDialogRef = useRef<HTMLDivElement>(null);
+  const modalCloseBtnRef = useRef<HTMLButtonElement>(null);
   const [iconStates, setIconStates] = useState<Record<string, boolean>>({
     heart: false,
     star: false,
@@ -294,25 +297,29 @@ const IconsShowcase = () => {
     'video-play': false,
   });
 
-  useEffect(() => {
-    if (selectedIcon) {
-      document.body.style.overflow = 'hidden';
-      const scrollToTop = () => {
-        if (modalContentRef.current) {
-          modalContentRef.current.scrollTop = 0;
-          modalContentRef.current.scrollTo({ top: 0, behavior: 'instant' });
-        }
-      };
-      
-      scrollToTop();
-      setTimeout(scrollToTop, 50);
-      setTimeout(scrollToTop, 200);
-    } else {
-      document.body.style.overflow = '';
-    }
+  useModalA11y({
+    isOpen: Boolean(selectedIcon),
+    onClose: () => setSelectedIcon(null),
+    containerRef: modalDialogRef,
+    initialFocusRef: modalCloseBtnRef,
+  });
 
+  useEffect(() => {
+    if (!selectedIcon) return;
+
+    const scrollToTop = () => {
+      if (modalContentRef.current) {
+        modalContentRef.current.scrollTop = 0;
+        modalContentRef.current.scrollTo({ top: 0, behavior: 'instant' });
+      }
+    };
+
+    scrollToTop();
+    const t1 = setTimeout(scrollToTop, 50);
+    const t2 = setTimeout(scrollToTop, 200);
     return () => {
-      document.body.style.overflow = '';
+      clearTimeout(t1);
+      clearTimeout(t2);
     };
   }, [selectedIcon]);
 
@@ -1361,11 +1368,19 @@ const IconsShowcase = () => {
       </div>
 
       {selectedIcon && createPortal(
-        <div className="icons-showcase__modal" onClick={() => setSelectedIcon(null)}>
+        <div
+          ref={modalDialogRef}
+          className="icons-showcase__modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="icons-showcase-modal-title"
+          onClick={() => setSelectedIcon(null)}
+        >
           <div className="icons-showcase__modal-content" ref={modalContentRef} onClick={(e) => e.stopPropagation()}>
             <div className="icons-showcase__modal-header">
-              <h3 className="icons-showcase__modal-title">{selectedIcon.name} Icon</h3>
+              <h3 id="icons-showcase-modal-title" className="icons-showcase__modal-title">{selectedIcon.name} Icon</h3>
               <button
+                ref={modalCloseBtnRef}
                 className="icons-showcase__modal-close"
                 onClick={() => setSelectedIcon(null)}
                 aria-label="Close"

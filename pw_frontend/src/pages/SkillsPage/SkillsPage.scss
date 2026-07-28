@@ -5,6 +5,7 @@
 
 .skills-page {
   min-height: 100vh;
+  min-height: 100dvh;
   padding: calc(#{$header-height} + 40px) 0 0;
   background:
     radial-gradient(1400px 600px at 0% 0%, rgba($accent-color-1, 0.08), transparent 50%),
@@ -29,6 +30,12 @@
 
     @include sm {
       padding: 0 16px 40px;
+    }
+
+    // Wide monitors: a little more horizontal breathing room so the
+    // 4-col skill grid doesn't feel edge-to-edge against the sidebar.
+    @include min(1680px) {
+      padding: 0 48px 96px;
     }
   }
 
@@ -316,6 +323,13 @@
       gap: 16px;
     }
 
+    // Only when the 1400px container is actually full (≈1680px viewport
+    // with the 240px sidebar). auto-fill at 280px can invent a cramped
+    // 5th column here - lock to an even 4-col rhythm instead.
+    @include min(1680px) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
     &--animated {
       .skills-page__card {
         transition: transform 0.4s ease, box-shadow 0.4s ease;
@@ -331,6 +345,13 @@
     border: none;
     background: transparent;
     perspective: 1000px;
+
+    // Cards are narrower here (240px min-width, see &__grid above), so a
+    // 2-line title needs a bit more vertical room to avoid feeling cramped
+    // against the rating/category/hint rows below it.
+    @include md {
+      height: 300px;
+    }
 
     @media (prefers-reduced-motion: reduce) {
       transform: none !important;
@@ -426,8 +447,8 @@
     position: absolute;
     top: 16px;
     right: 16px;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border: none;
     background: transparent;
     color: rgba($primary-color, 0.5);
@@ -441,6 +462,7 @@
     transition: all 0.4s ease;
     padding: 0;
     opacity: 1;
+    touch-action: manipulation;
 
     &:hover {
       background: rgba($accent-color-1, 0.1);
@@ -512,6 +534,15 @@
     transition: color 0.4s ease;
     position: relative;
     z-index: 1;
+    // Reserve exactly 2 lines regardless of title length (1 or 2 lines) so
+    // the layout never jumps, and clamp+ellipsis anything longer instead of
+    // letting the fixed-height card's overflow:hidden silently cut it off
+    // (e.g. "Role-Based Access Control" at the narrower `md` card width).
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    min-height: calc(#{$line-height-tight} * #{$font-size-xl} * 2);
 
     .skills-page--dark & {
       color: $light-color;
@@ -608,8 +639,8 @@
     position: absolute;
     top: 16px;
     right: 16px;
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border: none;
     background: rgba($primary-color, 0.05);
     border-radius: 50%;
@@ -620,6 +651,7 @@
     transition: all 0.4s ease;
     z-index: 10;
     color: $primary-color;
+    touch-action: manipulation;
 
     &:hover {
       background: rgba($accent-color-1, 0.1);

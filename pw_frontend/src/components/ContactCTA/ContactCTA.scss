@@ -10,6 +10,16 @@
   position: relative;
   background: $dark-color;
   overflow: hidden;
+
+  @include md {
+    padding-top: 5rem;
+    padding-bottom: 4rem;
+  }
+
+  @include sm {
+    padding-top: 3.75rem;
+    padding-bottom: 3.5rem;
+  }
   
   .container {
     position: relative;

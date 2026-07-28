@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import useTheme from '../../hooks/useTheme';
+import useModalA11y from '../../hooks/useModalA11y';
 import { Project } from '../../data/projects';
 import WidgetDemo from '../WidgetDemo/WidgetDemo';
 import './ProjectCaseStudyModal.scss';
@@ -24,34 +25,29 @@ const ProjectCaseStudyModal = ({
   onSelectImage,
 }: ProjectCaseStudyModalProps) => {
   const { theme } = useTheme();
+  const dialogRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   const hasImages = (project.images?.length ?? 0) > 0;
   const images = useMemo(() => project.images ?? [], [project.images]);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-
-    document.addEventListener('keydown', onKeyDown);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    closeBtnRef.current?.focus();
-
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [isOpen, onClose]);
+  useModalA11y({
+    isOpen,
+    onClose,
+    containerRef: dialogRef,
+    initialFocusRef: closeBtnRef,
+  });
 
   if (!isOpen) return null;
 
   return (
-    <div className={`project-modal project-modal--${theme}`} role="dialog" aria-modal="true">
+    <div
+      ref={dialogRef}
+      className={`project-modal project-modal--${theme}`}
+      role="dialog"
+      aria-modal="true"
+      aria-label={project.title}
+    >
       <button className="project-modal__backdrop" onClick={onClose} aria-label="Close dialog" />
 
       <div className="project-modal__panel" role="document">

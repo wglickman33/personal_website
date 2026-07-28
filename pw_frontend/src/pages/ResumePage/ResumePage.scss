@@ -5,6 +5,7 @@
 
 .resume-page {
   min-height: 100vh;
+  min-height: 100dvh;
   padding: calc(#{$header-height} + 40px) 0 0;
   background:
     radial-gradient(1400px 600px at 0% 0%, rgba($accent-color-1, 0.08), transparent 50%),
@@ -237,12 +238,27 @@
 
   &__experience-grid {
     display: grid;
+    // Desktop: roomy 360px min. lg (≤1200) drops to 300px so the
+    // 993-1200 band still lands even 2-3 columns instead of a lopsided
+    // 2+orphan. sm (≤768) goes single-column - tablets (768-992) keep a
+    // 2-col auto-fill from the lg rule, which is the tablet-band gap
+    // the previous md→1fr jump skipped entirely.
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
     gap: 24px;
     align-items: stretch;
 
-    @include md {
+    @include lg {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+
+    @include sm {
       grid-template-columns: 1fr;
+    }
+
+    // Once the 1200px resume container is full, lock to an even 3-col
+    // composition rather than letting auto-fill invent uneven tracks.
+    @include min(1440px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
@@ -603,10 +619,13 @@
 
   &__achievements {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    // Keep 2 columns through tablet (768-992) - previously collapsed at
+    // md (≤992), which made iPad-portrait look like a phone. minmax(0,1fr)
+    // lets long achievement copy wrap instead of overflowing the track.
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px;
 
-    @include md {
+    @include sm {
       grid-template-columns: 1fr;
     }
   }
@@ -719,7 +738,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px;
+  // Fluid clamp() throughout (matching ProjectCaseStudyModal's sibling
+  // pattern) instead of a single sm-only breakpoint - this scales
+  // continuously at every width instead of jumping at one fixed cutoff,
+  // and needs no separate xs tier since it's fluid all the way down.
+  padding: clamp(12px, 4vw, 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .resume-modal__backdrop {
@@ -739,7 +764,8 @@
   position: relative;
   width: 100%;
   max-width: 700px;
-  max-height: calc(100vh - 64px);
+  max-height: calc(100vh - clamp(24px, 8vw, 64px));
+  max-height: calc(100dvh - clamp(24px, 8vw, 64px));
   overflow-y: auto;
   overflow-x: hidden;
   border-radius: $border-radius-lg;
@@ -751,6 +777,7 @@
   display: flex;
   flex-direction: column;
   outline: none;
+  margin: auto;
 }
 
 .resume-modal--dark .resume-modal__panel {
@@ -770,12 +797,14 @@
 
 .resume-modal__close {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: clamp(12px, 2vw, 16px);
+  right: clamp(12px, 2vw, 16px);
   pointer-events: auto;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  width: clamp(40px, 4vw, 44px);
+  height: clamp(40px, 4vw, 44px);
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: clamp(8px, 1.5vw, 12px);
   border: 1px solid rgba($primary-color, 0.15);
   background: rgba($light-color, 0.98);
   backdrop-filter: blur(10px);
@@ -788,9 +817,10 @@
   z-index: 50;
   flex-shrink: 0;
   outline: none;
+  touch-action: manipulation;
 
   .material-symbols-outlined {
-    font-size: 24px;
+    font-size: clamp(20px, 3vw, 24px);
   }
 
   &:hover {
@@ -828,7 +858,12 @@
 }
 
 .resume-modal__header {
-  padding: 24px 60px 20px 24px;
+  // padding-right must always exceed the close button's own footprint
+  // (its right offset + width, both clamp()-based above: max 16+44=60px,
+  // min 12+40=52px) with a bit of margin, so a long wrapped title can
+  // never visually run underneath the button at any viewport width - this
+  // was the bug at the old fixed sm-only 50px value.
+  padding: clamp(16px, 3vw, 24px) clamp(56px, 10vw, 70px) clamp(12px, 2vw, 20px) clamp(16px, 3vw, 24px);
   border-bottom: 1px solid rgba($primary-color, 0.08);
 }
 
@@ -887,11 +922,11 @@
 }
 
 .resume-modal__body {
-  padding: 24px;
-  padding-bottom: 32px;
+  padding: clamp(16px, 4vw, 24px);
+  padding-bottom: clamp(24px, 5vw, 32px);
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: clamp(16px, 3vw, 24px);
 }
 
 .resume-modal__section {
@@ -1013,24 +1048,10 @@
   }
 }
 
-@include sm {
-  .resume-modal {
-    padding: 16px;
-    }
-
-  .resume-modal__panel {
-    max-height: calc(100vh - 32px);
-  }
-
-  .resume-modal__header {
-    padding: 20px 50px 16px 20px;
-  }
-
-  .resume-modal__body {
-    padding: 20px;
-    gap: 20px;
-  }
-}
+// resume-modal spacing above is now fully fluid via clamp() (matching
+// ProjectCaseStudyModal), so no sm/xs breakpoint overrides are needed here
+// anymore - reintroducing fixed-px values at a single breakpoint is what
+// caused the close-button/header-padding mismatch this pass fixed.
 
 @keyframes resumeSkillsChartFade {
   from {

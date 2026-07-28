@@ -1,3 +1,8 @@
 .home-page {
   width: 100%;
-    }
+  // Safety net for decorative absolute-positioned children (Hero gradient
+  // blobs, etc.) that can bleed past the viewport edge on narrow phones.
+  // Global body already has overflow-x: hidden; this reinforces it at the
+  // page level so a child with its own stacking context can't escape.
+  overflow-x: hidden;
+}

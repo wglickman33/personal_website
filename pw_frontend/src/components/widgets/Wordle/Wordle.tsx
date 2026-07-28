@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import useTheme from '../../../hooks/useTheme';
+import useModalA11y from '../../../hooks/useModalA11y';
 import { WORDS } from './wordleWords';
 import './Wordle.scss';
 
@@ -84,6 +85,16 @@ const Wordle = () => {
   });
   const [letterStates, setLetterStates] = useState<Record<string, LetterState>>({});
   const [showStats, setShowStats] = useState(false);
+  const statsDialogRef = useRef<HTMLDivElement>(null);
+  const statsCloseBtnRef = useRef<HTMLButtonElement>(null);
+
+  useModalA11y({
+    isOpen: showStats,
+    onClose: () => setShowStats(false),
+    containerRef: statsDialogRef,
+    initialFocusRef: statsCloseBtnRef,
+  });
+
   const [stats, setStats] = useState<Stats>(() => {
     const stored = localStorage.getItem(STORAGE_KEY_STATS);
     const lastPlayedDate = localStorage.getItem('pw:wordle:lastPlayedDate');
@@ -354,11 +365,25 @@ const Wordle = () => {
       </div>
 
       {showStats && createPortal(
-        <div className="wordle__overlay" onClick={() => setShowStats(false)}>
+        <div
+          ref={statsDialogRef}
+          className="wordle__overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="wordle-stats-title"
+          onClick={() => setShowStats(false)}
+        >
           <div className="wordle__stats-modal" onClick={(e) => e.stopPropagation()}>
             <div className="wordle__stats-header">
-              <h2 className="wordle__stats-title">Statistics</h2>
-              <button className="wordle__stats-close" onClick={() => setShowStats(false)}>×</button>
+              <h2 id="wordle-stats-title" className="wordle__stats-title">Statistics</h2>
+              <button
+                ref={statsCloseBtnRef}
+                className="wordle__stats-close"
+                onClick={() => setShowStats(false)}
+                aria-label="Close statistics"
+              >
+                ×
+              </button>
             </div>
             
             <div className="wordle__stats-grid">
