@@ -37,6 +37,20 @@ import bgworkspaceImage1 from '../assets/styles/images/bgworkspaceImage1.png';
 import bgworkspaceImage2 from '../assets/styles/images/bgworkspaceImage2.png';
 import bgworkspaceImage3 from '../assets/styles/images/bgworkspaceImage3.png';
 
+import whiskImage1 from '../assets/styles/images/whiskImage1.png';
+import whiskImage2 from '../assets/styles/images/whiskImage2.png';
+import whiskImage3 from '../assets/styles/images/whiskImage3.png';
+import whiskImage4 from '../assets/styles/images/whiskImage4.png';
+import whiskImage5 from '../assets/styles/images/whiskImage5.png';
+import whiskImage6 from '../assets/styles/images/whiskImage6.png';
+import whiskImage7 from '../assets/styles/images/whiskImage7.png';
+import whiskImage8 from '../assets/styles/images/whiskImage8.png';
+import whiskImage9 from '../assets/styles/images/whiskImage9.png';
+import whiskImage10 from '../assets/styles/images/whiskImage10.png';
+import whiskImage11 from '../assets/styles/images/whiskImage11.png';
+import whiskImage12 from '../assets/styles/images/whiskImage12.png';
+import whiskImage13 from '../assets/styles/images/whiskImage13.png';
+
 export interface Project {
     id: string;
     title: string;
@@ -100,6 +114,33 @@ export const projects: Project[] = [
     date: '2025',
     challenges: 'Redesigned a single static AI prompt into a dynamic, injectable prompt architecture that adapts intake flow, persona, and conversation logic in real time based on facility type and context. Built and owned four facility-typed phone AI agents with crisis escalation, live transfer, and scheduling tooling, plus a separate AI training product that simulates prospective callers so facility staff could practice live admissions conversations. Built an LLM evaluation framework from scratch in Langfuse, including multi-turn tool-use simulation and LLM-as-judge scoring, so agents could be tested against production-faithful conversations before shipping.',
     results: 'Deployed and maintain AI voice and chat agents across every facility type in a regulated healthcare environment, with an evaluation pipeline that catches regressions in crisis handling, insurance flow, and intake accuracy before they ever reach a real caller.',
+  },
+  {
+    id: 'whisk',
+    title: 'Whisk',
+    description: 'A full-stack recipe and kitchen toolkit: cloud-synced recipes with folders and import, collaborative shopping lists with real-time updates, 31 privacy-first browser tools (photo editing, unit conversion, markdown preview, and more), plus light/dark/auto theming. Built and shipped solo.',
+    techStack: ['React', 'TypeScript', 'SCSS', 'Vite', 'Zustand', 'Node.js', 'Express.js', 'PostgreSQL', 'Prisma', 'JWT Authentication', 'Server-Sent Events', 'Spoonacular API', 'EmailJS', 'Heroku', 'Netlify'],
+    liveLink: 'https://trywhisk.netlify.app',
+    githubLink: 'https://github.com/wglickman33/Whisk',
+    challenges: 'Architected the full stack solo: JWT auth with cloud sync for recipes and preferences, shared shopping lists with Server-Sent Events for live collaboration, and a settings system where theme (light, dark, auto) persists correctly across local storage and server sync. Built 31 client-side tools that run entirely in the browser, plus unit and file converters, while keeping the shopping list UX fast and phone-first on every screen size.',
+    results: '~35,000 lines of code and 285 automated tests. Production on Netlify (frontend) and Heroku (API), with shared grocery lists, recipe management, and a complete in-browser toolkit. No install required.',
+    category: 'web',
+    date: 'July 2026',
+    images: [
+      whiskImage1,
+      whiskImage2,
+      whiskImage3,
+      whiskImage4,
+      whiskImage5,
+      whiskImage6,
+      whiskImage7,
+      whiskImage8,
+      whiskImage9,
+      whiskImage10,
+      whiskImage11,
+      whiskImage12,
+      whiskImage13,
+    ],
   },
   {
     id: 'quant-ai-agents',

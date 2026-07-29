@@ -201,9 +201,26 @@ export const timelineItems: TimelineItem[] = [
     category: 'milestone',
   },
   {
+    id: 'whisk',
+    date: 'July 2026',
+    title: 'Launched Whisk',
+    description: 'Built and shipped a full-stack recipe app and kitchen toolkit solo: cloud-synced recipes, collaborative shopping lists with real-time updates, 31 privacy-first browser tools, and light/dark/auto theming. ~35,000 lines of code, 285 tests, live on Netlify and Heroku.',
+    category: 'achievement',
+    downloads: [
+      {
+        url: 'https://trywhisk.netlify.app',
+        text: 'Visit Live Site',
+      },
+      {
+        url: 'https://github.com/wglickman33/Whisk',
+        text: 'View on GitHub',
+      },
+    ],
+  },
+  {
     id: 'site-wip',
     date: 'December 2025 - Present',
-    title: 'Personal Website - Work in Progress',
+    title: 'Personal Website: Work in Progress',
     description: 'This site is continuously evolving. Started December 2025 and counting. More features, content, and improvements coming soon.',
     category: 'milestone',
   },

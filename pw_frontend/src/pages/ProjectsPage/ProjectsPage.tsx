@@ -10,6 +10,8 @@ import ColorSortPuzzle from '../../components/widgets/ColorSortPuzzle/ColorSortP
 import CapitalVenture from '../../components/widgets/CapitalVenture/CapitalVenture';
 import whiteMKDIcon from '../../assets/styles/logos/whiteMKDIcon.png';
 import navyMKDIcon from '../../assets/styles/logos/navyMKDIcon.png';
+import whiskLogoCharcoal from '../../assets/styles/logos/whiskLogoCharcoal.svg';
+import whiskLogoAmber from '../../assets/styles/logos/whiskLogoAmber.svg';
 import bgworkspaceLogo from '../../assets/styles/logos/bgworkspaceLogo.png';
 import toriLogo from '../../assets/styles/logos/toriLogo.png';
 import './ProjectsPage.scss';
@@ -62,8 +64,8 @@ const ProjectsPage = () => {
 
   useEffect(() => {
     const tooltipMap = new WeakMap<HTMLElement, HTMLElement>();
-    let hideTimeout: NodeJS.Timeout | null = null;
-    let showTimeout: NodeJS.Timeout | null = null;
+    let hideTimeout: ReturnType<typeof setTimeout> | null = null;
+    let showTimeout: ReturnType<typeof setTimeout> | null = null;
     let currentLink: HTMLElement | null = null;
 
     const hideAllTooltips = () => {
@@ -197,6 +199,7 @@ const ProjectsPage = () => {
   const renderProject = (project: Project, isWidget: boolean = false) => {
     const isFeatured = project.id === 'my-kosher-delivery';
     const mkdIcon = theme === 'light' ? navyMKDIcon : whiteMKDIcon;
+    const whiskIcon = theme === 'light' ? whiskLogoCharcoal : whiskLogoAmber;
     const hasImages = project.images && project.images.length > 0;
     const isGame = project.category === 'game';
     const isInteractive = isWidget || isGame;
@@ -357,8 +360,14 @@ const ProjectsPage = () => {
               <img src={toriLogo} alt="Tori" className="projects-portfolio__card-tori-icon" />
             </div>
           )}
+
+          {project.id === 'whisk' && (
+            <div className="projects-portfolio__card-whisk-preview">
+              <img src={whiskIcon} alt="Whisk" className="projects-portfolio__card-whisk-icon" />
+            </div>
+          )}
           
-          {!hasImages && !(isInteractive && project.id === 'afk-clock-screen') && project.id !== '2048-game' && project.id !== 'wordle' && project.id !== 'wavelength' && project.id !== 'my-kosher-delivery' && project.id !== 'bg-workspace' && project.id !== 'tori' && (
+          {!hasImages && !(isInteractive && project.id === 'afk-clock-screen') && project.id !== '2048-game' && project.id !== 'wordle' && project.id !== 'wavelength' && project.id !== 'my-kosher-delivery' && project.id !== 'bg-workspace' && project.id !== 'tori' && project.id !== 'whisk' && (
             <div className={`projects-portfolio__card-placeholder projects-portfolio__card-placeholder--${project.category} ${project.id === 'my-kosher-delivery' ? 'projects-portfolio__card-placeholder--mkd' : ''}`}>
               {project.id === 'my-kosher-delivery' ? (
                 <img src={mkdIcon} alt="My Kosher Delivery" className="projects-portfolio__card-placeholder-mkd-icon" />

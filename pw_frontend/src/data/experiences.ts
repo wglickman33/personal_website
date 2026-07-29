@@ -21,6 +21,16 @@ export const experiences: Experience[] = [
   liveLink: 'https://wglickman.com',
 },
 {
+  title: 'Creator & Full-Stack Engineer',
+  company: 'Whisk',
+  location: 'Remote',
+  period: 'July 2026 - Present',
+  description: 'Built and shipped a full-stack recipe app and kitchen toolkit solo: cloud-synced recipes with folders and import, collaborative shopping lists with Server-Sent Events, 31 privacy-first browser tools, and light/dark/auto theming. ~35,000 lines of code, 285 automated tests, deployed on Netlify and Heroku.',
+  skills: ['React', 'TypeScript', 'Vite', 'Zustand', 'Node.js', 'Express.js', 'PostgreSQL', 'Prisma', 'JWT Authentication', 'Server-Sent Events', 'Spoonacular API', 'EmailJS', 'Heroku', 'Netlify'],
+  liveLink: 'https://trywhisk.netlify.app',
+  githubLink: 'https://github.com/wglickman33/Whisk',
+},
+{
   title: 'Agentic AI Software Engineer',
   company: 'Further (Talk Further)',
   location: 'Remote',
