@@ -97,7 +97,7 @@ const Hero = () => {
 
           <div className="hero__stats">
             <div className="hero__stat">
-              <div className="hero__stat-value">345K+</div>
+              <div className="hero__stat-value">310K+</div>
               <div className="hero__stat-label">Lines of Code</div>
             </div>
             <div className="hero__stat">
