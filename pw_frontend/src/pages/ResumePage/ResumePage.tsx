@@ -42,7 +42,7 @@ const ResumePage = () => {
   const sortedExperiences = [...experiences].sort((a, b) => {
     const dateA = parseDateFromPeriod(a.period);
     const dateB = parseDateFromPeriod(b.period);
-    return dateA.getTime() - dateB.getTime();
+    return dateB.getTime() - dateA.getTime();
   });
 
   const skillCategoryData = useMemo(
