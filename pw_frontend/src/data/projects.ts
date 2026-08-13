@@ -188,7 +188,7 @@ export const projects: Project[] = [
   },
   {
     id: 'scout',
-    title: 'Scout',
+    title: 'Scout Sports',
     description: 'I\'m a Modern Orthodox Jew who observes Shabbat - no devices for 25 hours from Friday night until Saturday night - and a die-hard New York sports fan (Knicks, Mets, Giants, Rangers). I tried Amazon Alexa (Echo) and Google Home (Nest) for live scores; they were awful: updates would land days late, long after I cared. I also refused to drop $200 on a Tidbyt: ugly, overpriced, and something I could build myself. Scout Sports is the jumbotron I leave running so I can still follow the games without touching a phone or laptop. Favorites and pinned leagues keep the board on my sports; auto-cycling catches late finishes I\'d otherwise miss until the Saturday morning newspaper. Fullscreen wake-lock keeps it on all day while I can\'t use anything else. First project built end to end with TypeScript + Tailwind CSS.',
     techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'TanStack Query', 'Radix UI', 'Node.js', 'Express.js', 'PostgreSQL', 'Prisma', 'JWT Authentication', 'ESPN API', 'TheSportsDB', 'Heroku', 'Netlify'],
     liveLink: 'https://scoutsports.netlify.app',

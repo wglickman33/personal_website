@@ -244,8 +244,8 @@ export const timelineItems: TimelineItem[] = [
   {
     id: 'scout',
     date: 'August 2026 - Present',
-    title: 'Launched Scout',
-    description: 'Built Scout for Shabbat: as a Modern Orthodox Jew who can\'t use devices Friday night through Saturday, and a Knicks/Mets/Giants/Rangers fan, I needed a jumbotron that stays on all day (fullscreen wake-lock), shows only my teams and leagues (favorites + pins), and auto-cycles so late games aren\'t a mystery until the Saturday morning newspaper. Tried Alexa and Google Home first (scores showed up days late) and refused to buy a $200 Tidbyt. Multi-league ESPN scores, box scores, JWT auth. First TypeScript + Tailwind project. ~7,500 lines of code (~20% tests), ~20-25 hours, live on Netlify and Heroku.',
+    title: 'Launched Scout Sports',
+    description: 'Built Scout Sports for Shabbat: as a Modern Orthodox Jew who can\'t use devices Friday night through Saturday, and a Knicks/Mets/Giants/Rangers fan, I needed a jumbotron that stays on all day (fullscreen wake-lock), shows only my teams and leagues (favorites + pins), and auto-cycles so late games aren\'t a mystery until the Saturday morning newspaper. Tried Alexa and Google Home first (scores showed up days late) and refused to buy a $200 Tidbyt. Multi-league ESPN scores, box scores, JWT auth. First TypeScript + Tailwind project. ~7,500 lines of code (~20% tests), ~20-25 hours, live on Netlify and Heroku.',
     category: 'achievement',
     downloads: [
       {
