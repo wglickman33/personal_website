@@ -167,7 +167,7 @@
   }
 
   @include max(767px) {
-    // Always off-canvas at phone width. Do NOT honor bare `--open` here —
+    // Always off-canvas at phone width. Do NOT honor bare `--open` here -
     // tablet leaves `--open` on, and that used to flash a full-width drawer
     // before JS caught up. Showing the drawer requires `.sidebar--mobile`
     // (set by JS once we're actually in phone mode).

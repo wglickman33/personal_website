@@ -143,7 +143,7 @@ export const timelineItems: TimelineItem[] = [
     id: 'bootcamp-end',
     date: 'October 2024',
     title: 'Completed Bootcamp - Top of Class',
-    description: 'Finished BrainStation bootcamp top of the class. Created a home inventory management system capstone project designed like a handwritten notebook with my own handwriting font. Hand drew the entire site before recreating it with code.',
+    description: 'Finished BrainStation bootcamp top of the class. Capstone was Tori v1: a home inventory app designed like a handwritten notebook with a custom handwriting font, hand-drawn before being rebuilt in code. Later rebuilt as a full product (see August 2026).',
     category: 'achievement',
     link: 'https://github.com/wglickman33/Tori',
     linkText: 'View on GitHub',
@@ -166,7 +166,7 @@ export const timelineItems: TimelineItem[] = [
     id: 'my-kosher-delivery',
     date: 'February 2025 - Present',
     title: 'Co-Founded My Kosher Delivery',
-    description: 'Co-founded and lead all engineering for a full-stack, multi-vendor kosher food delivery platform serving the Five Towns, NYC, NJ, and the Hamptons. Customers can order from up to 11 restaurant partners in a single order, with a dedicated B2B vertical delivering to nursing home residents. 1,500+ hours of development, 120,000+ lines of code, with a full admin dashboard, secure authentication and payments, and real-time order tracking.',
+    description: 'Co-founded and lead all engineering for a full-stack, multi-vendor kosher food delivery platform serving the Five Towns, NYC, NJ, and the Hamptons. Customers can order from up to 11 restaurant partners in a single order, with a dedicated B2B vertical delivering to nursing home residents. 1,500+ hours of development, 128,000+ lines of code, with a full admin dashboard, secure authentication and payments, and real-time order tracking.',
     category: 'work',
     downloads: [
       {
@@ -223,5 +223,39 @@ export const timelineItems: TimelineItem[] = [
     title: 'Personal Website: Work in Progress',
     description: 'This site is continuously evolving. Started December 2025 and counting. More features, content, and improvements coming soon.',
     category: 'milestone',
+  },
+  {
+    id: 'tori-rebuild',
+    date: 'August 2026 - Present',
+    title: 'Rebuilt Tori into a Full Product',
+    description: 'Took my first-ever app (the BrainStation notebook-style capstone) and rebuilt it from scratch in about a week as a professional full-stack household inventory system: shared homes, searchable items, expiration and value tracking, Cloudinary photos, and live household sync. ~25,000 lines of code, ~40 hours, live on Netlify and Heroku.',
+    category: 'achievement',
+    downloads: [
+      {
+        url: 'https://torihome.netlify.app',
+        text: 'Visit Live Site',
+      },
+      {
+        url: 'https://github.com/wglickman33/Tori',
+        text: 'View on GitHub',
+      },
+    ],
+  },
+  {
+    id: 'scout',
+    date: 'August 2026 - Present',
+    title: 'Launched Scout',
+    description: 'Built Scout for Shabbat: as a Modern Orthodox Jew who can\'t use devices Friday night through Saturday, and a Knicks/Mets/Giants/Rangers fan, I needed a jumbotron that stays on all day (fullscreen wake-lock), shows only my teams and leagues (favorites + pins), and auto-cycles so late games aren\'t a mystery until the Saturday morning newspaper. Tried Alexa and Google Home first (scores showed up days late) and refused to buy a $200 Tidbyt. Multi-league ESPN scores, box scores, JWT auth. First TypeScript + Tailwind project. ~7,500 lines of code (~20% tests), ~20-25 hours, live on Netlify and Heroku.',
+    category: 'achievement',
+    downloads: [
+      {
+        url: 'https://scoutsports.netlify.app',
+        text: 'Visit Live Site',
+      },
+      {
+        url: 'https://github.com/wglickman33/Scout',
+        text: 'View on GitHub',
+      },
+    ],
   },
 ];

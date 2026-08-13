@@ -269,7 +269,7 @@ const ResumePage = () => {
                 <span className="material-symbols-outlined">code</span>
                 <div>
                   <strong>Biggest App: 1500+ Hours of Development</strong>
-                  <p>Built My Kosher Delivery with 120,000+ lines of code</p>
+                  <p>Built My Kosher Delivery with 128,000+ lines of code</p>
                 </div>
               </div>
               <div className="resume-page__achievement-item">

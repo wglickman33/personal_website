@@ -12,6 +12,26 @@ export interface Experience {
 
 export const experiences: Experience[] = [
 {
+  title: 'Creator & Full-Stack Engineer',
+  company: 'Tori',
+  location: 'Remote',
+  period: 'August 2026 - Present',
+  description: 'Rebuilt my first-ever app (BrainStation capstone) into a full-stack household inventory product in about a week: shared households with invite codes, searchable inventory with tags/locations/folders and photo uploads, expiration and value tracking, and live sync via Server-Sent Events. ~25,000 lines of code, ~40 hours, deployed on Netlify and Heroku.',
+  skills: ['React', 'TypeScript', 'SCSS', 'Vite', 'Zustand', 'Node.js', 'Express.js', 'PostgreSQL', 'Sequelize ORM', 'JWT Authentication', 'Server-Sent Events', 'Cloudinary', 'MiniSearch', 'Zod', 'Heroku', 'Netlify'],
+  liveLink: 'https://torihome.netlify.app',
+  githubLink: 'https://github.com/wglickman33/Tori',
+},
+{
+  title: 'Creator & Full-Stack Engineer',
+  company: 'Scout Sports',
+  location: 'Remote',
+  period: 'August 2026 - Present',
+  description: 'Built Scout Sports so I could follow Knicks/Mets/Giants/Rangers games on Shabbat without using devices, after Amazon Alexa (Echo) and Google Home (Nest) proved useless at timely scores (updates days late), and after refusing to buy a $200 Tidbyt that looked ugly and overpriced for what it is. Jumbotron scoreboard with fullscreen wake-lock that stays on all day, team and league favorites for the sports I care about, and auto-cycling so late finishes still show up before the Saturday morning newspaper. Multi-league live scores (ESPN + TheSportsDB), box scores, JWT auth API. First TypeScript + Tailwind project. ~7,500 lines of code (~20% tests), ~20-25 hours, live on Netlify and Heroku.',
+  skills: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'TanStack Query', 'Radix UI', 'Node.js', 'Express.js', 'PostgreSQL', 'Prisma', 'JWT Authentication', 'ESPN API', 'TheSportsDB', 'Heroku', 'Netlify'],
+  liveLink: 'https://scoutsports.netlify.app',
+  githubLink: 'https://github.com/wglickman33/Scout',
+},
+{
   title: 'Personal Website - Work in Progress',
   company: 'wglickman.com',
   location: 'Remote',
@@ -19,6 +39,7 @@ export const experiences: Experience[] = [
   description: 'This site is continuously evolving. Started December 2025 and counting. More features, content, and improvements coming soon.',
   skills: ['React', 'TypeScript', 'SCSS', 'Web Development', 'UI/UX Design'],
   liveLink: 'https://wglickman.com',
+  githubLink: 'https://github.com/wglickman33/personal_website',
 },
 {
   title: 'Creator & Full-Stack Engineer',

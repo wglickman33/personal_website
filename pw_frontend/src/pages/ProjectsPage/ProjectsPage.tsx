@@ -14,6 +14,7 @@ import whiskLogoCharcoal from '../../assets/styles/logos/whiskLogoCharcoal.svg';
 import whiskLogoAmber from '../../assets/styles/logos/whiskLogoAmber.svg';
 import bgworkspaceLogo from '../../assets/styles/logos/bgworkspaceLogo.png';
 import toriLogo from '../../assets/styles/logos/toriLogo.png';
+import scoutIcon from '../../assets/styles/logos/scoutIcon.svg';
 import './ProjectsPage.scss';
 
 type ProjectCategory = 'all' | 'web' | 'widget' | 'game';
@@ -355,7 +356,7 @@ const ProjectsPage = () => {
             </div>
           )}
           
-          {project.id === 'tori' && (
+          {project.id === 'tori-v2' && (
             <div className="projects-portfolio__card-tori-preview">
               <img src={toriLogo} alt="Tori" className="projects-portfolio__card-tori-icon" />
             </div>
@@ -366,8 +367,14 @@ const ProjectsPage = () => {
               <img src={whiskIcon} alt="Whisk" className="projects-portfolio__card-whisk-icon" />
             </div>
           )}
+
+          {project.id === 'scout' && (
+            <div className="projects-portfolio__card-scout-preview">
+              <img src={scoutIcon} alt="Scout" className="projects-portfolio__card-scout-icon" />
+            </div>
+          )}
           
-          {!hasImages && !(isInteractive && project.id === 'afk-clock-screen') && project.id !== '2048-game' && project.id !== 'wordle' && project.id !== 'wavelength' && project.id !== 'my-kosher-delivery' && project.id !== 'bg-workspace' && project.id !== 'tori' && project.id !== 'whisk' && (
+          {!hasImages && !(isInteractive && project.id === 'afk-clock-screen') && project.id !== '2048-game' && project.id !== 'wordle' && project.id !== 'wavelength' && project.id !== 'my-kosher-delivery' && project.id !== 'bg-workspace' && project.id !== 'tori-v2' && project.id !== 'whisk' && project.id !== 'scout' && (
             <div className={`projects-portfolio__card-placeholder projects-portfolio__card-placeholder--${project.category} ${project.id === 'my-kosher-delivery' ? 'projects-portfolio__card-placeholder--mkd' : ''}`}>
               {project.id === 'my-kosher-delivery' ? (
                 <img src={mkdIcon} alt="My Kosher Delivery" className="projects-portfolio__card-placeholder-mkd-icon" />

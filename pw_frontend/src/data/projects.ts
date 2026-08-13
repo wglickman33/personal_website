@@ -51,6 +51,25 @@ import whiskImage11 from '../assets/styles/images/whiskImage11.png';
 import whiskImage12 from '../assets/styles/images/whiskImage12.png';
 import whiskImage13 from '../assets/styles/images/whiskImage13.png';
 
+import toriImage1 from '../assets/styles/images/toriImage1.png';
+import toriImage2 from '../assets/styles/images/toriImage2.png';
+import toriImage3 from '../assets/styles/images/toriImage3.png';
+import toriImage4 from '../assets/styles/images/toriImage4.png';
+import toriImage5 from '../assets/styles/images/toriImage5.png';
+import toriImage6 from '../assets/styles/images/toriImage6.png';
+import toriImage7 from '../assets/styles/images/toriImage7.png';
+import toriImage8 from '../assets/styles/images/toriImage8.png';
+import toriImage9 from '../assets/styles/images/toriImage9.png';
+import toriImage10 from '../assets/styles/images/toriImage10.png';
+import toriImage11 from '../assets/styles/images/toriImage11.png';
+
+import scoutImage1 from '../assets/styles/images/scoutImage1.png';
+import scoutImage2 from '../assets/styles/images/scoutImage2.png';
+import scoutImage3 from '../assets/styles/images/scoutImage3.png';
+import scoutImage4 from '../assets/styles/images/scoutImage4.png';
+import scoutImage5 from '../assets/styles/images/scoutImage5.png';
+import scoutImage6 from '../assets/styles/images/scoutImage6.png';
+
 export interface Project {
     id: string;
     title: string;
@@ -83,9 +102,9 @@ export const projects: Project[] = [
     liveLink: 'https://mykosherdelivery.netlify.app',
     githubLink: 'https://github.com/wglickman33/mykosherdelivery',
     challenges: 'Architected the entire stack solo: a multi-vendor cart and checkout system with zone-based delivery validation, custom JWT authentication with role-based access control across four user types (customers, admins, restaurant owners, facility staff), and server-side Stripe validation to prevent price tampering. Built a full admin platform with revenue/profit analytics, promo and refund handling, and an audit-logged action history, plus a separate nursing-home ordering vertical with its own facility, resident, and billing management running on a different weekly cadence than the core consumer app.',
-    results: '1,500+ hours of development, 120,000+ lines of code. A production platform serving real customers and 11 restaurant partners, with real-time order updates via Server-Sent Events and a full operational admin dashboard behind it.',
+    results: '1,500+ hours of development, 128,000+ lines of code. A production platform serving real customers and 11 restaurant partners, with real-time order updates via Server-Sent Events and a full operational admin dashboard behind it.',
     category: 'web',
-    date: '2025',
+    date: 'February 2025',
     images: [
       mkdImage0,
       mkdImage1,
@@ -111,9 +130,34 @@ export const projects: Project[] = [
     description: 'Joined as the sole engineer on the Behavioral Health product team (since grown to four engineers with a dedicated manager), building production AI voice and chat admissions agents for treatment facilities across substance use, mental health, eating disorder, and outpatient care.',
     techStack: ['Python', 'Django', 'OpenAI API', 'Anthropic Claude API', 'Voice AI Agents', 'Conversational AI', 'Langfuse', 'PostgreSQL'],
     category: 'web',
-    date: '2025',
+    date: 'June 2025',
     challenges: 'Redesigned a single static AI prompt into a dynamic, injectable prompt architecture that adapts intake flow, persona, and conversation logic in real time based on facility type and context. Built and owned four facility-typed phone AI agents with crisis escalation, live transfer, and scheduling tooling, plus a separate AI training product that simulates prospective callers so facility staff could practice live admissions conversations. Built an LLM evaluation framework from scratch in Langfuse, including multi-turn tool-use simulation and LLM-as-judge scoring, so agents could be tested against production-faithful conversations before shipping.',
     results: 'Deployed and maintain AI voice and chat agents across every facility type in a regulated healthcare environment, with an evaluation pipeline that catches regressions in crisis handling, insurance flow, and intake accuracy before they ever reach a real caller.',
+  },
+  {
+    id: 'tori-v2',
+    title: 'Tori',
+    description: 'My first-ever app, rebuilt from the ground up. Tori is a full-stack household inventory system: shared homes with invite codes, searchable items with tags/locations/folders, expiration tracking, value dashboards, and live sync so everyone in the household sees changes without refreshing. What started as a rough BrainStation capstone is now a real product.',
+    techStack: ['React', 'TypeScript', 'SCSS', 'Vite', 'Zustand', 'Node.js', 'Express.js', 'PostgreSQL', 'Sequelize ORM', 'JWT Authentication', 'Server-Sent Events', 'Cloudinary', 'MiniSearch', 'Zod', 'EmailJS', 'Heroku', 'Netlify'],
+    liveLink: 'https://torihome.netlify.app',
+    githubLink: 'https://github.com/wglickman33/Tori',
+    challenges: 'Threw out the original capstone UI and rebuilt the whole stack solo in about a week: JWT auth, multi-member households with roles and invite codes, inventory with tags/locations/folders and Cloudinary photo uploads, MiniSearch-powered filtering (including expiration and price), and Server-Sent Events so household members stay in sync live. Designed a cleaner, more professional product surface than the handwritten notebook aesthetic of v1.',
+    results: '~25,000 lines of code, ~31 automated test files, ~40 hours of focused rebuild work. Live on Netlify (frontend) and Heroku (API + Postgres). Sibling product vibe to Whisk, but for home inventory instead of the kitchen.',
+    category: 'web',
+    date: 'August 2026',
+    images: [
+      toriImage1,
+      toriImage2,
+      toriImage3,
+      toriImage4,
+      toriImage5,
+      toriImage6,
+      toriImage7,
+      toriImage8,
+      toriImage9,
+      toriImage10,
+      toriImage11,
+    ],
   },
   {
     id: 'whisk',
@@ -140,6 +184,26 @@ export const projects: Project[] = [
       whiskImage11,
       whiskImage12,
       whiskImage13,
+    ],
+  },
+  {
+    id: 'scout',
+    title: 'Scout',
+    description: 'I\'m a Modern Orthodox Jew who observes Shabbat - no devices for 25 hours from Friday night until Saturday night - and a die-hard New York sports fan (Knicks, Mets, Giants, Rangers). I tried Amazon Alexa (Echo) and Google Home (Nest) for live scores; they were awful: updates would land days late, long after I cared. I also refused to drop $200 on a Tidbyt: ugly, overpriced, and something I could build myself. Scout Sports is the jumbotron I leave running so I can still follow the games without touching a phone or laptop. Favorites and pinned leagues keep the board on my sports; auto-cycling catches late finishes I\'d otherwise miss until the Saturday morning newspaper. Fullscreen wake-lock keeps it on all day while I can\'t use anything else. First project built end to end with TypeScript + Tailwind CSS.',
+    techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'TanStack Query', 'Radix UI', 'Node.js', 'Express.js', 'PostgreSQL', 'Prisma', 'JWT Authentication', 'ESPN API', 'TheSportsDB', 'Heroku', 'Netlify'],
+    liveLink: 'https://scoutsports.netlify.app',
+    githubLink: 'https://github.com/wglickman33/Scout',
+    challenges: 'Designed the product around a real constraint: Shabbat. Fullscreen wake-lock so a TV or monitor can stay awake all day, team favorites plus league pins so the board only shows what I care about (and auto-cycle for the rest), and live multi-league scoring so late Friday/Saturday games aren\'t a black hole until the newspaper. On the engineering side, normalized messy ESPN payloads across football, basketball, baseball, hockey, soccer, combat, golf, racing, and tennis card kinds, with TheSportsDB as a free-tier backup, TanStack Query for live polling, box-score modals, and an Express + Prisma JWT auth API on Heroku.',
+    results: '~7,500 lines of code with ~20% test coverage, ~20-25 hours of focused build work. Production demo live on Netlify (frontend) and Heroku (auth API), covering 20+ leagues with offseason champion cards when the slate is empty.',
+    category: 'web',
+    date: 'August 2026',
+    images: [
+      scoutImage1,
+      scoutImage2,
+      scoutImage3,
+      scoutImage4,
+      scoutImage5,
+      scoutImage6,
     ],
   },
   {
@@ -170,13 +234,13 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: 'tori',
-    title: 'Tori - Home Inventory Management',
-    description: 'A home inventory management system designed like a handwritten notebook to give users a "write in their notebook" vibe. Features my own handwriting font and was hand-drawn before being recreated with code. Created as my BrainStation bootcamp capstone project.',
+    id: 'tori-v1',
+    title: 'Tori v1 (Capstone)',
+    description: 'Original BrainStation capstone: a home inventory app styled like a handwritten notebook, with a custom handwriting font. Hand-drew the UI first, then built it in code. Rebuilt as the full-stack Tori product in August 2026.',
     techStack: ['React', 'JavaScript', 'SCSS', 'Custom Fonts', 'Firebase'],
     githubLink: 'https://github.com/wglickman33/Tori',
-    challenges: 'Designed the entire interface by hand first, then recreated it digitally. Created a custom handwriting font to match the aesthetic. Built item and category management functionality with a unique notebook-style UI.',
-    results: 'Finished top of the class at BrainStation bootcamp with this project. Got very far along with the ability to manage items and categories, creating a unique and personal user experience.',
+    challenges: 'Designed the interface by hand, created a custom handwriting font, and shipped item/category management with a notebook-style UI under bootcamp constraints.',
+    results: 'Finished top of class at BrainStation. The v1 aesthetic was personal and distinctive; the rebuild kept the problem domain and leveled up the engineering.',
     category: 'web',
     date: 'October 2024',
   },
