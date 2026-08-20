@@ -143,7 +143,7 @@ export const timelineItems: TimelineItem[] = [
     id: 'bootcamp-end',
     date: 'October 2024',
     title: 'Completed Bootcamp - Top of Class',
-    description: 'Finished BrainStation bootcamp top of the class. Capstone was Tori v1: a home inventory app designed like a handwritten notebook with a custom handwriting font, hand-drawn before being rebuilt in code. Later rebuilt as a full product (see August 2026).',
+    description: 'Finished BrainStation bootcamp top of the class. Capstone was Tori v1: a home inventory app designed like a handwritten notebook with a custom handwriting font, hand-drawn before being rebuilt in code. Later rebuilt and shipped as the live Tori product (see August 2026).',
     category: 'achievement',
     link: 'https://github.com/wglickman33/Tori',
     linkText: 'View on GitHub',
@@ -202,9 +202,9 @@ export const timelineItems: TimelineItem[] = [
   },
   {
     id: 'whisk',
-    date: 'July 2026',
+    date: 'July 2026 - Present',
     title: 'Launched Whisk',
-    description: 'Built and shipped a full-stack recipe app and kitchen toolkit solo: cloud-synced recipes, collaborative shopping lists with real-time updates, 31 privacy-first browser tools, and light/dark/auto theming. ~35,000 lines of code, 285 tests, live on Netlify and Heroku.',
+    description: 'Built and shipped a live recipe app and kitchen toolkit solo: cloud-synced recipes, collaborative shopping lists with real-time updates, 31 privacy-first browser tools, Sous AI for saved recipes and lists, and photo import that turns screenshots into a draft recipe you review before Save. Live on Netlify and Heroku.',
     category: 'achievement',
     downloads: [
       {
@@ -227,8 +227,8 @@ export const timelineItems: TimelineItem[] = [
   {
     id: 'tori-rebuild',
     date: 'August 2026 - Present',
-    title: 'Rebuilt Tori into a Full Product',
-    description: 'Took my first-ever app (the BrainStation notebook-style capstone) and rebuilt it from scratch in about a week as a professional full-stack household inventory system: shared homes, searchable items, expiration and value tracking, Cloudinary photos, and live household sync. ~25,000 lines of code, ~40 hours, live on Netlify and Heroku.',
+    title: 'Launched Tori',
+    description: 'Took my first-ever app (the BrainStation notebook-style capstone) and rebuilt it from scratch as a live household inventory product: shared homes, searchable items, expiration and value tracking, Cloudinary photos, and live household sync. Then shipped Tori AI so anyone in the home can ask the inventory questions in chat, with confirm-before-write. Live on Netlify and Heroku.',
     category: 'achievement',
     downloads: [
       {

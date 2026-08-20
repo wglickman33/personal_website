@@ -65,6 +65,7 @@ const SKILLS_BY_CATEGORY: Record<SkillCategoryId, RawSkill[]> = {
 
   ai: [
     { id: 'openai', name: 'OpenAI API', rating: 4.9, favorite: true, description: 'GPT models, embeddings, and AI integrations' },
+    { id: 'groq', name: 'Groq API', rating: 4.8, description: 'Fast LLM and vision inference for Tori AI and Whisk (Sous AI plus screenshot-to-recipe)' },
     { id: 'chat-ai', name: 'Chat AI', rating: 4.8, description: 'Conversational AI and chat interfaces' },
     { id: 'anthropic', name: 'Anthropic API', rating: 4.9, description: 'Claude models and AI capabilities' },
     { id: 'ai-agents', name: 'AI Agents', rating: 4.7, favorite: true, description: 'Building autonomous AI systems with tools and memory' },

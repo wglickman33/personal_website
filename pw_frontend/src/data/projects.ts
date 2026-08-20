@@ -50,6 +50,12 @@ import whiskImage10 from '../assets/styles/images/whiskImage10.png';
 import whiskImage11 from '../assets/styles/images/whiskImage11.png';
 import whiskImage12 from '../assets/styles/images/whiskImage12.png';
 import whiskImage13 from '../assets/styles/images/whiskImage13.png';
+import whiskImage14 from '../assets/styles/images/whiskImage14.png';
+import whiskImage15 from '../assets/styles/images/whiskImage15.png';
+import whiskImage16 from '../assets/styles/images/whiskImage16.png';
+import whiskImage17 from '../assets/styles/images/whiskImage17.png';
+import whiskImage18 from '../assets/styles/images/whiskImage18.png';
+import whiskImage19 from '../assets/styles/images/whiskImage19.png';
 
 import toriImage1 from '../assets/styles/images/toriImage1.png';
 import toriImage2 from '../assets/styles/images/toriImage2.png';
@@ -62,6 +68,10 @@ import toriImage8 from '../assets/styles/images/toriImage8.png';
 import toriImage9 from '../assets/styles/images/toriImage9.png';
 import toriImage10 from '../assets/styles/images/toriImage10.png';
 import toriImage11 from '../assets/styles/images/toriImage11.png';
+import toriImage12 from '../assets/styles/images/toriImage12.png';
+import toriImage13 from '../assets/styles/images/toriImage13.png';
+import toriImage14 from '../assets/styles/images/toriImage14.png';
+import toriImage15 from '../assets/styles/images/toriImage15.png';
 
 import scoutImage1 from '../assets/styles/images/scoutImage1.png';
 import scoutImage2 from '../assets/styles/images/scoutImage2.png';
@@ -137,12 +147,12 @@ export const projects: Project[] = [
   {
     id: 'tori-v2',
     title: 'Tori',
-    description: 'My first-ever app, rebuilt from the ground up. Tori is a full-stack household inventory system: shared homes with invite codes, searchable items with tags/locations/folders, expiration tracking, value dashboards, and live sync so everyone in the household sees changes without refreshing. What started as a rough BrainStation capstone is now a real product.',
-    techStack: ['React', 'TypeScript', 'SCSS', 'Vite', 'Zustand', 'Node.js', 'Express.js', 'PostgreSQL', 'Sequelize ORM', 'JWT Authentication', 'Server-Sent Events', 'Cloudinary', 'MiniSearch', 'Zod', 'EmailJS', 'Heroku', 'Netlify'],
+    description: 'My first-ever app, now a live household inventory product. Shared homes with invite codes, searchable items with tags, locations, folders, and photos, expiration and value tracking, and live sync so the whole household sees changes without refreshing. Tori AI (Groq) can look up what you have, what is expiring, and where it lives, then propose adds, edits, or deletes for you to confirm in chat. Sibling to Whisk, for the rest of the house instead of the kitchen.',
+    techStack: ['React', 'TypeScript', 'SCSS', 'Vite', 'Zustand', 'Node.js', 'Express.js', 'PostgreSQL', 'Sequelize ORM', 'JWT Authentication', 'Server-Sent Events', 'Cloudinary', 'MiniSearch', 'Zod', 'Groq API', 'AI Agents', 'EmailJS', 'Heroku', 'Netlify'],
     liveLink: 'https://torihome.netlify.app',
     githubLink: 'https://github.com/wglickman33/Tori',
-    challenges: 'Threw out the original capstone UI and rebuilt the whole stack solo in about a week: JWT auth, multi-member households with roles and invite codes, inventory with tags/locations/folders and Cloudinary photo uploads, MiniSearch-powered filtering (including expiration and price), and Server-Sent Events so household members stay in sync live. Designed a cleaner, more professional product surface than the handwritten notebook aesthetic of v1.',
-    results: '~25,000 lines of code, ~31 automated test files, ~40 hours of focused rebuild work. Live on Netlify (frontend) and Heroku (API + Postgres). Sibling product vibe to Whisk, but for home inventory instead of the kitchen.',
+    challenges: 'Threw out the original capstone UI and rebuilt the stack solo: JWT auth, multi-member households with roles and invite codes, inventory with tags/locations/folders and Cloudinary photos, MiniSearch filtering, import/export (JSON, CSV, PDF), and Server-Sent Events for live household sync. Then shipped Tori AI as a tool-using inventory assistant (floating widget plus a dedicated /ai page) that stays on household data, never invents items, and never writes without Confirm. Designed a professional periwinkle light/dark surface instead of the handwritten notebook look of v1.',
+    results: 'Live and ready to use at torihome.netlify.app: Netlify frontend, Heroku API + Postgres. Started as a one-week rebuild of my BrainStation capstone and grew into a full product with Tori AI. Sibling to Whisk.',
     category: 'web',
     date: 'August 2026',
     images: [
@@ -157,17 +167,21 @@ export const projects: Project[] = [
       toriImage9,
       toriImage10,
       toriImage11,
+      toriImage12,
+      toriImage13,
+      toriImage14,
+      toriImage15,
     ],
   },
   {
     id: 'whisk',
     title: 'Whisk',
-    description: 'A full-stack recipe and kitchen toolkit: cloud-synced recipes with folders and import, collaborative shopping lists with real-time updates, 31 privacy-first browser tools (photo editing, unit conversion, markdown preview, and more), plus light/dark/auto theming. Built and shipped solo.',
-    techStack: ['React', 'TypeScript', 'SCSS', 'Vite', 'Zustand', 'Node.js', 'Express.js', 'PostgreSQL', 'Prisma', 'JWT Authentication', 'Server-Sent Events', 'Spoonacular API', 'EmailJS', 'Heroku', 'Netlify'],
+    description: 'A live kitchen app: cloud-synced recipes with folders, tags, URL import, and photo import, collaborative shopping lists with real-time updates, 31 privacy-first browser tools (photo editing, unit conversion, markdown preview, and more), plus light/dark/auto theming. Sous AI (Groq) can look up saved recipes, substitutions, and shopping lists, then propose grocery adds for you to confirm in chat. Upload up to five screenshots or cookbook pages and Groq vision fills a recipe draft you review before Save. Built and shipped solo. Sibling to Tori, for the kitchen instead of the household.',
+    techStack: ['React', 'TypeScript', 'SCSS', 'Vite', 'Zustand', 'Node.js', 'Express.js', 'PostgreSQL', 'Prisma', 'JWT Authentication', 'Server-Sent Events', 'Spoonacular API', 'Groq API', 'AI Agents', 'EmailJS', 'Heroku', 'Netlify'],
     liveLink: 'https://trywhisk.netlify.app',
     githubLink: 'https://github.com/wglickman33/Whisk',
-    challenges: 'Architected the full stack solo: JWT auth with cloud sync for recipes and preferences, shared shopping lists with Server-Sent Events for live collaboration, and a settings system where theme (light, dark, auto) persists correctly across local storage and server sync. Built 31 client-side tools that run entirely in the browser, plus unit and file converters, while keeping the shopping list UX fast and phone-first on every screen size.',
-    results: '~35,000 lines of code and 285 automated tests. Production on Netlify (frontend) and Heroku (API), with shared grocery lists, recipe management, and a complete in-browser toolkit. No install required.',
+    challenges: 'Architected the full stack solo: JWT auth with cloud sync for recipes and preferences, shared shopping lists with Server-Sent Events for live collaboration, 31 client-side tools that run entirely in the browser, and a settings system where theme (light, dark, auto) persists across local storage and server sync. Then shipped Sous AI as a tool-using kitchen assistant (floating widget plus a dedicated /sous page, with optional voice) that stays on saved recipes and lists, never invents Whisk data, and never adds groceries without Add to list. Photo import sends up to five JPEG, PNG, WebP, or HEIC screenshots or cookbook pages to Groq vision, opens the usual recipe form, and writes nothing until you Save.',
+    results: 'Live and ready to use at trywhisk.netlify.app: Netlify frontend, Heroku API + Postgres. Recipes, shared grocery lists, 31 in-browser tools, Sous AI, and screenshot-to-recipe, with no install required. Sibling to Tori.',
     category: 'web',
     date: 'July 2026',
     images: [
@@ -184,6 +198,12 @@ export const projects: Project[] = [
       whiskImage11,
       whiskImage12,
       whiskImage13,
+      whiskImage14,
+      whiskImage15,
+      whiskImage16,
+      whiskImage17,
+      whiskImage18,
+      whiskImage19,
     ],
   },
   {
@@ -236,11 +256,11 @@ export const projects: Project[] = [
   {
     id: 'tori-v1',
     title: 'Tori v1 (Capstone)',
-    description: 'Original BrainStation capstone: a home inventory app styled like a handwritten notebook, with a custom handwriting font. Hand-drew the UI first, then built it in code. Rebuilt as the full-stack Tori product in August 2026.',
+    description: 'Original BrainStation capstone: a home inventory app styled like a handwritten notebook, with a custom handwriting font. Hand-drew the UI first, then built it in code. Rebuilt and shipped as the live Tori product (with Tori AI) in August 2026.',
     techStack: ['React', 'JavaScript', 'SCSS', 'Custom Fonts', 'Firebase'],
     githubLink: 'https://github.com/wglickman33/Tori',
     challenges: 'Designed the interface by hand, created a custom handwriting font, and shipped item/category management with a notebook-style UI under bootcamp constraints.',
-    results: 'Finished top of class at BrainStation. The v1 aesthetic was personal and distinctive; the rebuild kept the problem domain and leveled up the engineering.',
+    results: 'Finished top of class at BrainStation. The v1 aesthetic was personal and distinctive; the live Tori product kept the problem domain and leveled up the engineering, including Tori AI.',
     category: 'web',
     date: 'October 2024',
   },
