@@ -3,7 +3,6 @@
 @use "../../../assets/styles/partials/mixins" as *;
 @use "../../../assets/styles/partials/breakpoints" as *;
 
-$item-count: 6;
 $item-transition: 0.5s;
 
 @mixin absolute-center {
@@ -13,34 +12,35 @@ $item-transition: 0.5s;
   transform: translate(-50%, -50%);
 }
 
-// Sizing is driven by CSS custom properties (not Sass variables) so a
-// single override inside a media query can rescale the toggler, the ring
-// items, and the radius they sit on all at once - Sass variables are
-// compile-time constants and can't respond to a breakpoint at all, which
-// is why this widget previously had zero responsive coverage.
 .circular-menu {
   --toggler-size: 40px;
   --item-size: calc(var(--toggler-size) * 2);
   --radius-gap: 30px;
+  --orbit-distance: min(
+    calc(var(--item-size) + var(--radius-gap)),
+    calc((100cqw - var(--item-size)) / 2 - 8px)
+  );
+  --menu-span: calc(2 * var(--orbit-distance) + var(--item-size));
 
+  container-type: inline-size;
   position: relative;
   width: 100%;
-  height: 400px;
+  height: max(400px, var(--menu-span));
+  min-height: var(--menu-span);
   display: flex;
   align-items: center;
   justify-content: center;
   background: transparent;
+  overflow: visible;
 
   @include sm {
-    --toggler-size: 34px;
-    --radius-gap: 22px;
-    height: 320px;
+    --toggler-size: 32px;
+    --radius-gap: 20px;
   }
 
   @include xs {
-    --toggler-size: 28px;
-    --radius-gap: 16px;
-    height: 260px;
+    --toggler-size: 26px;
+    --radius-gap: 14px;
   }
 }
 
@@ -150,34 +150,36 @@ $item-transition: 0.5s;
   opacity: 0;
   transition: opacity $item-transition, transform $item-transition;
   transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 .circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(1) {
-  transform: translate(-50%, -50%) rotate(0deg) translateX(calc(-1 * var(--item-size) - var(--radius-gap))) rotate(0deg);
+  transform: translate(-50%, -50%) rotate(0deg) translateX(calc(-1 * var(--orbit-distance))) rotate(0deg);
 }
 
 .circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(2) {
-  transform: translate(-50%, -50%) rotate(60deg) translateX(calc(-1 * var(--item-size) - var(--radius-gap))) rotate(-60deg);
+  transform: translate(-50%, -50%) rotate(60deg) translateX(calc(-1 * var(--orbit-distance))) rotate(-60deg);
 }
 
 .circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(3) {
-  transform: translate(-50%, -50%) rotate(120deg) translateX(calc(-1 * var(--item-size) - var(--radius-gap))) rotate(-120deg);
+  transform: translate(-50%, -50%) rotate(120deg) translateX(calc(-1 * var(--orbit-distance))) rotate(-120deg);
 }
 
 .circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(4) {
-  transform: translate(-50%, -50%) rotate(180deg) translateX(calc(-1 * var(--item-size) - var(--radius-gap))) rotate(-180deg);
+  transform: translate(-50%, -50%) rotate(180deg) translateX(calc(-1 * var(--orbit-distance))) rotate(-180deg);
 }
 
 .circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(5) {
-  transform: translate(-50%, -50%) rotate(240deg) translateX(calc(-1 * var(--item-size) - var(--radius-gap))) rotate(-240deg);
+  transform: translate(-50%, -50%) rotate(240deg) translateX(calc(-1 * var(--orbit-distance))) rotate(-240deg);
 }
 
 .circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(6) {
-  transform: translate(-50%, -50%) rotate(300deg) translateX(calc(-1 * var(--item-size) - var(--radius-gap))) rotate(-300deg);
+  transform: translate(-50%, -50%) rotate(300deg) translateX(calc(-1 * var(--orbit-distance))) rotate(-300deg);
 }
 
 .circular-menu__link {
@@ -209,7 +211,6 @@ $item-transition: 0.5s;
     position: absolute;
     left: 50%;
     bottom: calc(100% + 12px);
-    transform: translateX(-50%);
     padding: 8px 12px;
     border-radius: 8px;
     font-size: $font-size-xs;
@@ -233,7 +234,6 @@ $item-transition: 0.5s;
     position: absolute;
     left: 50%;
     bottom: calc(100% + 4px);
-    transform: translateX(-50%);
     width: 0;
     height: 0;
     border-left: 6px solid transparent;
@@ -265,15 +265,12 @@ $item-transition: 0.5s;
     transform: translateX(-50%) translateY(0);
   }
 
-  // On touch devices there's no hover state at all, so these CSS-only
-  // tooltips (the only place a label is shown for each icon) would
-  // otherwise never appear. Keep them permanently visible for touch/coarse
-  // pointers instead of requiring a hover that can never happen.
+  // Touch devices: hide CSS tooltips entirely. Labels overlap when all
+  // forced visible; icons remain tappable via aria-label.
   @media (hover: none) {
     &::after,
     &::before {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
+      display: none;
     }
   }
 
@@ -301,7 +298,7 @@ $item-transition: 0.5s;
 
 .circular-menu__item:nth-child(1) .circular-menu__link {
   transform: rotate(0deg);
-  
+
   &:hover {
     transform: rotate(0deg) scale(1.1);
   }
@@ -324,7 +321,7 @@ $item-transition: 0.5s;
 
 .circular-menu__item:nth-child(2) .circular-menu__link {
   transform: rotate(-60deg);
-  
+
   &:hover {
     transform: rotate(-60deg) scale(1.1);
   }
@@ -347,7 +344,7 @@ $item-transition: 0.5s;
 
 .circular-menu__item:nth-child(3) .circular-menu__link {
   transform: rotate(-120deg);
-  
+
   &:hover {
     transform: rotate(-120deg) scale(1.1);
   }
@@ -370,7 +367,7 @@ $item-transition: 0.5s;
 
 .circular-menu__item:nth-child(4) .circular-menu__link {
   transform: rotate(-180deg);
-  
+
   &:hover {
     transform: rotate(-180deg) scale(1.1);
   }
@@ -393,7 +390,7 @@ $item-transition: 0.5s;
 
 .circular-menu__item:nth-child(5) .circular-menu__link {
   transform: rotate(-240deg);
-  
+
   &:hover {
     transform: rotate(-240deg) scale(1.1);
   }
@@ -416,7 +413,7 @@ $item-transition: 0.5s;
 
 .circular-menu__item:nth-child(6) .circular-menu__link {
   transform: rotate(-300deg);
-  
+
   &:hover {
     transform: rotate(-300deg) scale(1.1);
   }
@@ -436,4 +433,3 @@ $item-transition: 0.5s;
     transform: translateX(-50%) translateY(0) rotate(300deg);
   }
 }
-
