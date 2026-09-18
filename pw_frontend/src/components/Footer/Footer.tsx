@@ -80,7 +80,7 @@ const Footer = () => {
         
         <div className="footer__bottom">
           <p className="footer__copyright">
-            © {currentYear} William Glickman. All rights reserved.
+            © {currentYear} WayGate Dev. All rights reserved.
           </p>
         </div>
       </div>

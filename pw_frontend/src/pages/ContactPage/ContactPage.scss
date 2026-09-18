@@ -425,41 +425,72 @@
 .contact-form__status {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
+  gap: 12px;
   margin-top: -8px;
   padding: 14px 16px;
   border-radius: $border-radius;
+  border: 1px solid transparent;
   font-size: $font-size-sm;
   line-height: $line-height-relaxed;
 
   .material-symbols-outlined {
     font-size: 20px;
     flex-shrink: 0;
+    margin-top: 1px;
   }
 
-  a {
-    color: inherit;
-    font-weight: $font-weight-semibold;
-    text-decoration: underline;
+  &-text {
+    flex: 1;
+    min-width: 0;
   }
 
   &--success {
     color: #15803d;
     background-color: rgba(#15803d, 0.1);
+    border-color: rgba(#15803d, 0.2);
 
     .contact-page--dark & {
       color: #4ade80;
       background-color: rgba(#4ade80, 0.12);
+      border-color: rgba(#4ade80, 0.25);
     }
   }
 
   &--error {
     color: #b91c1c;
     background-color: rgba(#b91c1c, 0.08);
+    border-color: rgba(#b91c1c, 0.2);
 
     .contact-page--dark & {
-      color: #f87171;
-      background-color: rgba(#f87171, 0.12);
+      color: #fca5a5;
+      background-color: rgba(#f87171, 0.1);
+      border-color: rgba(#f87171, 0.25);
+    }
+
+    a {
+      color: $accent-color-1;
+      font-weight: $font-weight-semibold;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $accent-color-3;
+      }
+
+      &:focus-visible {
+        outline: 2px solid $accent-color-3;
+        outline-offset: 2px;
+        border-radius: 2px;
+      }
+
+      .contact-page--dark & {
+        color: $accent-color-3;
+
+        &:hover {
+          color: $light-color;
+        }
+      }
     }
   }
 }

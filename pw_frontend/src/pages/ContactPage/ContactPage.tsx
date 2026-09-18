@@ -15,8 +15,6 @@ const ContactPage = () => {
     projectType: '',
     message: '',
   });
-  // Honeypot field: real users never see or fill this in. If it has a value
-  // on submit, the request is silently dropped (bot filled every field).
   const [honeypot, setHoneypot] = useState('');
   const [isAnimating, setIsAnimating] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle');
@@ -36,11 +34,6 @@ const ContactPage = () => {
       [name]: value,
     }));
   };
-
-  const encodeFormData = (data: Record<string, string>) =>
-    Object.keys(data)
-      .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
-      .join('&');
 
   const resetForm = () => {
     setFormData({
@@ -73,14 +66,13 @@ const ContactPage = () => {
     setIsAnimating(true);
 
     try {
-      // Submits to Netlify's built-in form handling: no third-party API
-      // keys, no client-exposed secrets, and no reliance on the visitor
-      // having a configured email client. Netlify stores the submission
-      // and emails a notification, so nothing gets missed.
-      const response = await fetch('/', {
+      const response = await fetch('/.netlify/functions/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encodeFormData({ 'form-name': 'contact', ...formData }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          honeypot,
+        }),
       });
 
       if (!response.ok) {
@@ -155,14 +147,7 @@ const ContactPage = () => {
       <section className="contact-form-section">
         <div className="contact-form-section__container">
           <h2 className="contact-form-section__title">Or send a message</h2>
-          <form
-            className="contact-form"
-            name="contact"
-            method="POST"
-            data-netlify="true"
-            onSubmit={handleSubmit}
-          >
-            <input type="hidden" name="form-name" value="contact" />
+          <form className="contact-form" onSubmit={handleSubmit}>
             <div className="contact-form__honeypot" aria-hidden="true">
               <label htmlFor="bot-field">Leave this field empty</label>
               <input
@@ -294,16 +279,20 @@ const ContactPage = () => {
 
             {submitStatus === 'success' && (
               <p className="contact-form__status contact-form__status--success" role="status">
-                <span className="material-symbols-outlined">check_circle</span>
-                Message sent! I'll get back to you soon.
+                <span className="material-symbols-outlined" aria-hidden="true">check_circle</span>
+                <span className="contact-form__status-text">
+                  Message sent! I'll get back to you soon.
+                </span>
               </p>
             )}
 
             {submitStatus === 'error' && (
               <p className="contact-form__status contact-form__status--error" role="alert">
-                <span className="material-symbols-outlined">error</span>
-                Something went wrong sending your message. Please try again, or email me directly at{' '}
-                <a href="mailto:willglickman@gmail.com">willglickman@gmail.com</a>.
+                <span className="material-symbols-outlined" aria-hidden="true">error</span>
+                <span className="contact-form__status-text">
+                  Something went wrong sending your message. Please try again, or email me directly at{' '}
+                  <a href="mailto:willglickman@gmail.com">willglickman@gmail.com</a>.
+                </span>
               </p>
             )}
           </form>
