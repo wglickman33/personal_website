@@ -109,7 +109,7 @@ export const projects: Project[] = [
     title: 'My Kosher Delivery',
     description: 'Co-founded and lead all engineering for a full-stack, multi-vendor kosher food delivery platform serving the Five Towns, NYC, NJ, and the Hamptons. Customers can order from up to 11 restaurant partners in a single checkout, with a dedicated B2B vertical delivering to nursing home residents.',
     techStack: ['React', 'TypeScript', 'JavaScript', 'SCSS', 'Node.js', 'Express', 'PostgreSQL', 'Sequelize ORM', 'JWT Auth', 'RBAC', 'Stripe API', 'Material UI', 'Recharts', 'Mailchimp API', 'Shipday API', 'Cloudinary', 'Server-Sent Events', 'Heroku', 'Netlify'],
-    liveLink: 'https://mykosherdelivery.netlify.app',
+    liveLink: 'https://mykosherdelivery.com',
     githubLink: 'https://github.com/wglickman33/mykosherdelivery',
     challenges: 'Architected the entire stack solo: a multi-vendor cart and checkout system with zone-based delivery validation, custom JWT authentication with role-based access control across four user types (customers, admins, restaurant owners, facility staff), and server-side Stripe validation to prevent price tampering. Built a full admin platform with revenue/profit analytics, promo and refund handling, and an audit-logged action history, plus a separate nursing-home ordering vertical with its own facility, resident, and billing management running on a different weekly cadence than the core consumer app.',
     results: '1,500+ hours of development, 128,000+ lines of code. A production platform serving real customers and 11 restaurant partners, with real-time order updates via Server-Sent Events and a full operational admin dashboard behind it.',

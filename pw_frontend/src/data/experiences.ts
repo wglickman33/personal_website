@@ -66,7 +66,7 @@ export const experiences: Experience[] = [
   period: 'February 2025 - Present',
   description: 'Co-founded and lead all engineering for a full-stack, multi-vendor kosher food delivery platform serving the Five Towns, NYC, NJ, and the Hamptons, partnering with 11 restaurants and a dedicated B2B nursing-home vertical. Architected the complete stack solo, from JWT authentication and role-based access control to Stripe payments with server-side order validation and a full admin analytics platform.',
   skills: ['React', 'TypeScript', 'Node.js', 'Express', 'PostgreSQL', 'Sequelize ORM', 'Stripe API', 'JWT Authentication', 'RBAC'],
-  liveLink: 'https://mykosherdelivery.netlify.app',
+  liveLink: 'https://mykosherdelivery.com',
   githubLink: 'https://github.com/wglickman33/mykosherdelivery',
 },
 {

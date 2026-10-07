@@ -170,7 +170,7 @@ export const timelineItems: TimelineItem[] = [
     category: 'work',
     downloads: [
       {
-        url: 'https://mykosherdelivery.netlify.app',
+        url: 'https://mykosherdelivery.com',
         text: 'Visit Live Site',
       },
       {
