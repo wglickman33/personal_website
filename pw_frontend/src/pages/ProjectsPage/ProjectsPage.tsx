@@ -15,6 +15,7 @@ import whiskLogoAmber from '../../assets/styles/logos/whiskLogoAmber.svg';
 import bgworkspaceLogo from '../../assets/styles/logos/bgworkspaceLogo.png';
 import toriLogo from '../../assets/styles/logos/toriLogo.png';
 import scoutIcon from '../../assets/styles/logos/scoutIcon.svg';
+import figAndPeachLogo from '../../assets/styles/logos/figAndPeachLogo.png';
 import './ProjectsPage.scss';
 
 type ProjectCategory = 'all' | 'web' | 'widget' | 'game';
@@ -373,8 +374,14 @@ const ProjectsPage = () => {
               <img src={scoutIcon} alt="Scout" className="projects-portfolio__card-scout-icon" />
             </div>
           )}
+
+          {project.id === 'fig-and-peach' && (
+            <div className="projects-portfolio__card-fig-peach-preview">
+              <img src={figAndPeachLogo} alt="Fig & Peach Shop" className="projects-portfolio__card-fig-peach-icon" />
+            </div>
+          )}
           
-          {!hasImages && !(isInteractive && project.id === 'afk-clock-screen') && project.id !== '2048-game' && project.id !== 'wordle' && project.id !== 'wavelength' && project.id !== 'my-kosher-delivery' && project.id !== 'bg-workspace' && project.id !== 'tori-v2' && project.id !== 'whisk' && project.id !== 'scout' && (
+          {!hasImages && !(isInteractive && project.id === 'afk-clock-screen') && project.id !== '2048-game' && project.id !== 'wordle' && project.id !== 'wavelength' && project.id !== 'my-kosher-delivery' && project.id !== 'bg-workspace' && project.id !== 'tori-v2' && project.id !== 'whisk' && project.id !== 'scout' && project.id !== 'fig-and-peach' && (
             <div className={`projects-portfolio__card-placeholder projects-portfolio__card-placeholder--${project.category} ${project.id === 'my-kosher-delivery' ? 'projects-portfolio__card-placeholder--mkd' : ''}`}>
               {project.id === 'my-kosher-delivery' ? (
                 <img src={mkdIcon} alt="My Kosher Delivery" className="projects-portfolio__card-placeholder-mkd-icon" />

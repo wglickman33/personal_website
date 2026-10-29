@@ -201,6 +201,23 @@ export const timelineItems: TimelineItem[] = [
     category: 'milestone',
   },
   {
+    id: 'fig-and-peach',
+    date: 'July 2026 - Present',
+    title: 'Launched Fig & Peach Shop',
+    description: 'Built a full-stack custom jewelry storefront and owner admin for a handmade brand: React 19, Vite 8, and React Router 7 on the frontend; Netlify Functions, PostgreSQL, jose JWT sessions, Zod validation, Cloudinary, and Resend on the backend. Ten shop categories, bracelet pricing engines, idempotent checkout, and an owner admin with dry-run order edits and pricing snapshots. 750+ Vitest tests, 90+ Playwright journeys, oxlint, and GitHub Actions CI against Postgres 16. Live at fignpeach.com.',
+    category: 'achievement',
+    downloads: [
+      {
+        url: 'https://fignpeach.com',
+        text: 'Visit Live Site',
+      },
+      {
+        url: 'https://github.com/wglickman33/figAndPeach',
+        text: 'View on GitHub',
+      },
+    ],
+  },
+  {
     id: 'whisk',
     date: 'July 2026 - Present',
     title: 'Launched Whisk',
@@ -208,7 +225,7 @@ export const timelineItems: TimelineItem[] = [
     category: 'achievement',
     downloads: [
       {
-        url: 'https://trywhisk.netlify.app',
+        url: 'https://whiskplus.com',
         text: 'Visit Live Site',
       },
       {

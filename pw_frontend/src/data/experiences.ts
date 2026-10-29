@@ -43,12 +43,22 @@ export const experiences: Experience[] = [
 },
 {
   title: 'Creator & Full-Stack Engineer',
+  company: 'Fig & Peach Shop',
+  location: 'Remote',
+  period: 'July 2026 - Present',
+  description: 'Built and shipped a production custom jewelry storefront and owner admin for a handmade brand. Shoppers browse ten categories, run multi-step customizers, and configure bracelet collections with server-calculated pricing, then checkout with pickup or shipping while payment happens off-site via Zelle or Venmo. The owner manages catalog photos, component library, collection pricing rules, and orders through a secured admin CMS on Netlify Functions, PostgreSQL, Cloudinary, and Resend (no AI/LLM layer in the app).',
+  skills: ['TypeScript', 'JavaScript', 'SQL', 'React', 'React Router', 'Vite', 'CSS', 'Node.js', 'Netlify Functions', 'jose', 'bcryptjs', 'Zod', 'Resend API', 'Cloudinary', 'PostgreSQL', 'Vitest', 'Playwright', 'Testing Library', 'GitHub Actions', 'Netlify', 'oxlint', 'esbuild'],
+  liveLink: 'https://fignpeach.com',
+  githubLink: 'https://github.com/wglickman33/figAndPeach',
+},
+{
+  title: 'Creator & Full-Stack Engineer',
   company: 'Whisk',
   location: 'Remote',
   period: 'July 2026 - Present',
   description: 'Built and shipped a live recipe app and kitchen toolkit solo: cloud-synced recipes with folders, URL import, and screenshot-to-recipe, collaborative shopping lists with Server-Sent Events, 31 privacy-first browser tools, and light/dark/auto theming. Shipped Sous AI, a Groq-backed assistant that can search saved recipes, check substitutions, and propose shopping-list adds with an Add to list step. Live on Netlify and Heroku.',
   skills: ['React', 'TypeScript', 'SCSS', 'Vite', 'Zustand', 'Node.js', 'Express.js', 'PostgreSQL', 'Prisma', 'JWT Authentication', 'Server-Sent Events', 'Spoonacular API', 'Groq API', 'AI Agents', 'EmailJS', 'Heroku', 'Netlify'],
-  liveLink: 'https://trywhisk.netlify.app',
+  liveLink: 'https://whiskplus.com',
   githubLink: 'https://github.com/wglickman33/Whisk',
 },
 {
