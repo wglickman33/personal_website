@@ -1,5 +1,7 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import useTheme from '../../../hooks/useTheme';
+import useModalA11y from '../../../hooks/useModalA11y';
 import { Challenge } from './types/capitalVentureTypes';
 import './Challenges.scss';
 
@@ -10,17 +12,15 @@ interface ChallengesProps {
 
 const Challenges = ({ challenges, onClose }: ChallengesProps) => {
   const { theme } = useTheme();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [onClose]);
+  useModalA11y({
+    isOpen: Boolean(challenges?.length),
+    onClose,
+    containerRef: dialogRef,
+    initialFocusRef: closeBtnRef,
+  });
 
   const completedCount = useMemo(() => 
     challenges?.filter(c => c.completed).length ?? 0,
@@ -56,18 +56,24 @@ const Challenges = ({ challenges, onClose }: ChallengesProps) => {
     return challenge.target.toString();
   };
 
-  return (
-    <div className={`challenges challenges--${theme}`}>
+  return createPortal(
+    <div
+      ref={dialogRef}
+      className={`challenges challenges--${theme}`}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="challenges-title"
+    >
       <div className="challenges__overlay" onClick={onClose} />
       <div className="challenges__content">
         <div className="challenges__header">
-          <h2 className="challenges__title">Challenges</h2>
+          <h2 id="challenges-title" className="challenges__title">Challenges</h2>
           <button
+            ref={closeBtnRef}
             className="challenges__close-btn"
             onClick={onClose}
             type="button"
             aria-label="Close challenges"
-            autoFocus
           >
             <span className="material-symbols-outlined" aria-hidden="true">close</span>
           </button>
@@ -210,7 +216,8 @@ const Challenges = ({ challenges, onClose }: ChallengesProps) => {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

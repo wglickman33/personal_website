@@ -852,7 +852,7 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
                           : levelsToBuy > 0 ? `+${levelsToBuy}` : 'Max'}
                       </span>
                       <span className="capital-venture__venture-buy-cost">
-                        {levelsToBuy > 0 ? BN.formatCompact(cost) : '—'}
+                        {levelsToBuy > 0 ? BN.formatCompact(cost) : '-'}
                       </span>
                     </button>
 
@@ -898,7 +898,7 @@ const CapitalVenture = ({ isPreview = false }: CapitalVentureProps) => {
                   </div>
                   <div className="capital-venture__upgrade-buy-btn capital-venture__upgrade-buy-btn--disabled">
                     <span className="material-symbols-outlined">lock</span>
-                    <span className="capital-venture__upgrade-cost">—</span>
+                    <span className="capital-venture__upgrade-cost">-</span>
                   </div>
                 </div>
               );

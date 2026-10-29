@@ -11,7 +11,8 @@ const ContactCTA = () => {
       <SectionDivider 
         position="top" 
         variant="triangle" 
-        color={theme === 'dark' ? '#0d1117' : '#f8f9fa'} 
+        // Match preceding section bg ($gray-color-light / $dark-gray-color)
+        color={theme === 'dark' ? '#1e293b' : '#f8fafc'} 
         flip={true}
       />
       

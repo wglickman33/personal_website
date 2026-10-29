@@ -10,6 +10,16 @@
   position: relative;
   overflow: hidden;
   background-color: $light-color;
+
+  @include md {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  @include sm {
+    padding-top: 3.75rem;
+    padding-bottom: 3.75rem;
+  }
   
   &::before {
     content: '';
@@ -169,10 +179,6 @@
       &:hover {
         color: color-mix(in srgb, $primary-color 90%, black 10%);
         background-color: rgba($primary-color, 0.1);
-        
-        .arrow-icon {
-          transform: translateX(5px);
-        }
       }
     }
   }

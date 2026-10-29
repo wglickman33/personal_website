@@ -5,6 +5,7 @@
 
 .skills-page {
   min-height: 100vh;
+  min-height: 100dvh;
   padding: calc(#{$header-height} + 40px) 0 0;
   background:
     radial-gradient(1400px 600px at 0% 0%, rgba($accent-color-1, 0.08), transparent 50%),
@@ -29,6 +30,12 @@
 
     @include sm {
       padding: 0 16px 40px;
+    }
+
+    // Wide monitors: a little more horizontal breathing room so the
+    // 4-col skill grid doesn't feel edge-to-edge against the sidebar.
+    @include min(1680px) {
+      padding: 0 48px 96px;
     }
   }
 
@@ -224,26 +231,18 @@
 
     .material-symbols-outlined {
       font-size: 20px;
-      transition: transform 0.4s ease, color 0.4s ease;
+      transition: color 0.4s ease;
     }
 
     &:hover:not(:disabled) {
       border-color: rgba($accent-color-1, 0.4);
       background: rgba($accent-color-1, 0.05);
       color: $accent-color-1;
-
-      .material-symbols-outlined {
-        transform: scale(1.1);
-      }
     }
 
     &:focus-visible {
       border-color: $accent-color-1;
       box-shadow: 0 0 0 3px rgba($accent-color-1, 0.2);
-    }
-
-    &:active:not(:disabled) {
-      transform: scale(0.98);
     }
 
     &:disabled {
@@ -259,17 +258,12 @@
 
       .material-symbols-outlined {
         color: $light-color;
-        animation: pulse 2s ease-in-out infinite;
-
-        @media (prefers-reduced-motion: reduce) {
-          animation: none;
-        }
       }
 
       &:hover:not(:disabled) {
-        background: rgba($accent-color-1, 0.9);
-        border-color: rgba($accent-color-1, 0.9);
-        box-shadow: 0 4px 12px rgba($accent-color-1, 0.4);
+        background: $accent-color-2;
+        border-color: $accent-color-2;
+        box-shadow: 0 2px 8px rgba($accent-color-2, 0.4);
       }
     }
 
@@ -291,7 +285,9 @@
         box-shadow: 0 2px 8px rgba($accent-color-1, 0.4);
 
         &:hover:not(:disabled) {
-          background: rgba($accent-color-1, 0.9);
+          background: $accent-color-2;
+          border-color: $accent-color-2;
+          box-shadow: 0 2px 8px rgba($accent-color-2, 0.5);
         }
       }
     }
@@ -303,14 +299,6 @@
 
     @media (prefers-reduced-motion: reduce) {
       transition: none;
-
-      &:hover .material-symbols-outlined {
-        transform: none;
-      }
-
-      &:active {
-        transform: none;
-      }
     }
   }
 
@@ -323,7 +311,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 24px;
-    perspective: 1000px;
+    align-items: start;
 
     @include md {
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -335,86 +323,29 @@
       gap: 16px;
     }
 
-    &--animated {
-      .skills-page__card {
-        transition: transform 0.4s ease, box-shadow 0.4s ease;
-      }
+    @include min(1680px) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 
   &__card {
-    position: relative;
-    height: 280px;
-    cursor: pointer;
-    outline: none;
-    border: none;
-    background: transparent;
-    perspective: 1000px;
-
-    @media (prefers-reduced-motion: reduce) {
-      transform: none !important;
-      transition: none !important;
-    }
-
-    &:focus-visible {
-      outline: 3px solid $accent-color-1;
-      outline-offset: 4px;
-      border-radius: $border-radius-lg;
-    }
-
-    &--favorite {
-      .skills-page__card-front {
-        border-color: rgba($accent-color-1, 0.4);
-        box-shadow: 0 4px 16px rgba($accent-color-1, 0.15);
-      }
-    }
-
-    &--flipped {
-      .skills-page__card-inner {
-        transform: rotateY(180deg);
-      }
-    }
+    min-width: 0;
   }
 
-  &__card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transition: transform 0.6s ease;
-
-    @media (prefers-reduced-motion: reduce) {
-      transform: none !important;
-      transition: none !important;
-    }
-  }
-
-  &__card-front,
-  &__card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: $border-radius-lg;
-    padding: 24px;
+  &__card-face {
     display: flex;
     flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    min-height: 200px;
+    padding: 20px;
+    border-radius: $border-radius-lg;
     background: rgba(250, 248, 245, 0.95);
     border: 2px solid rgba($primary-color, 0.1);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.4s ease, border-color 0.4s ease, background 0.4s ease;
-    overflow: hidden;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba($accent-color-1, 0.1), transparent);
-      transition: left 0.6s ease;
-    }
+    text-align: left;
+    font-family: $font-family-primary;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
 
     .skills-page--dark & {
       background: rgba($dark-gray-color, 0.95);
@@ -422,100 +353,70 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      transition: none !important;
+    @include sm {
+      padding: 18px;
+      gap: 14px;
+    }
 
-      &::before {
-        display: none;
+    .skills-page__card:not(.skills-page__card--expanded) & {
+      cursor: pointer;
+
+      &:focus-visible {
+        outline: 3px solid $accent-color-1;
+        outline-offset: 3px;
       }
     }
   }
 
-  &__card-back {
-    transform: rotateY(180deg);
-    overflow-y: auto;
-    overflow-x: hidden;
+  &__card--favorite &__card-face {
+    border-color: rgba($accent-color-1, 0.35);
+    box-shadow: 0 4px 16px rgba($accent-color-1, 0.12);
   }
 
-  &__card-front {
-    justify-content: space-between;
+  &__card--expanded &__card-face {
+    cursor: default;
   }
 
-  &__favorite-icon {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 36px;
-    height: 36px;
-    border: none;
-    background: transparent;
-    color: rgba($primary-color, 0.5);
-    font-size: 24px;
-    z-index: 10;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.4s ease;
-    padding: 0;
-    opacity: 1;
-
-    &:hover {
-      background: rgba($accent-color-1, 0.1);
-      color: $accent-color-1;
-      transform: scale(1.1);
-      opacity: 1;
-    }
-
-    &:focus-visible {
-      outline: 2px solid $accent-color-1;
-      outline-offset: 2px;
-      background: rgba($accent-color-1, 0.1);
-      opacity: 1;
-    }
-
-    &:active {
-      transform: scale(0.95);
-    }
-
-    &--active {
-      color: $accent-color-1;
-      opacity: 1;
-    }
+  &__card--animated:not(&__card--expanded) &__card-face:hover {
+    border-color: rgba($accent-color-1, 0.35);
+    box-shadow: 0 8px 24px rgba($accent-color-1, 0.15);
 
     .skills-page--dark & {
-      color: rgba($light-color, 0.5);
+      box-shadow: 0 8px 24px rgba($accent-color-1, 0.25);
+    }
 
-      &:hover {
-        background: rgba($accent-color-1, 0.15);
+    .skills-page__card-hint {
+      opacity: 1;
+      color: $accent-color-1;
+
+      .skills-page--dark & {
         color: $accent-color-3;
-        opacity: 1;
-      }
-
-      &--active {
-        color: $accent-color-1;
-        opacity: 1;
       }
     }
+  }
 
-    .material-symbols-outlined {
-      font-size: 24px;
-      transition: transform 0.4s ease;
-      display: block;
+  &__card-details {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.25s ease;
+
+    &--open {
+      grid-template-rows: 1fr;
     }
+  }
 
-    @media (prefers-reduced-motion: reduce) {
-      transition: none;
+  &__card-details-inner {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
 
-      &:hover {
-        transform: none;
-      }
-
-      &:active {
-        transform: none;
-      }
-    }
+  &__card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
   }
 
   &__card-title {
@@ -523,66 +424,104 @@
     font-size: $font-size-xl;
     font-weight: $font-weight-bold;
     color: $primary-color;
-    margin: 0 0 16px 0;
+    margin: 0;
     line-height: $line-height-tight;
-    transition: color 0.4s ease;
-    position: relative;
-    z-index: 1;
+    flex: 1;
+    min-width: 0;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    // Reserve two lines so short titles (e.g. "Agile") match cards
+    // with wrapped titles (e.g. "Product Management").
+    min-height: calc(#{$line-height-tight} * #{$font-size-xl} * 2);
 
     .skills-page--dark & {
       color: $light-color;
     }
   }
 
-  &__card-rating {
+  &__favorite-btn,
+  &__close-btn {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 16px;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba($primary-color, 0.06);
+    color: rgba($primary-color, 0.55);
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: background 0.2s ease, color 0.2s ease;
+
+    .material-symbols-outlined {
+      font-size: 22px;
+    }
+
+    &:hover {
+      background: rgba($accent-color-1, 0.12);
+      color: $accent-color-1;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $accent-color-1;
+      outline-offset: 2px;
+    }
+
+    .skills-page--dark & {
+      background: rgba($light-color, 0.08);
+      color: rgba($light-color, 0.6);
+
+      &:hover {
+        background: rgba($accent-color-1, 0.15);
+        color: $accent-color-3;
+      }
+    }
   }
 
-  &__star {
-    color: rgba($primary-color, 0.2);
-    font-size: 20px;
-    line-height: 1;
+  &__favorite-btn--active {
+    background: rgba($accent-color-1, 0.15);
+    color: $accent-color-1;
 
-    &--full {
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1;
       color: $accent-color-1;
     }
 
-    &--half {
-      color: $accent-color-1;
-    }
+    &:hover {
+      background: rgba($accent-color-1, 0.22);
+      color: $accent-color-2;
 
-    &--empty {
-      color: rgba($primary-color, 0.2);
-
-      .skills-page--dark & {
-        color: rgba($light-color, 0.2);
+      .material-symbols-outlined {
+        color: $accent-color-2;
       }
     }
 
-    .material-symbols-outlined {
-      font-size: 20px;
-    }
-  }
-
-  &__rating-value {
-    font-size: $font-size-sm;
-    font-weight: $font-weight-semibold;
-    color: $secondary-color;
-    margin-left: 4px;
-
     .skills-page--dark & {
-      color: rgba($light-color, 0.7);
-    }
-  }
+      background: rgba($accent-color-1, 0.25);
+      color: $accent-color-3;
 
-  &__card-category {
-    margin-top: auto;
+      .material-symbols-outlined {
+        color: $accent-color-3;
+      }
+
+      &:hover {
+        background: rgba($accent-color-1, 0.35);
+        color: $light-color;
+
+        .material-symbols-outlined {
+          color: $light-color;
+        }
+      }
+    }
   }
 
   &__category-badge {
+    align-self: flex-start;
     display: inline-block;
     padding: 6px 12px;
     background: rgba($accent-color-1, 0.1);
@@ -592,78 +531,31 @@
     font-weight: $font-weight-semibold;
     text-transform: uppercase;
     letter-spacing: $letter-spacing-wide;
-    transition: background 0.4s ease, transform 0.4s ease;
-    position: relative;
-    z-index: 1;
   }
 
   &__card-hint {
     display: flex;
     align-items: center;
     gap: 6px;
+    margin-top: auto;
     font-size: $font-size-xs;
     color: $secondary-color;
-    margin-top: 12px;
-    opacity: 0.7;
-    transition: opacity 0.4s ease, color 0.4s ease;
-    position: relative;
-    z-index: 1;
+    opacity: 0.65;
 
     .skills-page--dark & {
-      color: rgba($light-color, 0.6);
+      color: rgba($light-color, 0.55);
     }
 
     .material-symbols-outlined {
       font-size: 16px;
-      transition: transform 0.4s ease;
-    }
-  }
-
-  &__card-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: rgba($primary-color, 0.05);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.4s ease;
-    z-index: 10;
-    color: $primary-color;
-
-    &:hover {
-      background: rgba($accent-color-1, 0.15);
-    }
-
-    &:focus-visible {
-      outline: 2px solid $accent-color-1;
-      outline-offset: 2px;
-    }
-
-    .skills-page--dark & {
-      background: rgba($light-color, 0.1);
-      color: $light-color;
-
-      &:hover {
-        background: rgba($accent-color-1, 0.2);
-      }
-    }
-
-    .material-symbols-outlined {
-      font-size: 20px;
     }
   }
 
   &__card-description {
+    margin: 0;
     font-size: $font-size-sm;
-    color: $secondary-color;
     line-height: $line-height-relaxed;
-    margin: 0 0 20px 0;
+    color: $secondary-color;
 
     .skills-page--dark & {
       color: rgba($light-color, 0.8);
@@ -671,8 +563,7 @@
   }
 
   &__card-projects {
-    margin-top: auto;
-    padding-top: 20px;
+    padding-top: 4px;
     border-top: 1px solid rgba($primary-color, 0.1);
 
     .skills-page--dark & {
@@ -681,12 +572,12 @@
   }
 
   &__projects-title {
-    font-size: $font-size-sm;
+    margin: 0 0 10px;
+    font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
-    color: $primary-color;
-    margin: 0 0 12px 0;
     text-transform: uppercase;
     letter-spacing: $letter-spacing-wide;
+    color: $primary-color;
 
     .skills-page--dark & {
       color: $light-color;
@@ -699,24 +590,63 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
+
+    li {
+      position: relative;
+      padding-left: 16px;
+      font-size: $font-size-sm;
+      color: $secondary-color;
+
+      &::before {
+        content: '→';
+        position: absolute;
+        left: 0;
+        color: $accent-color-1;
+      }
+
+      .skills-page--dark & {
+        color: rgba($light-color, 0.7);
+      }
+    }
   }
 
-  &__projects-list li {
-    font-size: $font-size-sm;
-    color: $secondary-color;
-    padding-left: 16px;
-    position: relative;
+  &__back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    align-self: flex-start;
+    margin-top: 4px;
+    padding: 8px 0 0;
+    border: none;
+    background: none;
+    font-family: $font-family-primary;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $accent-color-1;
+    cursor: pointer;
+    touch-action: manipulation;
 
-    &::before {
-      content: '→';
-      position: absolute;
-      left: 0;
-      color: $accent-color-1;
+    .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    &:hover {
+      color: $accent-color-2;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $accent-color-1;
+      outline-offset: 2px;
+      border-radius: $border-radius;
     }
 
     .skills-page--dark & {
-      color: rgba($light-color, 0.7);
+      color: $accent-color-3;
+
+      &:hover {
+        color: $light-color;
+      }
     }
   }
 
@@ -763,101 +693,10 @@
   }
 }
 
-.skills-page__grid--animated .skills-page__card {
-  &:hover:not(.skills-page__card--flipped) {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 24px rgba($accent-color-1, 0.25);
-    border-color: rgba($accent-color-1, 0.3);
-
-    .skills-page--dark & {
-      box-shadow: 0 8px 24px rgba($accent-color-1, 0.35);
-      border-color: rgba($accent-color-1, 0.4);
-    }
-
-    .skills-page__card-front {
-      background: linear-gradient(135deg, rgba($accent-color-1, 0.05), rgba($accent-color-3, 0.05));
-      border-color: rgba($accent-color-1, 0.3);
-
-      .skills-page--dark & {
-        background: linear-gradient(135deg, rgba($accent-color-1, 0.1), rgba($accent-color-3, 0.1));
-        border-color: rgba($accent-color-1, 0.4);
-      }
-
-      &::before {
-        left: 100%;
-      }
-    }
-
-    .skills-page__card-title {
-      color: $accent-color-1;
-
-      .skills-page--dark & {
-        color: $accent-color-3;
-      }
-    }
-
-    .skills-page__category-badge {
-      background: rgba($accent-color-1, 0.2);
-      transform: scale(1.05);
-    }
-
-    .skills-page__card-hint {
-      opacity: 1;
-      color: $accent-color-1;
-
-      .skills-page--dark & {
-        color: $accent-color-3;
-      }
-
-      .material-symbols-outlined {
-        transform: rotate(15deg);
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      transform: none;
-
-      .skills-page__category-badge {
-        transform: none;
-      }
-
-      .skills-page__card-hint .material-symbols-outlined {
-        transform: none;
-      }
-    }
-  }
-
-  &:active:not(.skills-page__card--flipped) {
-    transform: translateY(-2px) scale(1.01);
-
-    @media (prefers-reduced-motion: reduce) {
-      transform: none;
-    }
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.7;
-    transform: scale(1.1);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .skills-page__card-inner,
-  .skills-page__card-front,
-  .skills-page__card-back,
-  .skills-page__card {
-    transition: none !important;
-    animation: none !important;
-  }
-
-  .skills-page__favorite-icon .material-symbols-outlined {
-    animation: none !important;
+  .skills-page__card-face,
+  .skills-page__card-details {
+    transition: none;
   }
 }
 

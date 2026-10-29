@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" rx="40" fill="#2C2C2C"/>
+  <!-- Top bar -->
+  <polygon points="56,36 144,36 136,50 64,50" fill="#FFFFFF"/>
+  <!-- Upper-left vertical - 32px tall -->
+  <polygon points="44,54 58,60 58,86 44,92" fill="#FFFFFF"/>
+  <!-- Middle bar -->
+  <polygon points="64,93 136,93 148,100 136,107 64,107 52,100" fill="#5BB8F5"/>
+  <!-- Lower-right vertical - exactly 32px tall, mirrored position -->
+  <polygon points="156,108 142,114 142,140 156,146" fill="#FFFFFF"/>
+  <!-- Bottom bar -->
+  <polygon points="64,150 136,150 144,164 56,164" fill="#FFFFFF"/>
+</svg>

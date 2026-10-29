@@ -1,52 +1,115 @@
+export type SkillCategoryId = 'frontend' | 'backend' | 'ai' | 'design' | 'product';
+
 export interface Skill {
   id: string;
-    name: string;
+  name: string;
   rating: number;
-  category: 'frontend' | 'backend' | 'ai' | 'design' | 'product';
+  category: SkillCategoryId;
   favorite?: boolean;
   description?: string;
-  }
-  
-export const skills: Skill[] = [
-  { id: 'react', name: 'React', rating: 4.9, category: 'frontend', favorite: true, description: 'Building interactive UIs with hooks, context, and modern patterns' },
-  { id: 'typescript', name: 'TypeScript', rating: 4.1, category: 'frontend', favorite: true, description: 'Type-safe JavaScript for scalable applications' },
-  { id: 'javascript', name: 'JavaScript', rating: 4.9, category: 'frontend', favorite: true, description: 'Core language expertise with ES6+ features' },
-  { id: 'scss', name: 'SCSS/CSS', rating: 5.0, category: 'frontend', favorite: true, description: 'Advanced styling with variables, mixins, and responsive design' },
-  { id: 'html', name: 'HTML', rating: 5.0, category: 'frontend', description: 'Semantic markup and accessibility best practices' },
-  { id: 'nextjs', name: 'Next.js', rating: 4.2, category: 'frontend', description: 'React framework with SSR and routing' },
-  { id: 'vite', name: 'Vite', rating: 4.5, category: 'frontend', description: 'Fast build tool and dev server' },
-  { id: 'material-ui', name: 'Material UI', rating: 4.3, category: 'frontend', description: 'React component library for rapid UI development' },
-  { id: 'threejs', name: 'Three.js', rating: 3.8, category: 'frontend', description: '3D graphics and WebGL experiences' },
-  { id: 'svg', name: 'SVG Morphing', rating: 4.0, category: 'frontend', description: 'Animated vector graphics and morphing' },
-  { id: 'framer-motion', name: 'Framer Motion', rating: 4.0, category: 'frontend', description: 'Animation library for React' },
-  { id: 'node', name: 'Node.js', rating: 4.4, category: 'backend', favorite: true, description: 'Server-side JavaScript runtime' },
-  { id: 'express', name: 'Express.js', rating: 4.4, category: 'backend', description: 'Web application framework for Node.js' },
-  { id: 'postgres', name: 'PostgreSQL', rating: 4.1, category: 'backend', description: 'Relational database management' },
-  { id: 'sql', name: 'SQL', rating: 4.2, category: 'backend', description: 'Database query language' },
-  { id: 'python', name: 'Python', rating: 4.8, category: 'backend', favorite: true, description: 'Backend development and AI/ML applications' },
-  { id: 'firebase', name: 'Firebase', rating: 4.1, category: 'backend', favorite: false, description: 'A backend as a service that provides a real-time database, authentication, and storage for web applications.' },
-  { id: 'supabase', name: 'Supabase', rating: 4.3, category: 'backend', favorite: false, description: 'An open-source backend as a service that provides a real-time database, authentication, and storage for web applications.' },
-  { id: 'flask', name: 'Flask', rating: 4.1, category: 'backend', description: 'Lightweight Python web framework' },
-  { id: 'docker', name: 'Docker', rating: 4.0, category: 'backend', description: 'Containerization and deployment' },
-  { id: 'openai', name: 'OpenAI API', rating: 4.9, category: 'ai', favorite: true, description: 'GPT models, embeddings, and AI integrations' },
-  { id: 'anthropic', name: 'Anthropic API', rating: 4.7, category: 'ai', description: 'Claude models and AI capabilities' },
-  { id: 'ai-agents', name: 'AI Agents', rating: 4.6, category: 'ai', favorite: true, description: 'Building autonomous AI systems with tools and memory' },
-  { id: 'voice-ai', name: 'Voice AI', rating: 4.6, category: 'ai', description: 'Voice interfaces and speech processing' },
-  { id: 'chat-ai', name: 'Chat AI', rating: 4.8, category: 'ai', description: 'Conversational AI and chat interfaces' },
-  { id: 'langchain', name: 'LangChain', rating: 4.3, category: 'ai', description: 'Framework for LLM applications' },
-  { id: 'retellai', name: 'RetellAI', rating: 4.5, category: 'ai', description: 'Voice AI platform integration' },
-  { id: 'twilio', name: 'Twilio', rating: 4.2, category: 'ai', description: 'SMS and communication APIs' },
-  { id: 'ui-design', name: 'UI Design', rating: 4.3, category: 'design', description: 'User interface design and visual systems' },
-  { id: 'ux-design', name: 'UX Design', rating: 4.7, category: 'design', favorite: true, description: 'User experience research and design thinking' },
-  { id: 'figma', name: 'Figma', rating: 4.0, category: 'design', description: 'Design and prototyping tool' },
-  { id: 'product-mgmt', name: 'Product Management', rating: 4.5, category: 'product', description: 'Product strategy and roadmap planning' },
-  { id: 'agile', name: 'Agile', rating: 4.8, category: 'product', description: 'Agile methodologies and sprint planning' },
-];
+}
 
-export const skillCategories = [
+type RawSkill = Omit<Skill, 'category'>;
+
+const SKILLS_BY_CATEGORY: Record<SkillCategoryId, RawSkill[]> = {
+  frontend: [
+    { id: 'react', name: 'React', rating: 4.9, favorite: true, description: 'Building interactive UIs with hooks, context, and modern patterns' },
+    { id: 'javascript', name: 'JavaScript', rating: 4.9, favorite: true, description: 'ES modules and modern JavaScript (including Node 22+ serverless)' },
+    { id: 'css', name: 'CSS', rating: 5.0, description: 'Component and page styles without utility-first frameworks' },
+    { id: 'scss', name: 'SCSS', rating: 5.0, favorite: true, description: 'Advanced styling with variables, mixins, and responsive design' },
+    { id: 'html', name: 'HTML', rating: 5.0, description: 'Semantic markup and accessibility best practices' },
+    { id: 'tailwind', name: 'Tailwind CSS', rating: 4.8, description: 'Utility-first CSS framework for rapid UI development' },
+    { id: 'typescript', name: 'TypeScript', rating: 4.6, favorite: true, description: 'Type-safe JavaScript for scalable applications' },
+    { id: 'react-router', name: 'React Router', rating: 4.6, description: 'Client-side routing for multi-page React SPAs' },
+    { id: 'vitest', name: 'Vitest', rating: 4.5, description: 'Unit and integration testing for Vite and React apps' },
+    { id: 'playwright', name: 'Playwright', rating: 4.5, description: 'End-to-end and accessibility testing in real browsers' },
+    { id: 'testing-library', name: 'Testing Library', rating: 4.5, description: 'React RTL with user-event and jest-dom matchers' },
+    { id: 'jsdom', name: 'jsdom', rating: 4.4, description: 'DOM environment for Vitest component tests' },
+    { id: 'vite', name: 'Vite', rating: 4.9, description: 'Fast build tool and dev server (Vite 8+)' },
+    { id: 'zustand', name: 'Zustand', rating: 4.5, description: 'Lightweight React state management with persistence' },
+    { id: 'tanstack-query', name: 'TanStack Query', rating: 4.4, description: 'Server-state fetching, caching, and live polling for React apps' },
+    { id: 'zod', name: 'Zod', rating: 4.6, description: 'Schema validation for forms, APIs, and typed payloads' },
+    { id: 'minisearch', name: 'MiniSearch', rating: 4.3, description: 'Client-side full-text search for fast filtered lists' },
+    { id: 'radix-ui', name: 'Radix UI', rating: 4.3, description: 'Accessible headless primitives for polished UI systems' },
+    { id: 'material-ui', name: 'Material UI', rating: 4.3, description: 'React component library for rapid UI development' },
+    { id: 'nextjs', name: 'Next.js', rating: 4.3, description: 'React framework with SSR and routing' },
+    { id: 'recharts', name: 'Recharts', rating: 4.3, description: 'Charting library for React analytics dashboards' },
+    { id: 'svg', name: 'SVG Morphing', rating: 4.6, description: 'Animated vector graphics and morphing' },
+    { id: 'framer-motion', name: 'Framer Motion', rating: 4.4, description: 'Animation library for React' },
+    { id: 'threejs', name: 'Three.js', rating: 4.0, description: '3D graphics and WebGL experiences' },
+  ],
+
+  backend: [
+    { id: 'python', name: 'Python', rating: 4.9, favorite: true, description: 'Backend development and AI/ML applications' },
+    { id: 'node', name: 'Node.js', rating: 4.8, favorite: true, description: 'Server-side JavaScript runtime (Node 22+ for serverless APIs)' },
+    { id: 'express', name: 'Express.js', rating: 4.7, description: 'Web application framework for Node.js' },
+    { id: 'jwt-auth', name: 'JWT Authentication', rating: 4.6, description: 'Token-based authentication and session management' },
+    { id: 'jose', name: 'jose', rating: 4.5, description: 'HS256 JWT sessions in httpOnly cookies (Fig & Peach admin)' },
+    { id: 'bcryptjs', name: 'bcryptjs', rating: 4.6, description: 'Password hashing for admin authentication' },
+    { id: 'supabase', name: 'Supabase', rating: 4.7, description: 'An open-source backend as a service that provides a real-time database, authentication, and storage for web applications.' },
+    { id: 'rbac', name: 'Role-Based Access Control', rating: 4.6, description: 'Permission systems across multiple user roles' },
+    { id: 'django', name: 'Django', rating: 4.4, description: 'Python web framework for production applications' },
+    { id: 'sequelize', name: 'Sequelize ORM', rating: 4.2, description: 'SQL ORM for Node.js applications' },
+    { id: 'prisma', name: 'Prisma', rating: 4.5, description: 'Type-safe ORM and migrations for Node.js APIs' },
+    { id: 'sql', name: 'SQL', rating: 4.8, description: 'PostgreSQL queries and numbered schema migrations' },
+    { id: 'server-sent-events', name: 'Server-Sent Events', rating: 4.5, description: 'Real-time server push for live updates and collaboration' },
+    { id: 'stripe', name: 'Stripe API', rating: 4.3, description: 'Payment processing with server-side order validation' },
+    { id: 'cloudinary', name: 'Cloudinary', rating: 4.6, description: 'Image upload, storage, and delivery for product UIs' },
+    { id: 'resend', name: 'Resend API', rating: 4.5, description: 'Transactional email for order confirmations and notifications' },
+    { id: 'netlify-functions', name: 'Netlify Functions', rating: 4.6, description: 'Serverless API routes with Postgres on Netlify' },
+    { id: 'spoonacular', name: 'Spoonacular API', rating: 4.2, description: 'Food and ingredient data for recipe features and substitutions' },
+    { id: 'emailjs', name: 'EmailJS', rating: 4.2, description: 'Transactional email for password reset and user notifications' },
+    { id: 'postgres', name: 'PostgreSQL', rating: 4.7, description: 'Relational database management' },
+    { id: 'firebase', name: 'Firebase', rating: 4.6, description: 'A backend as a service that provides a real-time database, authentication, and storage for web applications.' },
+    { id: 'flask', name: 'Flask', rating: 4.4, description: 'Lightweight Python web framework' },
+    { id: 'fastapi', name: 'FastAPI', rating: 4.5, description: 'Modern, high-performance Python API framework' },
+    { id: 'mysql', name: 'MySQL', rating: 4.7, description: 'Relational database management' },
+    { id: 'redis', name: 'Redis', rating: 4.0, description: 'In-memory data store for caching and queues' },
+    { id: 'docker', name: 'Docker', rating: 4.0, description: 'Containerization and deployment' },
+    { id: 'mongodb', name: 'MongoDB', rating: 4.7, description: 'NoSQL document database' },
+    { id: 'celery', name: 'Celery', rating: 4.2, description: 'Distributed task queue for Python applications' },
+    { id: 'google-maps-api', name: 'Google Maps API', rating: 4.3, description: 'Location services, geocoding, and delivery zone mapping' },
+    { id: 'heroku', name: 'Heroku', rating: 4.4, description: 'Cloud deployment for Node.js APIs and PostgreSQL' },
+    { id: 'netlify', name: 'Netlify', rating: 4.7, description: 'Static hosting, serverless functions, and netlify-cli local dev' },
+  ],
+
+  ai: [
+    { id: 'openai', name: 'OpenAI API', rating: 4.9, favorite: true, description: 'GPT models, embeddings, and AI integrations' },
+    { id: 'groq', name: 'Groq API', rating: 4.8, description: 'Fast LLM and vision inference for Tori AI and Whisk (Sous AI plus screenshot-to-recipe)' },
+    { id: 'chat-ai', name: 'Chat AI', rating: 4.8, description: 'Conversational AI and chat interfaces' },
+    { id: 'anthropic', name: 'Anthropic API', rating: 4.9, description: 'Claude models and AI capabilities' },
+    { id: 'ai-agents', name: 'AI Agents', rating: 4.7, favorite: true, description: 'Building autonomous AI systems with tools and memory' },
+    { id: 'voice-ai', name: 'Voice AI', rating: 4.6, description: 'Voice interfaces and speech processing' },
+    { id: 'langfuse', name: 'Langfuse', rating: 4.8, favorite: true, description: 'LLM evaluation, tracing, and observability infrastructure' },
+    { id: 'langchain', name: 'LangChain', rating: 4.3, description: 'Framework for LLM applications' },
+    { id: 'twilio', name: 'Twilio', rating: 4.2, description: 'SMS and communication APIs' },
+    { id: 'elevenlabs', name: 'ElevenLabs API', rating: 4.6, description: 'Text-to-speech and voice synthesis' },
+  ],
+
+  design: [
+    { id: 'ux-design', name: 'UX Design', rating: 4.8, favorite: true, description: 'User experience research and design thinking' },
+    { id: 'wcag', name: 'WCAG Accessibility', rating: 4.5, description: 'Contrast testing, axe scans, and accessible UX patterns' },
+    { id: 'ui-design', name: 'UI Design', rating: 4.5, description: 'User interface design and visual systems' },
+    { id: 'figma', name: 'Figma', rating: 4.0, description: 'Design and prototyping tool' },
+  ],
+
+  product: [
+    { id: 'agile', name: 'Agile', rating: 4.8, description: 'Agile methodologies and sprint planning' },
+    { id: 'github-actions', name: 'GitHub Actions', rating: 4.5, description: 'CI/CD pipelines with Postgres service containers and E2E gates' },
+    { id: 'oxlint', name: 'oxlint', rating: 4.4, description: 'Fast linting with deny-warnings enforcement' },
+    { id: 'esbuild', name: 'esbuild', rating: 4.4, description: 'Bundling and Netlify function build tooling' },
+    { id: 'product-mgmt', name: 'Product Management', rating: 4.5, description: 'Product strategy and roadmap planning' },
+  ],
+};
+
+export const skillCategories: { id: SkillCategoryId; label: string }[] = [
   { id: 'frontend', label: 'Frontend' },
   { id: 'backend', label: 'Backend' },
   { id: 'ai', label: 'AI/ML' },
   { id: 'design', label: 'Design' },
-  { id: 'product', label: 'Product Management' },
+  { id: 'product', label: 'Product' },
 ];
+
+export const skills: Skill[] = skillCategories.flatMap(({ id: category }) =>
+  SKILLS_BY_CATEGORY[category].map((skill) => ({ ...skill, category }))
+);

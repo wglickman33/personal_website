@@ -1,5 +1,6 @@
 @use "../../../assets/styles/partials/variables" as *;
 @use "../../../assets/styles/partials/fonts" as *;
+@use "../../../assets/styles/partials/breakpoints" as *;
 
 .challenges {
   position: fixed;
@@ -11,7 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: clamp(12px, 4vw, 20px);
 
   &__overlay {
     position: absolute;
@@ -28,14 +29,16 @@
     background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
     border: 2px solid rgba($primary-color, 0.2);
     border-radius: $border-radius-lg;
-    padding: 24px;
+    padding: clamp(16px, 4vw, 24px);
     max-width: 800px;
     width: 100%;
     max-height: 90vh;
+    max-height: 90dvh;
     overflow-y: auto;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     z-index: 1;
     animation: slideIn 0.3s ease-out;
+    margin: auto;
 
     .challenges--dark & {
       background: rgba($dark-gray-color, 0.98);
@@ -73,12 +76,16 @@
     border: none;
     color: rgba($primary-color, 0.7);
     cursor: pointer;
-    padding: 4px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
     border-radius: $border-radius;
     transition: all $transition-speed-fast ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    touch-action: manipulation;
 
     .challenges--dark & {
       color: rgba($light-color, 0.7);
@@ -212,6 +219,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
     margin-bottom: 8px;
   }
 
@@ -296,6 +305,34 @@
     .material-symbols-outlined {
       font-size: 1rem;
       color: $accent-color-2;
+    }
+  }
+
+  @include sm {
+    &__header {
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+    }
+
+    &__summary {
+      padding: 12px;
+      margin-bottom: 20px;
+    }
+
+    &__sections {
+      gap: 20px;
+    }
+  }
+
+  @include xs {
+    &__summary-stat {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    &__item {
+      padding: 12px;
     }
   }
 }

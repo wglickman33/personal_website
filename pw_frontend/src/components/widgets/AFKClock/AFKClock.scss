@@ -64,11 +64,15 @@
   }
 }
 
+// Fluid instead of a fixed 160x160px box. The repeating-conic-gradient
+// background and the --i custom property animation are both purely
+// angle-based, so they scale to any box size with zero changes needed -
+// only the text/border sizes below need their own clamp()s.
 .afk-clock__container {
   position: relative;
-  width: 160px;
-  height: 160px;
-  margin: 0 20px;
+  width: clamp(84px, 22vw, 160px);
+  height: clamp(84px, 22vw, 160px);
+  margin: 0 clamp(6px, 2vw, 20px);
   border-radius: 16px;
   color: $light-color;
   display: flex;
@@ -164,9 +168,9 @@
 }
 
 .afk-clock__time {
-  font-size: 70px;
+  font-size: clamp(32px, 9vw, 70px);
   font-weight: $font-weight-black;
-  line-height: 85px;
+  line-height: 1.2;
   z-index: 1;
   font-family: $font-family-display;
 
@@ -177,7 +181,7 @@
 }
 
 .afk-clock__unit {
-  font-size: 16px;
+  font-size: clamp(11px, 3vw, 16px);
   font-weight: $font-weight-semibold;
   letter-spacing: 2px;
   z-index: 1;

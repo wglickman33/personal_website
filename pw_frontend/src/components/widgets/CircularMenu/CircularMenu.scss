@@ -1,12 +1,8 @@
-@use "sass:math";
 @use "../../../assets/styles/partials/variables" as *;
 @use "../../../assets/styles/partials/fonts" as *;
 @use "../../../assets/styles/partials/mixins" as *;
 @use "../../../assets/styles/partials/breakpoints" as *;
 
-$toggler-size: 40px;
-$item-count: 6;
-$item-size: $toggler-size * 2;
 $item-transition: 0.5s;
 
 @mixin absolute-center {
@@ -17,19 +13,41 @@ $item-transition: 0.5s;
 }
 
 .circular-menu {
+  --toggler-size: 40px;
+  --item-size: calc(var(--toggler-size) * 2);
+  --radius-gap: 30px;
+  --orbit-distance: min(
+    calc(var(--item-size) + var(--radius-gap)),
+    calc((100cqw - var(--item-size)) / 2 - 8px)
+  );
+  --menu-span: calc(2 * var(--orbit-distance) + var(--item-size));
+
+  container-type: inline-size;
   position: relative;
   width: 100%;
-  height: 400px;
+  height: max(400px, var(--menu-span));
+  min-height: var(--menu-span);
   display: flex;
   align-items: center;
   justify-content: center;
   background: transparent;
+  overflow: visible;
+
+  @include sm {
+    --toggler-size: 32px;
+    --radius-gap: 20px;
+  }
+
+  @include xs {
+    --toggler-size: 26px;
+    --radius-gap: 14px;
+  }
 }
 
 .circular-menu__toggler {
   @include absolute-center;
-  width: $toggler-size;
-  height: $toggler-size;
+  width: var(--toggler-size);
+  height: var(--toggler-size);
   z-index: 2;
   opacity: 0;
   cursor: pointer;
@@ -37,11 +55,11 @@ $item-transition: 0.5s;
 
 .circular-menu__label {
   @include absolute-center;
-  width: $toggler-size;
-  height: calc($toggler-size / 8);
+  width: var(--toggler-size);
+  height: calc(var(--toggler-size) / 8);
   display: block;
   z-index: 1;
-  border-radius: calc($toggler-size / 16);
+  border-radius: calc(var(--toggler-size) / 16);
   background: rgba($primary-color, 0.7);
   transition: transform $item-transition, top $item-transition, background $transition-speed;
 
@@ -54,11 +72,11 @@ $item-transition: 0.5s;
     content: "";
     position: absolute;
     left: 0;
-    width: $toggler-size;
-    height: calc($toggler-size / 8);
+    width: var(--toggler-size);
+    height: calc(var(--toggler-size) / 8);
     display: block;
     z-index: 1;
-    border-radius: calc($toggler-size / 16);
+    border-radius: calc(var(--toggler-size) / 16);
     background: rgba($primary-color, 0.7);
     transition: transform $item-transition, top $item-transition, background $transition-speed;
 
@@ -68,11 +86,11 @@ $item-transition: 0.5s;
   }
 
   &::before {
-    top: calc($toggler-size / 4);
+    top: calc(var(--toggler-size) / 4);
   }
 
   &::after {
-    top: calc(-#{math.div($toggler-size, 4)});
+    top: calc(var(--toggler-size) / -4);
   }
 }
 
@@ -102,7 +120,7 @@ $item-transition: 0.5s;
 .circular-menu__toggler:checked + .circular-menu__label::before,
 .circular-menu__toggler:checked + .circular-menu__label::after {
   top: 0;
-  width: $toggler-size;
+  width: var(--toggler-size);
   transform-origin: 50% 50%;
 }
 
@@ -126,55 +144,57 @@ $item-transition: 0.5s;
 
 .circular-menu__item {
   @include absolute-center;
-  width: $item-size;
-  height: $item-size;
+  width: var(--item-size);
+  height: var(--item-size);
   display: block;
   opacity: 0;
   transition: opacity $item-transition, transform $item-transition;
   transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 .circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(1) {
-  transform: translate(-50%, -50%) rotate(0deg) translateX(-$item-size - 30px) rotate(0deg);
+  transform: translate(-50%, -50%) rotate(0deg) translateX(calc(-1 * var(--orbit-distance))) rotate(0deg);
 }
 
 .circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(2) {
-  transform: translate(-50%, -50%) rotate(60deg) translateX(-$item-size - 30px) rotate(-60deg);
+  transform: translate(-50%, -50%) rotate(60deg) translateX(calc(-1 * var(--orbit-distance))) rotate(-60deg);
 }
 
 .circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(3) {
-  transform: translate(-50%, -50%) rotate(120deg) translateX(-$item-size - 30px) rotate(-120deg);
+  transform: translate(-50%, -50%) rotate(120deg) translateX(calc(-1 * var(--orbit-distance))) rotate(-120deg);
 }
 
 .circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(4) {
-  transform: translate(-50%, -50%) rotate(180deg) translateX(-$item-size - 30px) rotate(-180deg);
+  transform: translate(-50%, -50%) rotate(180deg) translateX(calc(-1 * var(--orbit-distance))) rotate(-180deg);
 }
 
 .circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(5) {
-  transform: translate(-50%, -50%) rotate(240deg) translateX(-$item-size - 30px) rotate(-240deg);
+  transform: translate(-50%, -50%) rotate(240deg) translateX(calc(-1 * var(--orbit-distance))) rotate(-240deg);
 }
 
 .circular-menu__toggler:checked ~ .circular-menu__list .circular-menu__item:nth-child(6) {
-  transform: translate(-50%, -50%) rotate(300deg) translateX(-$item-size - 30px) rotate(-300deg);
+  transform: translate(-50%, -50%) rotate(300deg) translateX(calc(-1 * var(--orbit-distance))) rotate(-300deg);
 }
 
 .circular-menu__link {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: $item-size;
-  height: $item-size;
+  width: var(--item-size);
+  height: var(--item-size);
   border-radius: 50%;
   color: rgba($primary-color, 0.7);
   background: rgba($light-color, 0.2);
   border: 1px solid rgba($primary-color, 0.1);
   text-align: center;
   text-decoration: none;
-  font-size: calc($item-size / 2);
+  font-size: calc(var(--item-size) / 2);
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 0;
@@ -182,7 +202,7 @@ $item-transition: 0.5s;
   outline: none;
 
   .material-symbols-outlined {
-    font-size: calc($item-size / 2);
+    font-size: calc(var(--item-size) / 2);
     line-height: 1;
   }
 
@@ -191,7 +211,6 @@ $item-transition: 0.5s;
     position: absolute;
     left: 50%;
     bottom: calc(100% + 12px);
-    transform: translateX(-50%);
     padding: 8px 12px;
     border-radius: 8px;
     font-size: $font-size-xs;
@@ -215,7 +234,6 @@ $item-transition: 0.5s;
     position: absolute;
     left: 50%;
     bottom: calc(100% + 4px);
-    transform: translateX(-50%);
     width: 0;
     height: 0;
     border-left: 6px solid transparent;
@@ -229,7 +247,7 @@ $item-transition: 0.5s;
   }
 
   &:hover {
-    box-shadow: 0 0 0 calc($item-size / 40) rgba($accent-color-1, 0.3);
+    box-shadow: 0 0 0 calc(var(--item-size) / 40) rgba($accent-color-1, 0.3);
     color: $accent-color-1;
     background: rgba($accent-color-1, 0.15);
     border-color: rgba($accent-color-1, 0.3);
@@ -245,6 +263,15 @@ $item-transition: 0.5s;
   &:focus-visible::before {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+  }
+
+  // Touch devices: hide CSS tooltips entirely. Labels overlap when all
+  // forced visible; icons remain tappable via aria-label.
+  @media (hover: none) {
+    &::after,
+    &::before {
+      display: none;
+    }
   }
 
   .circular-menu--dark & {
@@ -271,7 +298,7 @@ $item-transition: 0.5s;
 
 .circular-menu__item:nth-child(1) .circular-menu__link {
   transform: rotate(0deg);
-  
+
   &:hover {
     transform: rotate(0deg) scale(1.1);
   }
@@ -294,7 +321,7 @@ $item-transition: 0.5s;
 
 .circular-menu__item:nth-child(2) .circular-menu__link {
   transform: rotate(-60deg);
-  
+
   &:hover {
     transform: rotate(-60deg) scale(1.1);
   }
@@ -317,7 +344,7 @@ $item-transition: 0.5s;
 
 .circular-menu__item:nth-child(3) .circular-menu__link {
   transform: rotate(-120deg);
-  
+
   &:hover {
     transform: rotate(-120deg) scale(1.1);
   }
@@ -340,7 +367,7 @@ $item-transition: 0.5s;
 
 .circular-menu__item:nth-child(4) .circular-menu__link {
   transform: rotate(-180deg);
-  
+
   &:hover {
     transform: rotate(-180deg) scale(1.1);
   }
@@ -363,7 +390,7 @@ $item-transition: 0.5s;
 
 .circular-menu__item:nth-child(5) .circular-menu__link {
   transform: rotate(-240deg);
-  
+
   &:hover {
     transform: rotate(-240deg) scale(1.1);
   }
@@ -386,7 +413,7 @@ $item-transition: 0.5s;
 
 .circular-menu__item:nth-child(6) .circular-menu__link {
   transform: rotate(-300deg);
-  
+
   &:hover {
     transform: rotate(-300deg) scale(1.1);
   }
@@ -406,4 +433,3 @@ $item-transition: 0.5s;
     transform: translateX(-50%) translateY(0) rotate(300deg);
   }
 }
-

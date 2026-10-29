@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import useTheme from '../../../hooks/useTheme';
+import useModalA11y from '../../../hooks/useModalA11y';
 import './IconsShowcase.scss';
 
 interface Icon {
@@ -275,6 +277,8 @@ const IconsShowcase = () => {
   const [selectedIcon, setSelectedIcon] = useState<Icon | null>(null);
   const [copied, setCopied] = useState(false);
   const modalContentRef = useRef<HTMLDivElement>(null);
+  const modalDialogRef = useRef<HTMLDivElement>(null);
+  const modalCloseBtnRef = useRef<HTMLButtonElement>(null);
   const [iconStates, setIconStates] = useState<Record<string, boolean>>({
     heart: false,
     star: false,
@@ -293,25 +297,29 @@ const IconsShowcase = () => {
     'video-play': false,
   });
 
-  useEffect(() => {
-    if (selectedIcon) {
-      document.body.style.overflow = 'hidden';
-      const scrollToTop = () => {
-        if (modalContentRef.current) {
-          modalContentRef.current.scrollTop = 0;
-          modalContentRef.current.scrollTo({ top: 0, behavior: 'instant' });
-        }
-      };
-      
-      scrollToTop();
-      setTimeout(scrollToTop, 50);
-      setTimeout(scrollToTop, 200);
-    } else {
-      document.body.style.overflow = '';
-    }
+  useModalA11y({
+    isOpen: Boolean(selectedIcon),
+    onClose: () => setSelectedIcon(null),
+    containerRef: modalDialogRef,
+    initialFocusRef: modalCloseBtnRef,
+  });
 
+  useEffect(() => {
+    if (!selectedIcon) return;
+
+    const scrollToTop = () => {
+      if (modalContentRef.current) {
+        modalContentRef.current.scrollTop = 0;
+        modalContentRef.current.scrollTo({ top: 0, behavior: 'instant' });
+      }
+    };
+
+    scrollToTop();
+    const t1 = setTimeout(scrollToTop, 50);
+    const t2 = setTimeout(scrollToTop, 200);
     return () => {
-      document.body.style.overflow = '';
+      clearTimeout(t1);
+      clearTimeout(t2);
     };
   }, [selectedIcon]);
 
@@ -326,14 +334,7 @@ const IconsShowcase = () => {
     }
   };
 
-  const handleIconClick = (icon: Icon, e: React.MouseEvent) => {
-    e.stopPropagation();
-    
-    if (!icon.interactive) {
-      setSelectedIcon(icon);
-      return;
-    }
-
+  const toggleInteractiveIcon = (icon: Icon) => {
     switch (icon.id) {
       case 'heart':
       case 'star':
@@ -341,7 +342,6 @@ const IconsShowcase = () => {
           ...prev,
           [icon.id]: !prev[icon.id]
         }));
-        setSelectedIcon(icon);
         break;
       case 'bell':
         setIconStates(prev => ({
@@ -354,14 +354,12 @@ const IconsShowcase = () => {
             bell: false
           }));
         }, 500);
-        setSelectedIcon(icon);
         break;
       case 'menu':
         setIconStates(prev => ({
           ...prev,
           menu: !prev.menu
         }));
-        setSelectedIcon(icon);
         break;
       case 'settings':
         setIconStates(prev => ({
@@ -374,28 +372,24 @@ const IconsShowcase = () => {
             settings: false
           }));
         }, 3000);
-        setSelectedIcon(icon);
         break;
       case 'lock':
         setIconStates(prev => ({
           ...prev,
           lock: !prev.lock
         }));
-        setSelectedIcon(icon);
         break;
       case 'unlock':
         setIconStates(prev => ({
           ...prev,
           unlock: !prev.unlock
         }));
-        setSelectedIcon(icon);
         break;
       case 'eye':
         setIconStates(prev => ({
           ...prev,
           eye: !prev.eye
         }));
-        setSelectedIcon(icon);
         break;
       case 'chevron-up':
       case 'chevron-down':
@@ -405,7 +399,6 @@ const IconsShowcase = () => {
           ...prev,
           [icon.id]: !prev[icon.id]
         }));
-        setSelectedIcon(icon);
         break;
       case 'thumbs-up':
       case 'thumbs-down':
@@ -420,18 +413,25 @@ const IconsShowcase = () => {
             [`${icon.id}-animate`]: false
           }));
         }, 600);
-        setSelectedIcon(icon);
         break;
       case 'video-play':
         setIconStates(prev => ({
           ...prev,
           'video-play': !prev['video-play']
         }));
-        setSelectedIcon(icon);
         break;
       default:
-        setSelectedIcon(icon);
+        break;
     }
+  };
+
+  const openIconModal = (icon: Icon) => {
+    setSelectedIcon(icon);
+  };
+
+  const handleInteractiveTargetClick = (icon: Icon, e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleInteractiveIcon(icon);
   };
 
   const renderIcon = (icon: Icon) => {
@@ -1345,61 +1345,102 @@ const IconsShowcase = () => {
             <div
               key={icon.id}
               className="icons-showcase__item"
-              onClick={(e) => handleIconClick(icon, e)}
+              onClick={() => openIconModal(icon)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  openIconModal(icon);
+                }
+              }}
+              aria-label={`View ${icon.name} icon details`}
             >
-              <div className={`icons-showcase__icon-wrapper ${icon.interactive ? 'icons-showcase__icon-wrapper--interactive' : ''}`}>
+              <div
+                className={`icons-showcase__icon-wrapper ${icon.interactive ? 'icons-showcase__icon-wrapper--interactive' : ''}`}
+                onClick={icon.interactive ? (e) => handleInteractiveTargetClick(icon, e) : undefined}
+                onKeyDown={icon.interactive ? (e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleInteractiveIcon(icon);
+                  }
+                } : undefined}
+                role={icon.interactive ? 'button' : undefined}
+                tabIndex={icon.interactive ? 0 : undefined}
+                aria-label={icon.interactive ? `Interact with ${icon.name} icon` : undefined}
+              >
                 {renderIcon(icon)}
               </div>
               <div className="icons-showcase__label">{icon.name}</div>
               {icon.interactive && (
-                <div className="icons-showcase__click-hint">Click Me</div>
+                <button
+                  type="button"
+                  className="icons-showcase__click-hint"
+                  onClick={(e) => handleInteractiveTargetClick(icon, e)}
+                  aria-label={`Interact with ${icon.name} icon`}
+                >
+                  Click Me
+                </button>
               )}
             </div>
           ))}
         </div>
       </div>
 
-      {selectedIcon && (
-        <div className="icons-showcase__modal" onClick={() => setSelectedIcon(null)}>
-          <div className="icons-showcase__modal-content" ref={modalContentRef} onClick={(e) => e.stopPropagation()}>
-            <div className="icons-showcase__modal-header">
-              <h3 className="icons-showcase__modal-title">{selectedIcon.name} Icon</h3>
-              <button
-                className="icons-showcase__modal-close"
-                onClick={() => setSelectedIcon(null)}
-                aria-label="Close"
-              >
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-            <div 
-              className="icons-showcase__modal-preview"
-              onClick={(e) => {
-                if (selectedIcon.interactive) {
-                  handleIconClick(selectedIcon, e);
-                }
-              }}
-            >
-              {renderIcon(selectedIcon)}
-            </div>
-            <div className="icons-showcase__modal-code">
-              <div className="icons-showcase__code-header">
-                <span className="icons-showcase__code-label">SVG Code</span>
+      {selectedIcon && createPortal(
+        <div className={`icons-showcase icons-showcase--${theme} icons-showcase--modal-root`}>
+          <div
+            ref={modalDialogRef}
+            className="icons-showcase__modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="icons-showcase-modal-title"
+            onClick={() => setSelectedIcon(null)}
+          >
+            <div className="icons-showcase__modal-content" ref={modalContentRef} onClick={(e) => e.stopPropagation()}>
+              <div className="icons-showcase__modal-header">
+                <h3 id="icons-showcase-modal-title" className="icons-showcase__modal-title">{selectedIcon.name} Icon</h3>
                 <button
-                  className="icons-showcase__copy-btn"
-                  onClick={() => handleCopyCode(selectedIcon)}
-                  aria-label="Copy code"
+                  ref={modalCloseBtnRef}
+                  className="icons-showcase__modal-close"
+                  onClick={() => setSelectedIcon(null)}
+                  aria-label="Close"
                 >
-                  <span className="material-symbols-outlined">{copied ? 'check' : 'content_copy'}</span>
-                  {copied ? 'Copied!' : 'Copy'}
+                  <span className="material-symbols-outlined">close</span>
                 </button>
               </div>
-              <pre className="icons-showcase__code-block">
-                <code>{getIconSVGCode(selectedIcon.id)}</code>
-              </pre>
+              <div className="icons-showcase__modal-preview">
+                <div
+                  className={`icons-showcase__icon-wrapper ${selectedIcon.interactive ? 'icons-showcase__icon-wrapper--interactive' : ''}`}
+                  onClick={selectedIcon.interactive ? (e) => handleInteractiveTargetClick(selectedIcon, e) : undefined}
+                  role={selectedIcon.interactive ? 'button' : undefined}
+                  tabIndex={selectedIcon.interactive ? 0 : undefined}
+                  aria-label={selectedIcon.interactive ? `Interact with ${selectedIcon.name} icon` : undefined}
+                >
+                  {renderIcon(selectedIcon)}
+                </div>
+              </div>
+              <div className="icons-showcase__modal-code">
+                <div className="icons-showcase__code-header">
+                  <span className="icons-showcase__code-label">SVG Code</span>
+                  <button
+                    className="icons-showcase__copy-btn"
+                    onClick={() => handleCopyCode(selectedIcon)}
+                    aria-label="Copy code"
+                  >
+                    <span className="material-symbols-outlined">{copied ? 'check' : 'content_copy'}</span>
+                    {copied ? 'Copied!' : 'Copy'}
+                  </button>
+                </div>
+                <pre className="icons-showcase__code-block">
+                  <code>{getIconSVGCode(selectedIcon.id)}</code>
+                </pre>
+              </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

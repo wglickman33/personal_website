@@ -18,7 +18,7 @@ export const timelineItems: TimelineItem[] = [
     id: 'high-school',
     date: 'May 2020',
     title: 'High School Graduation',
-    description: 'Graduated high school, ready to dive into college. Thoughts of becoming a doctor or perhaps a neurosurgeon, unsure whether to study neuroscience, biology, or chemistry.',
+    description: 'Graduated high school, ready to dive into college. I considered becoming a doctor, maybe even a neurosurgeon, but wasn\'t sure whether to study neuroscience, biology, or chemistry.',
     category: 'education',
   },
   {
@@ -32,12 +32,12 @@ export const timelineItems: TimelineItem[] = [
     id: 'phlebotomy-intern',
     date: 'June - August 2021',
     title: 'Phlebotomy & EKG Intern',
-    description: 'Worked as a phlebotomy and EKG intern at MZF Medical Services PC, drawing blood, taking EKGs, and packaging blood samples with ICD-10 codes. We also collected urine samples, fecal samples, and saliva samples.',
+    description: 'Worked as a phlebotomy and EKG intern at MZF Medical Services PC, drawing blood, taking EKGs, and packaging blood samples with ICD-10 codes. Also collected urine, fecal, and saliva samples.',
     category: 'work',
   },
   {
     id: 'ta-start',
-    date: 'August 2021',
+    date: 'August 2021 - August 2023',
     title: 'General Chemistry TA',
     description: 'Started as a Teaching Assistant for General Chemistry 1 and 2 at Binghamton University. Was the only consistent undergrad TA with 15+ students showing up to weekly office hours. Fellow TAs told me no one showed up to theirs. Created questions for exams and quizzes to help students prepare.',
     category: 'work',
@@ -53,14 +53,14 @@ export const timelineItems: TimelineItem[] = [
     id: 'orthodontics',
     date: 'May 2022 - August 2023',
     title: 'Orthodontics Assistant at Oppenheimer Orthodontics',
-    description: 'Worked as an orthodontics assistant in Cedarhurst, New York. Assisted on standard procedures and got to watch some pretty cool upper-level procedures. Also helped sterilize and package equipment, maintain machine upkeep, update files, manage calendars, take calls, and even scrubbed walls. Once fixed plaster and painted, and helped move old chairs out in preparation for new ones. Learned the importance of understanding patients and their stories.',
+    description: 'Worked as an orthodontics assistant in Cedarhurst, New York. Assisted on standard procedures and got to watch some pretty cool upper-level ones, while also handling sterilization, equipment upkeep, scheduling, and general office support. Learned the importance of understanding patients and their stories.',
     category: 'work',
   },
   {
     id: 'aviato-start',
     date: 'July 2023',
     title: 'Chief of Staff, Flight Training, and Curriculum Management at Aviato Drone & Code',
-    description: 'Started as Chief of Staff, Flight Training, and Curriculum Management. Taught Part 107 drone license courses and JavaScript-based block coding to kids. Created 6 different curricula in Canva using information from the DroneBlocks and Part 107 curricula.',
+    description: 'Started as Chief of Staff, Flight Training, and Curriculum Management. Taught Part 107 drone license courses and JavaScript-based block coding to kids. Created 7 different curricula in Canva using information from the DroneBlocks and Part 107 curricula.',
     category: 'work',
   },
   {
@@ -143,17 +143,10 @@ export const timelineItems: TimelineItem[] = [
     id: 'bootcamp-end',
     date: 'October 2024',
     title: 'Completed Bootcamp - Top of Class',
-    description: 'Finished BrainStation bootcamp top of the class. Created a home inventory management system capstone project designed like a handwritten notebook with my own handwriting font. Hand drew the entire site before recreating it with code.',
+    description: 'Finished BrainStation bootcamp top of the class. Capstone was Tori v1: a home inventory app designed like a handwritten notebook with a custom handwriting font, hand-drawn before being rebuilt in code. Later rebuilt and shipped as the live Tori product (see August 2026).',
     category: 'achievement',
     link: 'https://github.com/wglickman33/Tori',
     linkText: 'View on GitHub',
-  },
-  {
-    id: 'aviato-end',
-    date: 'November 2024',
-    title: 'Finished at Aviato Drone & Code',
-    description: 'Completed role as Chief of Staff, Flight Training, and Curriculum Management. Sometimes had 20 eight-year-olds with only 1 paying attention, but teaching that 1 was worth every second. Saw how young minds process new information and utilize it to succeed.',
-    category: 'milestone',
   },
   {
     id: 'quant-start',
@@ -170,21 +163,14 @@ export const timelineItems: TimelineItem[] = [
     category: 'education',
   },
   {
-    id: 'further-start',
-    date: 'June 9, 2025',
-    title: 'Agentic AI Engineer at Further',
-    description: 'Started at Further (Talk Further), building and maintaining voice AI agents for behavioral health facilities. Working with customer success managers, directors, VPs of sales, and clients.',
-    category: 'work',
-  },
-  {
     id: 'my-kosher-delivery',
-    date: '2024-2025',
-    title: 'My Kosher Delivery',
-    description: 'Built a comprehensive kosher food delivery platform serving New York area (5 Boroughs and Long Island). Unlike traditional delivery services, customers can order from multiple restaurants in a single order, with delivery capabilities extending 2+ hours away. 850 hours of development, 74,000+ lines of code. Full-stack application with comprehensive admin dashboard, order tracking, multi-restaurant ordering, user authentication, promo codes, gift cards, ticket system, and integrations with ShipDay, MailChimp, EmailJS, and Stripe.',
+    date: 'February 2025 - Present',
+    title: 'Co-Founded My Kosher Delivery',
+    description: 'Co-founded and lead all engineering for a full-stack, multi-vendor kosher food delivery platform serving the Five Towns, NYC, NJ, and the Hamptons. Customers can order from up to 11 restaurant partners in a single order, with a dedicated B2B vertical delivering to nursing home residents. 1,500+ hours of development, 128,000+ lines of code, with a full admin dashboard, secure authentication and payments, and real-time order tracking.',
     category: 'work',
     downloads: [
       {
-        url: 'https://mykosherdelivery.netlify.app',
+        url: 'https://mykosherdelivery.com',
         text: 'Visit Live Site',
       },
       {
@@ -194,10 +180,99 @@ export const timelineItems: TimelineItem[] = [
     ],
   },
   {
+    id: 'quant-end',
+    date: 'May 2025',
+    title: 'Finished at Quant Inc.',
+    description: 'Wrapped up my time as Junior AI Engineer at Quant Inc. Shipped working agents across 8+ industries in under 6 months, and learned a ton about adapting AI to wildly different business contexts.',
+    category: 'milestone',
+  },
+  {
+    id: 'further-start',
+    date: 'June 9, 2025',
+    title: 'Agentic AI Engineer at Further',
+    description: 'Started at Further (Talk Further) as the sole engineer on the Behavioral Health team, building production AI voice and chat admissions agents for treatment facilities across substance use, mental health, eating disorder, and outpatient care. Redesigned a static AI prompt into a dynamic, injectable architecture and built an evaluation framework from scratch to test agents before they ever talk to a real caller.',
+    category: 'work',
+  },
+  {
+    id: 'aviato-end',
+    date: 'June 2025',
+    title: 'Finished at Aviato Drone & Code',
+    description: 'Completed role as Chief of Staff, Flight Training, and Curriculum Management, having led hiring, training, and performance management for a 15-person team and helped expand the customer base by 300%. Sometimes had 20 eight-year-olds with only 1 paying attention, but teaching that 1 was worth every second. Saw how young minds process new information and utilize it to succeed.',
+    category: 'milestone',
+  },
+  {
+    id: 'fig-and-peach',
+    date: 'July 2026 - Present',
+    title: 'Launched Fig & Peach Shop',
+    description: 'Built a full-stack custom jewelry storefront and owner admin for a handmade brand: React 19, Vite 8, and React Router 7 on the frontend; Netlify Functions, PostgreSQL, jose JWT sessions, Zod validation, Cloudinary, and Resend on the backend. Ten shop categories, bracelet pricing engines, idempotent checkout, and an owner admin with dry-run order edits and pricing snapshots. 750+ Vitest tests, 90+ Playwright journeys, oxlint, and GitHub Actions CI against Postgres 16. Live at fignpeach.com.',
+    category: 'achievement',
+    downloads: [
+      {
+        url: 'https://fignpeach.com',
+        text: 'Visit Live Site',
+      },
+      {
+        url: 'https://github.com/wglickman33/figAndPeach',
+        text: 'View on GitHub',
+      },
+    ],
+  },
+  {
+    id: 'whisk',
+    date: 'July 2026 - Present',
+    title: 'Launched Whisk',
+    description: 'Built and shipped a live recipe app and kitchen toolkit solo: cloud-synced recipes, collaborative shopping lists with real-time updates, 31 privacy-first browser tools, Sous AI for saved recipes and lists, and photo import that turns screenshots into a draft recipe you review before Save. Live on Netlify and Heroku.',
+    category: 'achievement',
+    downloads: [
+      {
+        url: 'https://whiskplus.com',
+        text: 'Visit Live Site',
+      },
+      {
+        url: 'https://github.com/wglickman33/Whisk',
+        text: 'View on GitHub',
+      },
+    ],
+  },
+  {
     id: 'site-wip',
-    date: 'December 2025',
-    title: 'Personal Website - Work in Progress',
+    date: 'December 2025 - Present',
+    title: 'Personal Website: Work in Progress',
     description: 'This site is continuously evolving. Started December 2025 and counting. More features, content, and improvements coming soon.',
     category: 'milestone',
+  },
+  {
+    id: 'tori-rebuild',
+    date: 'August 2026 - Present',
+    title: 'Launched Tori',
+    description: 'Took my first-ever app (the BrainStation notebook-style capstone) and rebuilt it from scratch as a live household inventory product: shared homes, searchable items, expiration and value tracking, Cloudinary photos, and live household sync. Then shipped Tori AI so anyone in the home can ask the inventory questions in chat, with confirm-before-write. Live on Netlify and Heroku.',
+    category: 'achievement',
+    downloads: [
+      {
+        url: 'https://torihome.netlify.app',
+        text: 'Visit Live Site',
+      },
+      {
+        url: 'https://github.com/wglickman33/Tori',
+        text: 'View on GitHub',
+      },
+    ],
+  },
+  {
+    id: 'scout',
+    date: 'August 2026 - Present',
+    title: 'Launched Scout Sports',
+    description: 'Built Scout Sports for Shabbat: as a Modern Orthodox Jew who can\'t use devices Friday night through Saturday, and a Knicks/Mets/Giants/Rangers fan, I needed a jumbotron that stays on all day (fullscreen wake-lock), shows only my teams and leagues (favorites + pins), and auto-cycles so late games aren\'t a mystery until the Saturday morning newspaper. Tried Alexa and Google Home first (scores showed up days late) and refused to buy a $200 Tidbyt. Multi-league ESPN scores, box scores, JWT auth. First TypeScript + Tailwind project. ~7,500 lines of code (~20% tests), ~20-25 hours, live on Netlify and Heroku.',
+    category: 'achievement',
+    downloads: [
+      {
+        url: 'https://scoutsports.netlify.app',
+        text: 'Visit Live Site',
+      },
+      {
+        url: 'https://github.com/wglickman33/Scout',
+        text: 'View on GitHub',
+      },
+    ],
   },
 ];

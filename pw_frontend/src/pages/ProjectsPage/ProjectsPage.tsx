@@ -9,8 +9,13 @@ import DrawingCanvas from '../../components/widgets/DrawingCanvas/DrawingCanvas'
 import ColorSortPuzzle from '../../components/widgets/ColorSortPuzzle/ColorSortPuzzle';
 import CapitalVenture from '../../components/widgets/CapitalVenture/CapitalVenture';
 import whiteMKDIcon from '../../assets/styles/logos/whiteMKDIcon.png';
+import navyMKDIcon from '../../assets/styles/logos/navyMKDIcon.png';
+import whiskLogoCharcoal from '../../assets/styles/logos/whiskLogoCharcoal.svg';
+import whiskLogoAmber from '../../assets/styles/logos/whiskLogoAmber.svg';
 import bgworkspaceLogo from '../../assets/styles/logos/bgworkspaceLogo.png';
 import toriLogo from '../../assets/styles/logos/toriLogo.png';
+import scoutIcon from '../../assets/styles/logos/scoutIcon.svg';
+import figAndPeachLogo from '../../assets/styles/logos/figAndPeachLogo.png';
 import './ProjectsPage.scss';
 
 type ProjectCategory = 'all' | 'web' | 'widget' | 'game';
@@ -61,8 +66,8 @@ const ProjectsPage = () => {
 
   useEffect(() => {
     const tooltipMap = new WeakMap<HTMLElement, HTMLElement>();
-    let hideTimeout: NodeJS.Timeout | null = null;
-    let showTimeout: NodeJS.Timeout | null = null;
+    let hideTimeout: ReturnType<typeof setTimeout> | null = null;
+    let showTimeout: ReturnType<typeof setTimeout> | null = null;
     let currentLink: HTMLElement | null = null;
 
     const hideAllTooltips = () => {
@@ -195,6 +200,8 @@ const ProjectsPage = () => {
 
   const renderProject = (project: Project, isWidget: boolean = false) => {
     const isFeatured = project.id === 'my-kosher-delivery';
+    const mkdIcon = theme === 'light' ? navyMKDIcon : whiteMKDIcon;
+    const whiskIcon = theme === 'light' ? whiskLogoCharcoal : whiskLogoAmber;
     const hasImages = project.images && project.images.length > 0;
     const isGame = project.category === 'game';
     const isInteractive = isWidget || isGame;
@@ -338,26 +345,46 @@ const ProjectsPage = () => {
           
           {project.id === 'my-kosher-delivery' && (
             <div className="projects-portfolio__card-mkd-preview">
-              <img src={whiteMKDIcon} alt="My Kosher Delivery" className="projects-portfolio__card-mkd-icon" />
+              <img src={mkdIcon} alt="My Kosher Delivery" className="projects-portfolio__card-mkd-icon" />
             </div>
           )}
           
           {project.id === 'bg-workspace' && (
             <div className="projects-portfolio__card-bgworkspace-preview">
-              <img src={bgworkspaceLogo} alt="BG Workspace" className="projects-portfolio__card-bgworkspace-icon" />
+              <div className="projects-portfolio__card-bgworkspace-icon-backdrop">
+                <img src={bgworkspaceLogo} alt="BG Workspace" className="projects-portfolio__card-bgworkspace-icon" />
+              </div>
             </div>
           )}
           
-          {project.id === 'tori' && (
+          {project.id === 'tori-v2' && (
             <div className="projects-portfolio__card-tori-preview">
               <img src={toriLogo} alt="Tori" className="projects-portfolio__card-tori-icon" />
             </div>
           )}
+
+          {project.id === 'whisk' && (
+            <div className="projects-portfolio__card-whisk-preview">
+              <img src={whiskIcon} alt="Whisk" className="projects-portfolio__card-whisk-icon" />
+            </div>
+          )}
+
+          {project.id === 'scout' && (
+            <div className="projects-portfolio__card-scout-preview">
+              <img src={scoutIcon} alt="Scout" className="projects-portfolio__card-scout-icon" />
+            </div>
+          )}
+
+          {project.id === 'fig-and-peach' && (
+            <div className="projects-portfolio__card-fig-peach-preview">
+              <img src={figAndPeachLogo} alt="Fig & Peach Shop" className="projects-portfolio__card-fig-peach-icon" />
+            </div>
+          )}
           
-          {!hasImages && !(isInteractive && project.id === 'afk-clock-screen') && project.id !== '2048-game' && project.id !== 'wordle' && project.id !== 'wavelength' && project.id !== 'my-kosher-delivery' && project.id !== 'bg-workspace' && project.id !== 'tori' && (
+          {!hasImages && !(isInteractive && project.id === 'afk-clock-screen') && project.id !== '2048-game' && project.id !== 'wordle' && project.id !== 'wavelength' && project.id !== 'my-kosher-delivery' && project.id !== 'bg-workspace' && project.id !== 'tori-v2' && project.id !== 'whisk' && project.id !== 'scout' && project.id !== 'fig-and-peach' && (
             <div className={`projects-portfolio__card-placeholder projects-portfolio__card-placeholder--${project.category} ${project.id === 'my-kosher-delivery' ? 'projects-portfolio__card-placeholder--mkd' : ''}`}>
               {project.id === 'my-kosher-delivery' ? (
-                <img src={whiteMKDIcon} alt="My Kosher Delivery" className="projects-portfolio__card-placeholder-mkd-icon" />
+                <img src={mkdIcon} alt="My Kosher Delivery" className="projects-portfolio__card-placeholder-mkd-icon" />
               ) : (
               <span className="material-symbols-outlined">
                 {project.category === 'web' ? 'web' : 

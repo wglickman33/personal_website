@@ -22,6 +22,7 @@
   align-items: center;
   justify-content: center;
   min-height: 200px;
+  overflow: visible;
   background: linear-gradient(135deg, rgba($accent-color-3, 0.05) 0%, rgba($accent-color-1, 0.05) 100%);
 
   .widget-demo--dark & {
@@ -29,7 +30,7 @@
   }
 
   @include sm {
-    padding: 24px;
+    padding: 24px 16px;
     min-height: 150px;
   }
 }

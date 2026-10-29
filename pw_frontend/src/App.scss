@@ -6,6 +6,7 @@
 
 .app {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   position: relative;
 }
@@ -18,13 +19,23 @@
 
   .sidebar--collapsed ~ & {
     margin-left: 72px;
+
+    // Collapsed stays on during the tablet→mobile slide-out; don't keep a
+    // 72px content gutter once the viewport is actually phone-sized.
+    @include max(767px) {
+      margin-left: 0;
+    }
   }
 
-  @include md {
+  // Must mirror the exact same ranges as the sidebar's own CSS fallback
+  // (see Sidebar.scss) so the content margin always matches the sidebar's
+  // actual on-screen width at every viewport, including the 768px/992px
+  // boundaries themselves.
+  @include between(768px, 991px) {
     margin-left: 72px;
   }
 
-  @include sm {
+  @include max(767px) {
     margin-left: 0;
   }
 }

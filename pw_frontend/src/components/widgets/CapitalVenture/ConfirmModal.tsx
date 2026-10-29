@@ -1,5 +1,7 @@
-import { useEffect } from 'react';
+import { useRef } from 'react';
+import { createPortal } from 'react-dom';
 import useTheme from '../../../hooks/useTheme';
+import useModalA11y from '../../../hooks/useModalA11y';
 import './ConfirmModal.scss';
 
 interface ConfirmModalProps {
@@ -22,38 +24,34 @@ const ConfirmModal = ({
   onCancel
 }: ConfirmModalProps) => {
   const { theme } = useTheme();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const cancelBtnRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onCancel();
-      }
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onCancel]);
+  useModalA11y({
+    isOpen,
+    onClose: onCancel,
+    containerRef: dialogRef,
+    initialFocusRef: cancelBtnRef,
+  });
 
   if (!isOpen) return null;
 
-  return (
-    <div className={`confirm-modal confirm-modal--${theme}`}>
+  return createPortal(
+    <div
+      ref={dialogRef}
+      className={`confirm-modal confirm-modal--${theme}`}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirm-modal-title"
+      aria-describedby="confirm-modal-message"
+    >
       <div className="confirm-modal__overlay" onClick={onCancel} />
       <div className="confirm-modal__content">
-        <h3 className="confirm-modal__title">{title}</h3>
-        <p className="confirm-modal__message">{message}</p>
+        <h3 id="confirm-modal-title" className="confirm-modal__title">{title}</h3>
+        <p id="confirm-modal-message" className="confirm-modal__message">{message}</p>
         <div className="confirm-modal__actions">
           <button
+            ref={cancelBtnRef}
             className="confirm-modal__button confirm-modal__button--cancel"
             onClick={onCancel}
             type="button"
@@ -69,9 +67,9 @@ const ConfirmModal = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
 export default ConfirmModal;
-

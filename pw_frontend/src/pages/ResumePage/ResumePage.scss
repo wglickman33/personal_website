@@ -5,6 +5,7 @@
 
 .resume-page {
   min-height: 100vh;
+  min-height: 100dvh;
   padding: calc(#{$header-height} + 40px) 0 0;
   background:
     radial-gradient(1400px 600px at 0% 0%, rgba($accent-color-1, 0.08), transparent 50%),
@@ -33,8 +34,8 @@
   }
 
   &__header {
-    margin-bottom: 80px;
-    padding: 60px 0;
+    margin-bottom: 32px;
+    padding: 60px 0 0;
     position: relative;
   }
 
@@ -237,11 +238,27 @@
 
   &__experience-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    // Desktop: roomy 360px min. lg (≤1200) drops to 300px so the
+    // 993-1200 band still lands even 2-3 columns instead of a lopsided
+    // 2+orphan. sm (≤768) goes single-column - tablets (768-992) keep a
+    // 2-col auto-fill from the lg rule, which is the tablet-band gap
+    // the previous md→1fr jump skipped entirely.
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
     gap: 24px;
+    align-items: stretch;
 
-    @include md {
+    @include lg {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+
+    @include sm {
       grid-template-columns: 1fr;
+    }
+
+    // Once the 1200px resume container is full, lock to an even 3-col
+    // composition rather than letting auto-fill invent uneven tracks.
+    @include min(1440px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
@@ -256,6 +273,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    gap: 16px;
 
     .resume-page--dark & {
       background: rgba($dark-gray-color, 0.8);
@@ -271,36 +289,29 @@
         box-shadow: 0 8px 24px rgba($accent-color-1, 0.25);
         border-color: rgba($accent-color-1, 0.4);
       }
+
     }
   }
 
-  &__experience-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 16px;
-    flex: 1;
-    min-height: 0;
-  }
-
-  &__experience-card-main {
+  &__experience-card-body {
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
+    gap: 12px;
   }
 
   &__experience-title {
-    font-size: $font-size-lg;
+    font-size: $font-size-md;
     font-weight: $font-weight-bold;
     color: $primary-color;
-    margin-bottom: 8px;
-    line-height: $line-height-tight;
+    line-height: $line-height-snug;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    min-height: calc($line-height-snug * $font-size-md * 2);
 
     .resume-page--dark & {
       color: $light-color;
@@ -308,75 +319,82 @@
   }
 
   &__experience-company {
-    font-size: $font-size-base;
+    font-size: $font-size-sm;
     font-weight: $font-weight-semibold;
     color: $accent-color-1;
-    margin-bottom: 8px;
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
+    line-height: 1;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
   }
 
   &__experience-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
-    font-size: $font-size-sm;
-    color: $secondary-color;
-    margin-top: auto;
-
-    .resume-page--dark & {
-      color: rgba($light-color, 0.7);
-    }
+    gap: 8px;
   }
 
   &__experience-location,
   &__experience-period {
     display: flex;
     align-items: center;
-    gap: 4px;
-  }
-
-  &__expand-icon {
-    font-size: 24px;
-    color: $accent-color-1;
-    transition: transform 0.4s ease;
-    flex-shrink: 0;
-  }
-
-  &__skill-tag {
-    display: inline-block;
-    padding: 4px 12px;
-    background: rgba($accent-color-1, 0.1);
-    color: $accent-color-1;
-    border-radius: $border-radius;
+    gap: 5px;
     font-size: $font-size-xs;
     font-weight: $font-weight-medium;
+    color: $secondary-color;
+    background: rgba($primary-color, 0.05);
+    border-radius: 999px;
+    padding: 5px 10px 5px 8px;
+
+    .material-symbols-outlined {
+      font-size: 14px;
+      color: $accent-color-1;
+    }
 
     .resume-page--dark & {
-      background: rgba($accent-color-1, 0.2);
-      color: $accent-color-3;
+      color: rgba($light-color, 0.75);
+      background: rgba($light-color, 0.08);
     }
   }
 
-  &__skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 32px;
+  &__experience-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid rgba($primary-color, 0.08);
 
-    @include md {
-      grid-template-columns: 1fr;
+    .resume-page--dark & {
+      border-top-color: rgba($light-color, 0.12);
+    }
+
+    .button--outline {
+      background: transparent !important;
+      box-shadow: none !important;
+      border: 1.5px solid rgba($accent-color-1, 0.6) !important;
+      color: $accent-color-1 !important;
+      transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease !important;
+
+      &::before {
+        display: none !important;
+      }
+
+      &:hover, &:focus {
+        background: $accent-color-1 !important;
+        border-color: $accent-color-1 !important;
+        color: $light-color !important;
+        box-shadow: none !important;
+      }
     }
   }
 
-  &__skills-category {
+  &__skills-carousel {
     background: rgba($light-color, 0.9);
     border: 1px solid rgba($primary-color, 0.1);
     border-radius: $border-radius-lg;
-    padding: 24px;
+    padding: 28px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
     .resume-page--dark & {
@@ -386,58 +404,149 @@
     }
   }
 
-  &__skills-category-title {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-bold;
-    color: $primary-color;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid rgba($accent-color-1, 0.2);
-
-    .resume-page--dark & {
-      color: $light-color;
-      border-bottom-color: rgba($accent-color-1, 0.3);
-    }
-  }
-
-  &__skills-list {
+  &__skills-tabs {
     display: flex;
-    flex-direction: column;
-    gap: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
   }
 
-  &__skill-item {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  &__skill-name {
+  &__skills-tab {
+    font-family: inherit;
     font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
-    color: $primary-color;
+    font-weight: $font-weight-semibold;
+    color: $secondary-color;
+    background: rgba($primary-color, 0.05);
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 
     .resume-page--dark & {
+      color: rgba($light-color, 0.7);
+      background: rgba($light-color, 0.06);
+    }
+
+    &:hover {
+      color: $accent-color-1;
+      border-color: rgba($accent-color-1, 0.3);
+    }
+
+    &--active {
+      background: $accent-color-1;
+      color: $light-color;
+      border-color: $accent-color-1;
+
+      &:hover {
+        color: $light-color;
+      }
+    }
+  }
+
+  &__skills-panel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__skills-nav {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba($primary-color, 0.12);
+    background: rgba($primary-color, 0.04);
+    color: $primary-color;
+    cursor: pointer;
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+
+    .material-symbols-outlined {
+      font-size: 22px;
+    }
+
+    .resume-page--dark & {
+      border-color: rgba($light-color, 0.15);
+      background: rgba($light-color, 0.06);
       color: $light-color;
     }
-  }
 
-  &__skill-bar {
-    height: 6px;
-    background: rgba($primary-color, 0.1);
-    border-radius: 3px;
-    overflow: hidden;
+    &:hover {
+      background: $accent-color-1;
+      border-color: $accent-color-1;
+      color: $light-color;
+    }
 
-    .resume-page--dark & {
-      background: rgba($light-color, 0.1);
+    @include sm {
+      display: none;
     }
   }
 
-  &__skill-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, $accent-color-1, $accent-color-3);
-    border-radius: 3px;
-    transition: width 0.8s ease-out;
+  &__skills-empty {
+    flex: 1;
+    font-size: $font-size-sm;
+    color: $secondary-color;
+    font-style: italic;
+    text-align: center;
+    padding: 40px 0;
+
+    .resume-page--dark & {
+      color: rgba($light-color, 0.6);
+    }
+  }
+
+  &__skills-chart {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    animation: resumeSkillsChartFade 0.4s ease;
+
+    .recharts-cartesian-axis-tick-value {
+      font-family: $font-family-primary;
+    }
+
+    .recharts-wrapper,
+    .recharts-surface,
+    svg,
+    svg:focus,
+    .recharts-wrapper:focus,
+    .recharts-wrapper *:focus {
+      outline: none !important;
+    }
+  }
+
+  &__skills-dots {
+    display: none;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+
+    @include sm {
+      display: flex;
+    }
+  }
+
+  &__skills-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background: rgba($primary-color, 0.15);
+    cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.25s ease;
+
+    .resume-page--dark & {
+      background: rgba($light-color, 0.2);
+    }
+
+    &--active {
+      background: $accent-color-1;
+      transform: scale(1.3);
+    }
   }
 
   &__education-grid {
@@ -510,13 +619,22 @@
 
   &__achievements {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    // Keep 2 columns through tablet (768-992) - previously collapsed at
+    // md (≤992), which made iPad-portrait look like a phone. minmax(0,1fr)
+    // lets long achievement copy wrap instead of overflowing the track.
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px;
+
+    @include sm {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__achievement-item {
     display: flex;
+    align-items: flex-start;
     gap: 16px;
+    height: 100%;
     background: rgba($light-color, 0.9);
     border: 1px solid rgba($primary-color, 0.1);
     border-radius: $border-radius-lg;
@@ -589,7 +707,7 @@
     padding: calc(#{$header-height} + 16px) 0 0;
 
     &__header {
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
 
     &__content {
@@ -598,11 +716,17 @@
     }
 
     &__experience-grid,
-    &__skills-grid,
-    &__education-grid,
-    &__achievements {
+    &__education-grid {
       grid-template-columns: 1fr;
       gap: 16px;
+    }
+
+    &__achievements {
+      gap: 16px;
+    }
+
+    &__skills-carousel {
+      padding: 20px;
     }
   }
 }
@@ -614,7 +738,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px;
+  // Fluid clamp() throughout (matching ProjectCaseStudyModal's sibling
+  // pattern) instead of a single sm-only breakpoint - this scales
+  // continuously at every width instead of jumping at one fixed cutoff,
+  // and needs no separate xs tier since it's fluid all the way down.
+  padding: clamp(12px, 4vw, 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .resume-modal__backdrop {
@@ -634,7 +764,8 @@
   position: relative;
   width: 100%;
   max-width: 700px;
-  max-height: calc(100vh - 64px);
+  max-height: calc(100vh - clamp(24px, 8vw, 64px));
+  max-height: calc(100dvh - clamp(24px, 8vw, 64px));
   overflow-y: auto;
   overflow-x: hidden;
   border-radius: $border-radius-lg;
@@ -645,6 +776,8 @@
   transition: opacity 0.4s ease;
   display: flex;
   flex-direction: column;
+  outline: none;
+  margin: auto;
 }
 
 .resume-modal--dark .resume-modal__panel {
@@ -653,13 +786,25 @@
   box-shadow: 0 24px 90px rgba(0, 0, 0, 0.5);
 }
 
-.resume-modal__close {
+.resume-modal__close-anchor {
   position: sticky;
-  top: 16px;
-  align-self: flex-end;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  top: 0;
+  width: 100%;
+  height: 0;
+  z-index: 51;
+  pointer-events: none;
+}
+
+.resume-modal__close {
+  position: absolute;
+  top: clamp(12px, 2vw, 16px);
+  right: clamp(12px, 2vw, 16px);
+  pointer-events: auto;
+  width: clamp(40px, 4vw, 44px);
+  height: clamp(40px, 4vw, 44px);
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: clamp(8px, 1.5vw, 12px);
   border: 1px solid rgba($primary-color, 0.15);
   background: rgba($light-color, 0.98);
   backdrop-filter: blur(10px);
@@ -670,12 +815,12 @@
   justify-content: center;
   transition: all $transition-speed ease;
   z-index: 50;
-  margin: 16px 16px 0 0;
   flex-shrink: 0;
   outline: none;
+  touch-action: manipulation;
 
   .material-symbols-outlined {
-    font-size: 24px;
+    font-size: clamp(20px, 3vw, 24px);
   }
 
   &:hover {
@@ -713,7 +858,12 @@
 }
 
 .resume-modal__header {
-  padding: 24px 60px 20px 24px;
+  // padding-right must always exceed the close button's own footprint
+  // (its right offset + width, both clamp()-based above: max 16+44=60px,
+  // min 12+40=52px) with a bit of margin, so a long wrapped title can
+  // never visually run underneath the button at any viewport width - this
+  // was the bug at the old fixed sm-only 50px value.
+  padding: clamp(16px, 3vw, 24px) clamp(56px, 10vw, 70px) clamp(12px, 2vw, 20px) clamp(16px, 3vw, 24px);
   border-bottom: 1px solid rgba($primary-color, 0.08);
 }
 
@@ -744,27 +894,39 @@
 .resume-modal__meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  font-size: $font-size-sm;
-  color: $secondary-color;
-}
-
-.resume-modal--dark .resume-modal__meta {
-  color: rgba($light-color, 0.7);
+  gap: 8px;
 }
 
 .resume-modal__location,
 .resume-modal__period {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: $secondary-color;
+  background: rgba($primary-color, 0.05);
+  border-radius: 999px;
+  padding: 5px 10px 5px 8px;
+
+  .material-symbols-outlined {
+    font-size: 14px;
+    color: $accent-color-1;
+  }
+}
+
+.resume-modal--dark .resume-modal__location,
+.resume-modal--dark .resume-modal__period {
+  color: rgba($light-color, 0.75);
+  background: rgba($light-color, 0.08);
 }
 
 .resume-modal__body {
-  padding: 24px;
+  padding: clamp(16px, 4vw, 24px);
+  padding-bottom: clamp(24px, 5vw, 32px);
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: clamp(16px, 3vw, 24px);
 }
 
 .resume-modal__section {
@@ -824,22 +986,79 @@
   }
 }
 
-@include sm {
-  .resume-modal {
-    padding: 16px;
-    }
+.resume-modal__links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 18px;
+  margin-bottom: 4px;
+  border-top: 1px solid rgba($primary-color, 0.08);
+}
 
-  .resume-modal__panel {
-    max-height: calc(100vh - 32px);
+.resume-modal--dark .resume-modal__links {
+  border-top-color: rgba($light-color, 0.12);
+}
+
+.resume-modal__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: $border-radius;
+  background: rgba($accent-color-1, 0.12);
+  border: 1px solid rgba($accent-color-1, 0.3);
+  color: $accent-color-1;
+  text-decoration: none;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  transition: all $transition-speed ease;
+  min-height: 44px;
+
+  .material-symbols-outlined {
+    font-size: 20px;
   }
 
-  .resume-modal__header {
-    padding: 20px 50px 16px 20px;
+  &:hover {
+    background: rgba($accent-color-1, 0.18);
+    border-color: $accent-color-1;
   }
 
-  .resume-modal__body {
-    padding: 20px;
-    gap: 20px;
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($accent-color-1, 0.3);
+    border-color: $accent-color-1;
+    background: rgba($accent-color-1, 0.18);
+  }
+}
+
+.resume-modal--dark .resume-modal__link {
+  background: rgba($accent-color-1, 0.18);
+  border-color: rgba($accent-color-1, 0.4);
+  color: $light-color;
+
+  &:hover {
+    background: rgba($accent-color-1, 0.25);
+    border-color: $accent-color-1;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba($accent-color-1, 0.4);
+    border-color: $accent-color-1;
+    background: rgba($accent-color-1, 0.25);
+  }
+}
+
+// resume-modal spacing above is now fully fluid via clamp() (matching
+// ProjectCaseStudyModal), so no sm/xs breakpoint overrides are needed here
+// anymore - reintroducing fixed-px values at a single breakpoint is what
+// caused the close-button/header-padding mismatch this pass fixed.
+
+@keyframes resumeSkillsChartFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 

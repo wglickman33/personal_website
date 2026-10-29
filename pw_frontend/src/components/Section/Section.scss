@@ -1,4 +1,5 @@
 @use "../../assets/styles/partials/variables" as *;
+@use "../../assets/styles/partials/fonts" as *;
 @use "../../assets/styles/partials/mixins" as *;
 @use "../../assets/styles/partials/breakpoints" as *;
 
@@ -6,6 +7,14 @@
   padding: 5rem 0;
   position: relative;
   transition: background-color 0.3s ease;
+
+  @include md {
+    padding: 4rem 0;
+  }
+
+  @include sm {
+    padding: 3rem 0;
+  }
   
   &.dark {
     .section-title {
@@ -32,6 +41,7 @@
   
   &.full-height {
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     justify-content: center;

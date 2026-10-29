@@ -60,19 +60,7 @@
   }
 }
 
-@mixin respond-to($breakpoint) {
-  @if $breakpoint == xs {
-    @media (max-width: 576px) { @content; }
-  } @else if $breakpoint == sm {
-    @media (max-width: 768px) { @content; }
-  } @else if $breakpoint == md {
-    @media (max-width: 992px) { @content; }
-  } @else if $breakpoint == lg {
-    @media (max-width: 1200px) { @content; }
-  } @else if $breakpoint == xl {
-    @media (min-width: 1201px) { @content; }
-  }
-}
+
 
 @mixin button($bg-color: $primary-color, $text-color: $light-color, $hover-bg: color-mix(in srgb, $primary-color 90%, black 10%)) {
   display: inline-block;

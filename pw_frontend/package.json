@@ -14,12 +14,14 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.3.0",
+    "recharts": "^3.10.1",
     "sass": "^1.85.1",
     "three": "^0.174.0",
     "three-stdlib": "^2.35.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@types/node": "^26.6.1",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@types/three": "^0.174.0",

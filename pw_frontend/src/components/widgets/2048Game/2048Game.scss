@@ -143,12 +143,7 @@
   transition: transform $transition-speed-fast ease, background $transition-speed-fast ease;
 
   &:hover {
-    transform: translateY(-1px);
     background: linear-gradient(135deg, rgba($accent-color-1, 0.30), rgba($accent-color-3, 0.20));
-  }
-
-  &:active {
-    transform: translateY(0);
   }
 }
 
@@ -395,6 +390,7 @@
   box-shadow: $dark-box-shadow;
   text-align: center;
   max-height: calc(100vh - clamp(24px, 4vw, 40px));
+  max-height: calc(100dvh - clamp(24px, 4vw, 40px));
   overflow-y: auto;
   margin: auto;
 }
@@ -452,6 +448,7 @@
     padding: 16px;
     border-radius: $border-radius-lg;
     max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - 24px);
   }
 
   .g2048__overlay-title {
@@ -468,6 +465,7 @@
     padding: 12px;
     border-radius: $border-radius;
     max-height: calc(100vh - 16px);
+    max-height: calc(100dvh - 16px);
   }
 
   .g2048__overlay-title {

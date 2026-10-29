@@ -197,7 +197,6 @@
   }
 
   &:hover {
-    transform: translateY(-6px);
     box-shadow: $box-shadow-xl;
     border-color: rgba($accent-color-1, 0.3);
 
@@ -294,7 +293,6 @@
   &:hover {
     background-color: rgba($accent-color-1, 0.2);
     border-color: rgba($accent-color-1, 0.4);
-    transform: translateY(-2px);
   }
 
   .projects--dark & {
@@ -362,7 +360,7 @@
   font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
   border: 1px solid rgba($primary-color, 0.2);
-  transition: all $transition-speed cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all $transition-speed ease;
   font-family: $font-family-display;
 
   .material-symbols-outlined {
@@ -373,7 +371,6 @@
     background-color: $primary-color;
     color: $light-color;
     border-color: $primary-color;
-    transform: translateY(-2px);
     box-shadow: $box-shadow-md;
   }
 
